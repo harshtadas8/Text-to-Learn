@@ -6,10 +6,10 @@ const requireAuth = expressjwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
+    jwksUri: "https://dev-1dhhjax6mpux65zz.us.auth0.com/.well-known/jwks.json",
   }),
-  audience: process.env.AUTH0_AUDIENCE,
-  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  audience: "https://texttolearn/api",
+  issuer: "https://dev-1dhhjax6mpux65zz.us.auth0.com/",
   algorithms: ["RS256"],
 });
 
