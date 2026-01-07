@@ -11,7 +11,7 @@ import AuthButtons from "./components/AuthButtons";
 import UserProfile from "./components/UserProfile";
 import MobileMenu from "./components/MobileMenu";
 
-import { setGetTokenSilently } from "./api"; // ✅ IMPORTANT
+import { setGetTokenSilently } from "./services/api"; // ✅ IMPORTANT
 
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
