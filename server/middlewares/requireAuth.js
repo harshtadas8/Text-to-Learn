@@ -11,6 +11,7 @@ const requireAuth = expressjwt({
   audience: "https://texttolearn/api",
   issuer: "https://dev-1dhhjax6mpux65zz.us.auth0.com/",
   algorithms: ["RS256"],
+  requestProperty: "auth", // 👈 IMPORTANT
 });
 
 export default requireAuth;

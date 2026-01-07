@@ -9,9 +9,16 @@ import {
 
 const router = express.Router();
 
+/**
+ * 🔐 Protected routes (require Auth0 access token)
+ */
 router.post("/generate", requireAuth, generateCourseController);
 router.get("/my", requireAuth, getMyCourses);
-router.get("/:id", getCourseById);
 router.get("/:id/full", requireAuth, getFullCourseController);
+
+/**
+ * 🌍 Public route (no auth needed)
+ */
+router.get("/:id", getCourseById);
 
 export default router;
