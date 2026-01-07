@@ -7,9 +7,7 @@ export default function VideoBlock({ query }) {
   useEffect(() => {
     async function fetchVideo() {
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/youtube?q=${encodeURIComponent(query)}`
-        );
+        const res = await fetch(`${BASE_URL}/youtube/search?q=${topic}`);
         const data = await res.json();
         setVideo(data);
       } catch (err) {
