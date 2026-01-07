@@ -1,11 +1,23 @@
 const BASE_URL = "http://localhost:5000/api";
 
+// Auth0 token getter (set from App.jsx)
+let getTokenSilentlyFn = null;
+
+export function setGetTokenSilently(fn) {
+  getTokenSilentlyFn = fn;
+}
+
 /* ------------------ COURSE APIs ------------------ */
 
 export async function generateCourseAPI(payload) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
   const res = await fetch(`${BASE_URL}/courses/generate`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
     body: JSON.stringify(payload),
   });
 
@@ -29,9 +41,14 @@ export async function getCourseByIdAPI(id) {
 /* ------------------ LESSON APIs ------------------ */
 
 export async function generateLessonAPI(payload) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
   const res = await fetch(`${BASE_URL}/lessons/generate`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
     body: JSON.stringify(payload),
   });
 
@@ -43,8 +60,7 @@ export async function generateLessonAPI(payload) {
 }
 
 export async function getFullCourseAPI(id) {
-  const res = await fetch(`http://localhost:5000/api/courses/${id}/full`);
+  const res = await fetch(`${BASE_URL}/courses/${id}/full`);
   if (!res.ok) throw new Error("Failed to fetch full course");
   return res.json();
 }
-

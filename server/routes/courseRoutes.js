@@ -1,16 +1,17 @@
 import express from "express";
-import { getFullCourseController } from "../controllers/courseController.js";
+import requireAuth from "../middlewares/requireAuth.js";
 import {
   generateCourseController,
-  getAllCourses,
+  getMyCourses,
   getCourseById,
+  getFullCourseController,
 } from "../controllers/courseController.js";
 
 const router = express.Router();
 
-router.post("/generate", generateCourseController);
-router.get("/", getAllCourses);
+router.post("/generate", requireAuth, generateCourseController);
+router.get("/my", requireAuth, getMyCourses);
 router.get("/:id", getCourseById);
-router.get("/:id/full", getFullCourseController);
+router.get("/:id/full", requireAuth, getFullCourseController);
 
 export default router;

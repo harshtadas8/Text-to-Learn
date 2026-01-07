@@ -9,6 +9,9 @@ export async function generateCourseController(req, res) {
   try {
     const { topic, level, language = "English" } = req.body;
 
+    // 🔐 Auth0 user id
+    const userId = req.auth.sub;
+
     const content = await generateCourseWithGemini(topic, level, language);
 
     const course = await Course.create({
@@ -16,20 +19,26 @@ export async function generateCourseController(req, res) {
       level,
       language,
       content,
+      userId, // ✅ saved
     });
 
     res.status(201).json({ success: true, data: course });
   } catch (e) {
+    console.error(e);
     res.status(500).json({ success: false, message: "Course generation failed" });
   }
 }
 
 /* =====================================================
-   GET /api/courses
+   GET /api/courses/my
+   (ONLY logged-in user's courses)
 ===================================================== */
-export async function getAllCourses(req, res) {
+export async function getMyCourses(req, res) {
   try {
-    const courses = await Course.find().sort({ createdAt: -1 });
+    const userId = req.auth.sub;
+
+    const courses = await Course.find({ userId }).sort({ createdAt: -1 });
+
     return res.json({
       success: true,
       data: courses,
@@ -37,7 +46,7 @@ export async function getAllCourses(req, res) {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch courses",
+      message: "Failed to fetch user courses",
     });
   }
 }
@@ -70,7 +79,6 @@ export async function getCourseById(req, res) {
 
 /* =====================================================
    GET /api/courses/:id/full
-   (Course + Cached Lessons for PDF)
 ===================================================== */
 export async function getFullCourseController(req, res) {
   try {
@@ -87,18 +95,15 @@ export async function getFullCourseController(req, res) {
     // 🔥 Fetch cached lessons
     const lessons = await Lesson.find({ courseId: id }).lean();
 
-    // 🔥 Create lookup map
     const lessonMap = {};
     lessons.forEach((lesson) => {
       const key = `${lesson.moduleIndex}-${lesson.lessonIndex}`;
       lessonMap[key] = lesson.content;
     });
 
-    // 🔥 Attach lesson content to course structure
     course.content.modules.forEach((module) => {
       module.lessons = module.lessons.map((lesson) => {
         const key = `${module.moduleIndex}-${lesson.lessonIndex}`;
-
         return {
           ...lesson,
           fullContent: lessonMap[key] || null,

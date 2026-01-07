@@ -1,23 +1,55 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Courses() {
   const navigate = useNavigate();
+  const { isAuthenticated, loginWithRedirect, getAccessTokenSilently } = useAuth0();
+
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/courses")
-      .then(res => res.json())
-      .then(data => {
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchCourses = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+
+        const res = await fetch("http://localhost:5000/api/courses/my", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
         setCourses(data.data || []);
-        setLoading(false);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error(err);
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchCourses();
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
+        <p className="mb-4">Please login to view your courses</p>
+        <button
+          onClick={() => loginWithRedirect()}
+          className="px-6 py-2 bg-emerald-500 rounded-lg"
+        >
+          Login
+        </button>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

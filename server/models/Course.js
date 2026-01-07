@@ -24,46 +24,31 @@ const moduleSchema = new mongoose.Schema(
   { _id: false }
 );
 
-// const courseSchema = new mongoose.Schema(
-//   {
-//     topic: {
-//       type: String,
-//       required: true,
-//     },
-//     level: {
-//       type: String,
-//       required: true,
-//       enum: ["Beginner", "Intermediate", "Advanced"],
-//     },
-//     content: {
-//       type: Object, // AI-generated structured JSON
-//       required: true,
-//     },
-//   },
-//   {
-//     timestamps: true, // createdAt, updatedAt
-//   }
-// );
-
-// const Course = mongoose.model("Course", courseSchema);
-
-// export default Course;
-
 const courseSchema = new mongoose.Schema(
   {
     topic: String,
+
     level: {
       type: String,
       enum: ["Beginner", "Intermediate", "Advanced"],
     },
+
     language: {
       type: String,
       enum: ["English", "Hindi", "Marathi", "Hinglish"],
       default: "English",
     },
+
     content: {
       type: Object,
       required: true,
+    },
+
+    // 🔐 Auth0 User ID
+    userId: {
+      type: String,
+      required: true,
+      index: true,
     },
   },
   { timestamps: true }

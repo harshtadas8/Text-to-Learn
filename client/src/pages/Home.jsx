@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateCourseAPI } from "../services/api";
+import { useAuth0 } from "@auth0/auth0-react";
+
 
 export default function Home() {
   const navigate = useNavigate();
