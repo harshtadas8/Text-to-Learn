@@ -1,4 +1,10 @@
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!BASE_URL) {
+  console.error(
+    "❌ VITE_API_BASE_URL is not defined. Check Vercel environment variables."
+  );
+}
 
 // Auth0 token getter (set from App.jsx)
 let getTokenSilentlyFn = null;
@@ -22,7 +28,8 @@ export async function generateCourseAPI(payload) {
   });
 
   if (!res.ok) {
-    throw new Error("Course generation failed");
+    const err = await res.text();
+    throw new Error(err || "Course generation failed");
   }
 
   return res.json();
@@ -53,14 +60,25 @@ export async function generateLessonAPI(payload) {
   });
 
   if (!res.ok) {
-    throw new Error("Lesson generation failed");
+    const err = await res.text();
+    throw new Error(err || "Lesson generation failed");
   }
 
   return res.json();
 }
 
 export async function getFullCourseAPI(id) {
-  const res = await fetch(`${BASE_URL}/courses/${id}/full`);
-  if (!res.ok) throw new Error("Failed to fetch full course");
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/courses/${id}/full`, {
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch full course");
+  }
+
   return res.json();
 }
