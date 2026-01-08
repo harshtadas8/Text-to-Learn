@@ -22,7 +22,7 @@ export default function VideoBlock({ query }) {
         const data = await res.json();
         setVideo(data);
       } catch (err) {
-        console.error("❌ Failed to load video", err);
+        console.error("Failed to load video", err);
       } finally {
         setLoading(false);
       }
@@ -49,7 +49,7 @@ export default function VideoBlock({ query }) {
         <iframe
           className="absolute top-0 left-0 w-full h-full"
           src={`https://www.youtube.com/embed/${video.videoId}`}
-          title={video.title || "YouTube video"}
+          title={video.title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         />
