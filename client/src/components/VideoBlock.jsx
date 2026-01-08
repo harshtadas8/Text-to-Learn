@@ -1,35 +1,22 @@
 import { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function VideoBlock({ query }) {
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
-
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!query || !isAuthenticated) {
-      setLoading(false);
-      return;
-    }
+    if (!query) return;
 
     async function fetchVideo() {
       try {
-        const token = await getAccessTokenSilently();
-
         const res = await fetch(
-          `${BASE_URL}/youtube/search?q=${encodeURIComponent(query)}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          `${BASE_URL}/youtube/search?q=${encodeURIComponent(query)}`
         );
 
         if (!res.ok) {
-          throw new Error("Failed to fetch video");
+          throw new Error(`HTTP ${res.status}`);
         }
 
         const data = await res.json();
@@ -42,7 +29,7 @@ export default function VideoBlock({ query }) {
     }
 
     fetchVideo();
-  }, [query, isAuthenticated, getAccessTokenSilently]);
+  }, [query]);
 
   if (loading) {
     return <p className="text-gray-400 italic">Loading video...</p>;
@@ -58,11 +45,11 @@ export default function VideoBlock({ query }) {
         📺 Recommended Video
       </p>
 
-      <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+      <div className="relative w-full" style={{ paddingTop: "50%" }}>
         <iframe
           className="absolute top-0 left-0 w-full h-full"
           src={`https://www.youtube.com/embed/${video.videoId}`}
-          title={video.title}
+          title={video.title || "YouTube video"}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         />
