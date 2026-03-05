@@ -11,20 +11,16 @@ import AuthButtons from "./components/AuthButtons";
 import UserProfile from "./components/UserProfile";
 import MobileMenu from "./components/MobileMenu";
 
-import { setGetTokenSilently } from "./services/api"; // ✅ IMPORTANT
+import { setGetTokenSilently } from "./services/api";
 
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // 🔥 Auth0 hook
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
-  // 🔥 VERY IMPORTANT: wire token → API layer
   useEffect(() => {
-    if (isAuthenticated) {
-      setGetTokenSilently(getAccessTokenSilently);
-    }
-  }, [isAuthenticated, getAccessTokenSilently]);
+    setGetTokenSilently(getAccessTokenSilently);
+  }, [getAccessTokenSilently]);
 
   return (
     <BrowserRouter>
@@ -33,7 +29,6 @@ export default function App() {
         {/* ---------- TOP NAVBAR ---------- */}
         <header className="flex justify-between items-center px-4 sm:px-6 py-4 border-b border-gray-800">
 
-          {/* Left: Hamburger (mobile) + Logo */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileOpen(true)}
@@ -47,25 +42,21 @@ export default function App() {
             </h1>
           </div>
 
-          {/* Right: Desktop actions */}
           <div className="hidden sm:flex items-center gap-4">
             <UserProfile />
             <AuthButtons />
           </div>
 
-          {/* Right: Mobile avatar only */}
           <div className="sm:hidden">
             <UserProfile />
           </div>
         </header>
 
-        {/* ---------- MOBILE DRAWER ---------- */}
         <MobileMenu
           open={mobileOpen}
           onClose={() => setMobileOpen(false)}
         />
 
-        {/* ---------- ROUTES ---------- */}
         <Routes>
           <Route path="/" element={<Home />} />
 

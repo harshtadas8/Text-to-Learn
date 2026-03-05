@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { generateCourseAPI } from "../services/api";
 import { useAuth0 } from "@auth0/auth0-react";
 
-
 export default function Home() {
   const navigate = useNavigate();
+
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
 
   const [topic, setTopic] = useState("");
   const [level, setLevel] = useState("Beginner");
@@ -14,6 +15,12 @@ export default function Home() {
   const [error, setError] = useState("");
 
   const handleGenerate = async () => {
+
+    if (!isAuthenticated) {
+      loginWithRedirect();
+      return;
+    }
+
     if (!topic.trim()) {
       setError("Please enter a topic");
       return;
@@ -26,16 +33,16 @@ export default function Home() {
       const res = await generateCourseAPI({
         topic,
         level,
-        language, // ✅ multilingual kept
+        language,
       });
 
       navigate(`/course/${res.data._id}`);
     } 
     catch (err) {
       console.error(err);
-      setError("Failed to generate course, Login or Sign Up to Continue");
+      setError("Something went wrong. Please try again.");
     }
-     finally {
+    finally {
       setLoading(false);
     }
   };
@@ -70,9 +77,13 @@ export default function Home() {
           <div className="w-full flex justify-center lg:justify-end">
             <div className="w-full max-w-md bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-8 shadow-xl">
 
-              <h2 className="text-2xl font-semibold mb-6">
+              <h2 className="text-2xl font-semibold mb-2">
                 Generate Your Course
               </h2>
+
+              <p className="text-xs text-gray-400 mb-6 flex items-center gap-2">
+                🔐 Login or Sign Up required to generate courses
+              </p>
 
               {/* TOPIC */}
               <div className="mb-4">
