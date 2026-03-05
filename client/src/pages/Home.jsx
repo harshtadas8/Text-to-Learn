@@ -30,10 +30,12 @@ export default function Home() {
       });
 
       navigate(`/course/${res.data._id}`);
-    } catch (err) {
+    } 
+    catch (err) {
       console.error(err);
-      setError("Failed to generate course");
-    } finally {
+      setError("Failed to generate course, Login or Sign Up to Continue");
+    }
+     finally {
       setLoading(false);
     }
   };
