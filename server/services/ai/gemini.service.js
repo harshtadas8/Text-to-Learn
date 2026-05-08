@@ -14,7 +14,7 @@ export async function generateCourseWithGemini(topic, level, language) {
   // The 'lite' model allows ~1,500 requests/day (vs 20 for standard)
   // Use this ONLY if 2.5-flash-lite fails
 // model: "gemini-2.5-flash-lite",
-model: "gemini-3-flash-preview",
+model: "gemini-3-flash",
   generationConfig: { responseMimeType: "application/json" }
 });
   const prompt = `
