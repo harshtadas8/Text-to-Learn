@@ -1,4 +1,10 @@
-import Course from "../models/Course.js";
+export const generateCourse = async (req, res) => {
+  try {
+    
+    // ... ALL YOUR EXISTING GENERATION CODE GOES HERE ...
+    // (Connecting to Gemini, YouTube, saving to MongoDB, etc.)
+
+    import Course from "../models/Course.js";
 import Lesson from "../models/Lesson.js";
 import { generateCourseWithGemini } from "../services/ai/gemini.service.js";
 
@@ -124,3 +130,19 @@ export async function getFullCourseController(req, res) {
     });
   }
 }
+
+
+  } catch (error) {
+    // 🚨 THIS IS THE MAGIC DIAGNOSTIC BLOCK 🚨
+    console.error("🔥 FATAL ERROR IN GENERATE ROUTE:");
+    console.error(error);
+    
+    // Send the exact error back to the browser so you can read it!
+    return res.status(500).json({ 
+      message: "Server crashed during generation",
+      errorName: error.name,
+      errorMessage: error.message,
+      stackTrace: error.stack
+    });
+  }
+};
