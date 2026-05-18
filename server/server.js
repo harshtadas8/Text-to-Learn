@@ -13,19 +13,22 @@ const app = express();
 /* ===============================
    ✅ CORS CONFIG (VERY IMPORTANT)
 ================================ */
+// Put exact URLs here. No trailing slashes (/) at the end!
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://text-to-learn.vercel.app",
+  "https://text-to-learn-psi.vercel.app" 
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (
-        !origin ||
-        origin.startsWith("http://localhost") ||
-        origin.endsWith(".vercel.app")
-      ) {
+      // Allow requests with no origin (like Postman or curl)
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      // Check if the exact origin is in our allowed list, OR if it's any local port
+      if (allowedOrigins.includes(origin) || origin.startsWith("http://localhost")) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
