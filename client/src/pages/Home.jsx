@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateCourseAPI } from "../services/api";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -13,6 +13,27 @@ export default function Home() {
   const [language, setLanguage] = useState("English");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const loadingMessages = [
+    "Analyzing your topic...",
+    "Structuring learning modules...",
+    "Writing detailed lessons...",
+    "Finding the best video resources...",
+    "Finalizing your AI course..."
+  ];
+  const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
+
+  useEffect(() => {
+    let interval;
+    if (loading) {
+      interval = setInterval(() => {
+        setLoadingMsgIdx((prev) => (prev + 1) % loadingMessages.length);
+      }, 2500);
+    } else {
+      setLoadingMsgIdx(0);
+    }
+    return () => clearInterval(interval);
+  }, [loading]);
 
   const handleGenerate = async () => {
 
@@ -142,6 +163,19 @@ export default function Home() {
 
         </div>
       </div>
+
+      {/* ---------------- LOADING OVERLAY ---------------- */}
+      {loading && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white">
+          <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-8"></div>
+          <h2 className="text-2xl font-bold text-emerald-400 animate-pulse text-center px-4">
+            {loadingMessages[loadingMsgIdx]}
+          </h2>
+          <p className="mt-4 text-gray-400 max-w-sm text-center px-4">
+            This might take 10-15 seconds as our AI generates a complete course specifically tailored for you.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

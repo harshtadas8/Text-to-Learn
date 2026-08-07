@@ -72,5 +72,14 @@ Rules:
   //   return null;
   // }
   const result = await model.generateContent(prompt);
-  return JSON.parse(result.response.text());
+  const rawText = result.response.text();
+
+  const first = rawText.indexOf("{");
+  const last = rawText.lastIndexOf("}");
+
+  if (first === -1 || last === -1) {
+    throw new Error("Invalid JSON from Gemini");
+  }
+
+  return JSON.parse(rawText.slice(first, last + 1));
 }
