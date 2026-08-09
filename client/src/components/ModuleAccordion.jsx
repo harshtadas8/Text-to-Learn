@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { generateLessonAPI } from "../services/api";
 import LessonViewer from "./LessonViewer";
-
-export default function ModuleAccordion({ module, courseId, courseTitle, language, }) {
+import QuizViewer from "./QuizViewer";
+import LessonTutor from "./LessonTutor";
+export default function ModuleAccordion({ module, courseId, courseTitle, language, completedLessons = [], onToggleComplete }) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedLessonId, setExpandedLessonId] = useState(null);
   const [lessonContentMap, setLessonContentMap] = useState({});
   const [loadingLessons, setLoadingLessons] = useState({});
+  const [errorLessons, setErrorLessons] = useState({});
 
   const toggleModule = () => setIsOpen(prev => !prev);
 
@@ -27,6 +29,7 @@ export default function ModuleAccordion({ module, courseId, courseTitle, languag
 
     try {
       setLoadingLessons(prev => ({ ...prev, [lessonId]: true }));
+      setErrorLessons(prev => ({ ...prev, [lessonId]: null }));
 
       const res = await generateLessonAPI({
         courseId,
@@ -47,6 +50,7 @@ export default function ModuleAccordion({ module, courseId, courseTitle, languag
 
     } catch (err) {
       console.error("Lesson generation failed", err);
+      setErrorLessons(prev => ({ ...prev, [lessonId]: err.message || "Failed to load lesson" }));
     } finally {
       setLoadingLessons(prev => ({ ...prev, [lessonId]: false }));
     }
@@ -83,21 +87,60 @@ export default function ModuleAccordion({ module, courseId, courseTitle, languag
                   onClick={() => handleLessonClick(lesson)}
                   className="w-full flex justify-between px-4 py-3 text-left hover:bg-gray-900"
                 >
-                  <span>
-                    {lesson.lessonIndex}. {lesson.title}
+                  <span className={completedLessons.includes(lessonId) ? "line-through text-gray-500" : ""}>
+                    {lesson.lessonIndex}. {lesson.title} {completedLessons.includes(lessonId) && "✅"}
                   </span>
                   <span className="text-blue-400">
                     {loadingLessons[lessonId]
                       ? "⏳"
+                      : errorLessons[lessonId]
+                      ? "⚠️"
                       : isExpanded
                       ? "▼"
                       : "▶"}
                   </span>
                 </button>
 
+                {errorLessons[lessonId] && !loadingLessons[lessonId] && !isExpanded && (
+                  <div className="px-4 py-3 bg-red-900/20 border-t border-red-900/50 text-red-400 text-sm flex justify-between items-center">
+                    <span>⚠️ {errorLessons[lessonId]}</span>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); handleLessonClick(lesson); }}
+                      className="text-xs px-3 py-1 bg-red-900/40 rounded hover:bg-red-900/60"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                )}
+
                 {isExpanded && lessonContentMap[lessonId] && (
                   <div className="px-4 py-4">
                     <LessonViewer content={lessonContentMap[lessonId]} />
+                    
+                    <QuizViewer 
+                      courseTopic={courseTitle}
+                      moduleTitle={module.moduleTitle}
+                      lessonTitle={lesson.title}
+                      lessonContent={JSON.stringify(lessonContentMap[lessonId])}
+                    />
+
+                    <LessonTutor lessonContent={lessonContentMap[lessonId]} />
+
+                    {onToggleComplete && (
+                      <div className="mt-6 pt-4 border-t border-gray-800 flex justify-end">
+                        <label className="flex items-center space-x-3 cursor-pointer group">
+                          <span className="text-gray-400 group-hover:text-white transition">
+                            {completedLessons.includes(lessonId) ? "Completed!" : "Mark Complete"}
+                          </span>
+                          <input 
+                            type="checkbox" 
+                            checked={completedLessons.includes(lessonId)}
+                            onChange={(e) => onToggleComplete(lessonId, e.target.checked)}
+                            className="w-5 h-5 rounded border-gray-600 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-gray-900 bg-gray-800"
+                          />
+                        </label>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

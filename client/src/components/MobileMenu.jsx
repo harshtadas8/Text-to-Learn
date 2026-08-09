@@ -33,6 +33,14 @@ export default function MobileMenu({ open, onClose }) {
             Home
           </Link>
 
+          <Link
+            to="/explore"
+            onClick={onClose}
+            className="hover:text-white transition"
+          >
+            Explore
+          </Link>
+
           {/* -------- LOGGED IN -------- */}
           {isAuthenticated && (
             <>

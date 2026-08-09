@@ -5,6 +5,10 @@ import connectDB from "./config/db.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import lessonRoutes from "./routes/lessonRoutes.js";
 import youtubeRoutes from "./routes/youtubeRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import quizRoutes from "./routes/quizRoutes.js";
+import tutorRoutes from "./routes/tutorRoutes.js";
+import requireAuth from "./middlewares/requireAuth.js";
 
 await connectDB();
 
@@ -54,6 +58,21 @@ app.use(express.json());
 app.use("/api/courses", courseRoutes);
 app.use("/api/lessons", lessonRoutes);
 app.use("/api/youtube", youtubeRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/quizzes", quizRoutes);
+app.use("/api/tutor", tutorRoutes);
+
+/* ===============================
+   GLOBAL ERROR HANDLER
+================================ */
+app.use((err, req, res, next) => {
+  if (err.name === "UnauthorizedError") {
+    return res.status(401).json({ message: "Invalid or missing authorization token" });
+  }
+  
+  console.error(err);
+  res.status(500).json({ message: "Internal Server Error" });
+});
 
 /* ===============================
    HEALTH CHECK

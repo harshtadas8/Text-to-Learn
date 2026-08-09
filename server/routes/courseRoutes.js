@@ -5,6 +5,7 @@ import {
   getMyCourses,
   getCourseById,
   getFullCourseController,
+  getPublicCourses,
 } from "../controllers/courseController.js";
 
 const router = express.Router();
@@ -17,8 +18,9 @@ router.get("/my", requireAuth, getMyCourses);
 router.get("/:id/full", requireAuth, getFullCourseController);
 
 /**
- * 🌍 Public route (no auth needed)
+ * 🌍 Public routes (no auth needed)
  */
+router.get("/public", getPublicCourses);
 router.get("/:id", getCourseById);
 
 export default router;

@@ -1,24 +1,35 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getCourseByIdAPI, getFullCourseAPI } from "../services/api";
+import { getCourseByIdAPI, getFullCourseAPI, getCourseProgressAPI, markLessonProgressAPI } from "../services/api";
 import ModuleAccordion from "../components/ModuleAccordion";
 import { generateCoursePDF } from "../utils/coursePdf";
+import CourseSkeleton from "../components/CourseSkeleton";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function CourseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const { isAuthenticated } = useAuth0();
+
   const [course, setCourse] = useState(null);
+  const [completedLessons, setCompletedLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  /* -------------------- FETCH COURSE (OUTLINE ONLY) -------------------- */
+  /* -------------------- FETCH COURSE & PROGRESS -------------------- */
 
   useEffect(() => {
-    async function fetchCourse() {
+    async function fetchCourseData() {
       try {
         const res = await getCourseByIdAPI(id);
         setCourse(res.data);
+
+        // Fetch progress if authenticated
+        if (isAuthenticated) {
+          const progRes = await getCourseProgressAPI(id);
+          setCompletedLessons(progRes.data || []);
+        }
       } catch (err) {
         console.error(err);
         setError("Failed to load course");
@@ -27,8 +38,24 @@ export default function CourseDetails() {
       }
     }
 
-    fetchCourse();
-  }, [id]);
+    fetchCourseData();
+  }, [id, isAuthenticated]);
+
+  /* -------------------- PROGRESS HANDLER -------------------- */
+
+  const handleToggleComplete = async (lessonId, isCompleted) => {
+    if (!isAuthenticated) return;
+    try {
+      if (isCompleted) {
+        setCompletedLessons(prev => [...prev, lessonId]);
+      } else {
+        setCompletedLessons(prev => prev.filter(id => id !== lessonId));
+      }
+      await markLessonProgressAPI(id, lessonId, isCompleted);
+    } catch (err) {
+      console.error("Failed to update progress:", err);
+    }
+  };
 
   /* -------------------- PDF HANDLER (FULL COURSE) -------------------- */
 
@@ -45,17 +72,23 @@ export default function CourseDetails() {
   /* -------------------- LOADING / ERROR -------------------- */
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        Loading course...
-      </div>
-    );
+    return <CourseSkeleton />;
   }
 
   if (error || !course || !course.content) {
     return (
-      <div className="min-h-screen bg-black text-red-400 flex items-center justify-center">
-        {error || "Course not found"}
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 animate-fade-in">
+        <div className="text-5xl mb-4">⚠️</div>
+        <h2 className="text-2xl font-bold text-red-400 mb-2">Oops! Something went wrong</h2>
+        <p className="text-gray-400 mb-6 text-center max-w-md">
+          {error || "We couldn't find the course you're looking for. It may have been deleted or the link is invalid."}
+        </p>
+        <button
+          onClick={() => navigate("/")}
+          className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition"
+        >
+          Return Home
+        </button>
       </div>
     );
   }
@@ -72,7 +105,7 @@ export default function CourseDetails() {
   /* -------------------- UI -------------------- */
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 py-16">
+    <div className="min-h-screen bg-black text-white px-4 py-16 animate-fade-in">
       <div className="max-w-4xl mx-auto space-y-10">
 
         {/* META */}
@@ -86,9 +119,27 @@ export default function CourseDetails() {
             {courseTitle || "Untitled Course"}
           </h1>
 
-          <p className="text-gray-300 leading-relaxed max-w-3xl">
+          <p className="text-gray-300 leading-relaxed max-w-3xl mb-6">
             {description || "This course does not have a description yet."}
           </p>
+
+          {/* PROGRESS BAR */}
+          {isAuthenticated && (
+            <div className="bg-gray-900 border border-gray-800 p-4 rounded-xl max-w-xl">
+              <div className="flex justify-between text-sm text-gray-300 mb-2">
+                <span>Course Progress</span>
+                <span className="font-semibold text-emerald-400">
+                  {completedLessons.length} completed
+                </span>
+              </div>
+              <div className="w-full bg-black rounded-full h-2.5">
+                <div 
+                  className="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" 
+                  style={{ width: `${modules.length > 0 ? Math.min(100, Math.round((completedLessons.length / modules.reduce((acc, m) => acc + m.lessons.length, 0)) * 100)) : 0}%` }}
+                ></div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* MODULES */}
@@ -105,6 +156,8 @@ export default function CourseDetails() {
                 courseId={course._id}       // ✅ REQUIRED FOR CACHING
                 courseTitle={courseTitle}
                 language={language}
+                completedLessons={completedLessons}
+                onToggleComplete={handleToggleComplete}
               />
             ))
           )}
@@ -125,6 +178,15 @@ export default function CourseDetails() {
           >
             Download PDF 📄
           </button>
+          
+          {isAuthenticated && modules.length > 0 && completedLessons.length === modules.reduce((acc, m) => acc + m.lessons.length, 0) && (
+            <button
+              onClick={() => navigate(`/certificate/${course._id}`)}
+              className="px-5 py-2 rounded-lg bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-bold shadow-[0_0_15px_rgba(251,191,36,0.4)] hover:shadow-[0_0_25px_rgba(251,191,36,0.6)] transition"
+            >
+              View Certificate 🏆
+            </button>
+          )}
         </div>
 
       </div>

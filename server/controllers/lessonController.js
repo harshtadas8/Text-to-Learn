@@ -1,5 +1,6 @@
 import Lesson from "../models/Lesson.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { extractJson } from "../utils/jsonUtils.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -51,14 +52,6 @@ Return JSON ONLY in this exact structure:
     { "type": "paragraph", "text": "" },
     { "type": "code", "language": "", "code": "" },
     { "type": "video", "query": "" }
-  ],
-  "mcqs": [
-    {
-      "question": "",
-      "options": [],
-      "correctAnswer": 0,
-      "explanation": ""
-    }
   ]
 }
 
@@ -99,8 +92,7 @@ export async function generateLessonController(req, res) {
     }
 
     const model = genAI.getGenerativeModel({
-      // model: "gemini-2.5-flash-lite",
-      model: "gemini-3-flash-preview",
+      model: "gemini-3.5-flash-lite",
       generationConfig: { responseMimeType: "application/json" },
     });
 
@@ -114,14 +106,7 @@ export async function generateLessonController(req, res) {
     const result = await model.generateContent(prompt);
     const rawText = result.response.text();
 
-    const first = rawText.indexOf("{");
-    const last = rawText.lastIndexOf("}");
-
-    if (first === -1 || last === -1) {
-      throw new Error("Invalid JSON from Gemini");
-    }
-
-    const lessonData = JSON.parse(rawText.slice(first, last + 1));
+    const lessonData = extractJson(rawText);
 
     // 💾 SAVE WITH LANGUAGE
     await Lesson.create({

@@ -39,6 +39,14 @@ const courseSchema = new mongoose.Schema(
       default: "English",
     },
 
+    goal: {
+      type: String,
+    },
+
+    timeAvailable: {
+      type: String,
+    },
+
     content: {
       type: Object,
       required: true,
@@ -48,6 +56,11 @@ const courseSchema = new mongoose.Schema(
     userId: {
       type: String,
       required: true,
+      index: true,
+    },
+    isPublic: {
+      type: Boolean,
+      default: true,
       index: true,
     },
   },

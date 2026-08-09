@@ -11,12 +11,14 @@ export default function Home() {
   const [topic, setTopic] = useState("");
   const [level, setLevel] = useState("Beginner");
   const [language, setLanguage] = useState("English");
+  const [goal, setGoal] = useState("");
+  const [timeAvailable, setTimeAvailable] = useState("2-5 hours/week");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const loadingMessages = [
-    "Analyzing your topic...",
-    "Structuring learning modules...",
+    "Analyzing your goals...",
+    "Structuring a personalized learning roadmap...",
     "Writing detailed lessons...",
     "Finding the best video resources...",
     "Finalizing your AI course..."
@@ -46,6 +48,11 @@ export default function Home() {
       setError("Please enter a topic");
       return;
     }
+    
+    if (!goal.trim()) {
+      setError("Please tell us your learning goal");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -55,12 +62,22 @@ export default function Home() {
         topic,
         level,
         language,
+        goal,
+        timeAvailable,
       });
 
       navigate(`/course/${res.data._id}`);
     } 
     catch (err) {
-      console.error(err);
+      console.error("Full Error:", err);
+      
+      // If Auth0 silent token fetch fails (e.g., due to new scopes or expired session)
+      const errorStr = err?.message?.toLowerCase() || err?.error?.toLowerCase() || "";
+      if (errorStr.includes('login required') || errorStr.includes('login_required') || errorStr.includes('consent required') || errorStr.includes('consent_required')) {
+        loginWithRedirect();
+        return;
+      }
+
       setError("Something went wrong. Please try again.");
     }
     finally {
@@ -72,24 +89,23 @@ export default function Home() {
     <div className="min-h-screen bg-black text-white px-4">
       <div className="max-w-7xl mx-auto flex items-center min-h-[calc(100vh-4rem)]">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full my-8">
 
           {/* ---------------- LEFT HERO ---------------- */}
           <div className="space-y-6 text-center lg:text-left">
             <h1 className="text-4xl sm:text-5xl font-bold leading-tight">
               Learn Anything with{" "}
-              <span className="text-emerald-400">AI-Generated</span> Courses
+              <span className="text-emerald-400">Personalized</span> AI Courses
             </h1>
 
             <p className="text-gray-400 max-w-xl mx-auto lg:mx-0">
-              Enter a topic, choose your level and language, and get a structured,
-              AI-generated learning roadmap with lessons, videos, MCQs and PDFs.
+              Tell us what you want to learn, your goals, and your time constraints. Our AI builds a customized learning roadmap with lessons, videos, and quizzes just for you.
             </p>
 
             <div className="flex flex-wrap justify-center lg:justify-start gap-4 text-sm text-gray-400">
-              <span>🌐 Multilingual</span>
-              <span>📄 PDF Export</span>
-              <span>🧠 Lesson Caching</span>
+              <span>🎯 Goal-Oriented</span>
+              <span>⏳ Time-Aware</span>
+              <span>🧠 Smart Quizzes</span>
               <span>⚡ Fast AI</span>
             </div>
           </div>
@@ -99,37 +115,66 @@ export default function Home() {
             <div className="w-full max-w-md bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-8 shadow-xl">
 
               <h2 className="text-2xl font-semibold mb-2">
-                Generate Your Course
+                Generate Your Roadmap
               </h2>
 
-              <p className="text-xs text-gray-400 mb-6 flex items-center gap-2">
-                🔐 Login or Sign Up required to generate courses
+              <p className={`text-xs mb-6 flex items-center gap-2 ${isAuthenticated ? 'text-emerald-400' : 'text-gray-400'}`}>
+                {isAuthenticated 
+                  ? "✅ Ready to generate" 
+                  : "🔐 Login required to generate"}
               </p>
 
               {/* TOPIC */}
               <div className="mb-4">
-                <label className="text-sm text-gray-400">Topic</label>
+                <label className="text-sm text-gray-400">What do you want to learn?</label>
                 <input
                   type="text"
-                  placeholder="e.g. Operating Systems"
+                  placeholder="e.g. Next.js, Machine Learning"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
                   className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 />
               </div>
 
-              {/* LEVEL */}
+              {/* GOAL */}
               <div className="mb-4">
-                <label className="text-sm text-gray-400">Level</label>
-                <select
-                  value={level}
-                  onChange={(e) => setLevel(e.target.value)}
-                  className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2"
-                >
-                  <option>Beginner</option>
-                  <option>Intermediate</option>
-                  <option>Advanced</option>
-                </select>
+                <label className="text-sm text-gray-400">What is your goal?</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Build a SaaS, Get a job, Ace my exam"
+                  value={goal}
+                  onChange={(e) => setGoal(e.target.value)}
+                  className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                />
+              </div>
+
+              {/* LEVEL & TIME (ROW) */}
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="text-sm text-gray-400">Experience</label>
+                  <select
+                    value={level}
+                    onChange={(e) => setLevel(e.target.value)}
+                    className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  >
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Advanced</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400">Time Available</label>
+                  <select
+                    value={timeAvailable}
+                    onChange={(e) => setTimeAvailable(e.target.value)}
+                    className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  >
+                    <option>&lt; 2 hours/week</option>
+                    <option>2-5 hours/week</option>
+                    <option>5-10 hours/week</option>
+                    <option>10+ hours/week</option>
+                  </select>
+                </div>
               </div>
 
               {/* LANGUAGE */}
@@ -138,11 +183,12 @@ export default function Home() {
                 <select
                   value={language}
                   onChange={(e) => setLanguage(e.target.value)}
-                  className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2"
+                  className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 >
                   <option>English</option>
                   <option>Hindi</option>
                   <option>Marathi</option>
+                  <option>Hinglish</option>
                 </select>
               </div>
 
