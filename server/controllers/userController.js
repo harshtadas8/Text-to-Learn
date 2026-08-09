@@ -115,7 +115,11 @@ export async function getDashboard(req, res) {
           totalCoursesCompleted,
           totalCoursesInProgress,
           xp: user?.xp || 0,
-          streak: user?.streak || 0
+          streak: user?.streak || 0,
+          strongTopics: user?.strongTopics || [],
+          weakTopics: user?.weakTopics || [],
+          quizHistory: user?.quizHistory || [],
+          learningTime: user?.learningTime || 0
         },
         recentCourses: enrichedCourses
       }

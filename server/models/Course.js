@@ -63,6 +63,14 @@ const courseSchema = new mongoose.Schema(
       default: true,
       index: true,
     },
+    
+    // RAG Context Chunks
+    chunks: [
+      {
+        text: String,
+        embedding: [Number], // The vector embedding
+      }
+    ],
   },
   { timestamps: true }
 );

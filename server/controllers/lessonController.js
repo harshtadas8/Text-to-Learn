@@ -1,6 +1,8 @@
 import Lesson from "../models/Lesson.js";
+import Course from "../models/Course.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { extractJson } from "../utils/jsonUtils.js";
+import { generateEmbeddings } from "../services/ai/gemini.service.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -117,6 +119,34 @@ export async function generateLessonController(req, res) {
       language,
       content: lessonData,
     });
+
+    // --- BACKGROUND EMBEDDING FOR RAG ---
+    (async () => {
+      try {
+        console.log(`[RAG] Generating embeddings for lesson ${lessonTitle}`);
+        const chunks = [];
+        // Chunking by blocks
+        for (const block of lessonData.content) {
+          if (block.type === 'paragraph' || block.type === 'heading' || block.type === 'code') {
+            const textToEmbed = block.text || block.code;
+            if (textToEmbed && textToEmbed.trim().length > 10) {
+               const chunkText = `[${moduleTitle} - ${lessonTitle}]: ${textToEmbed}`;
+               const embedding = await generateEmbeddings(chunkText);
+               chunks.push({ text: chunkText, embedding });
+            }
+          }
+        }
+        
+        if (chunks.length > 0) {
+          await Course.findByIdAndUpdate(courseId, {
+            $push: { chunks: { $each: chunks } }
+          });
+          console.log(`[RAG] Added ${chunks.length} chunks for course ${courseId}`);
+        }
+      } catch (embErr) {
+        console.error("[RAG] Failed to generate embeddings:", embErr);
+      }
+    })();
 
     return res.json({
       success: true,

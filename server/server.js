@@ -9,6 +9,7 @@ import userRoutes from "./routes/userRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
 import tutorRoutes from "./routes/tutorRoutes.js";
 import requireAuth from "./middlewares/requireAuth.js";
+import "./workers/aiWorker.js"; // 🔥 START BULLMQ WORKER
 
 await connectDB();
 

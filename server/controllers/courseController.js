@@ -1,5 +1,6 @@
 import Course from "../models/Course.js";
 import Lesson from "../models/Lesson.js";
+import User from "../models/User.js";
 import { generateCourseWithGemini } from "../services/ai/gemini.service.js";
 
 /* =====================================================
@@ -11,8 +12,11 @@ export async function generateCourseController(req, res) {
 
     // 🔐 Auth0 user id
     const userId = req.auth.sub;
+    
+    // Fetch user memory
+    const user = await User.findOne({ auth0Id: userId });
 
-    const content = await generateCourseWithGemini(topic, level, language, goal, timeAvailable);
+    const content = await generateCourseWithGemini(topic, level, language, goal, timeAvailable, user);
 
     const course = await Course.create({
       topic,

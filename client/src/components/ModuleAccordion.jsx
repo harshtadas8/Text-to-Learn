@@ -124,7 +124,7 @@ export default function ModuleAccordion({ module, courseId, courseTitle, languag
                       lessonContent={JSON.stringify(lessonContentMap[lessonId])}
                     />
 
-                    <LessonTutor lessonContent={lessonContentMap[lessonId]} />
+                    <LessonTutor lessonContent={lessonContentMap[lessonId]} courseId={courseId} />
 
                     {onToggleComplete && (
                       <div className="mt-6 pt-4 border-t border-gray-800 flex justify-end">

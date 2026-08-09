@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { chatWithTutorAPI } from "../services/api";
+import ReactMarkdown from "react-markdown";
 
-export default function LessonTutor({ lessonContent }) {
+export default function LessonTutor({ lessonContent, courseId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -15,12 +16,12 @@ export default function LessonTutor({ lessonContent }) {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isOpen]);
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -51,6 +52,7 @@ export default function LessonTutor({ lessonContent }) {
       const stringifiedContent = typeof lessonContent === 'string' ? lessonContent : JSON.stringify(lessonContent, null, 2);
 
       const res = await chatWithTutorAPI({
+        courseId,
         lessonContent: stringifiedContent,
         history,
         message: userMessage,
@@ -111,13 +113,24 @@ export default function LessonTutor({ lessonContent }) {
             }`}
           >
             <div
-              className={`max-w-[80%] p-3 rounded-lg text-sm ${
+              className={`max-w-[85%] p-3 rounded-lg text-sm ${
                 msg.role === "user"
                   ? "bg-indigo-600 text-white rounded-br-none"
                   : "bg-gray-800 border border-gray-700 text-gray-200 rounded-bl-none"
               }`}
             >
-              {msg.text}
+              <ReactMarkdown 
+                components={{
+                  strong: ({node, ...props}) => <strong className="font-bold text-white" {...props} />,
+                  ul: ({node, ...props}) => <ul className="list-disc pl-4 my-2" {...props} />,
+                  ol: ({node, ...props}) => <ol className="list-decimal pl-4 my-2" {...props} />,
+                  li: ({node, ...props}) => <li className="my-1" {...props} />,
+                  p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                  a: ({node, ...props}) => <a className="text-indigo-400 hover:underline" {...props} />
+                }}
+              >
+                {msg.text}
+              </ReactMarkdown>
             </div>
           </div>
         ))}

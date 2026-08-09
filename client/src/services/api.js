@@ -53,8 +53,27 @@ export async function syncUserAPI(payload) {
   return res.json();
 }
 
-export async function getDashboardAPI() {
+// Simple in-memory cache for fast UI navigation
+const apiCache = {
+  dashboard: null,
+  publicCourses: null,
+  lastFetched: {}
+};
+
+export function clearApiCache() {
+  apiCache.dashboard = null;
+  apiCache.publicCourses = null;
+  apiCache.lastFetched = {};
+}
+
+export async function getDashboardAPI(forceRefresh = false) {
   const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  // Use cache if available and not explicitly refreshing (cache for 1 min max)
+  if (!forceRefresh && apiCache.dashboard && apiCache.lastFetched.dashboard > Date.now() - 60000) {
+    // Return a clone to avoid mutation issues
+    return JSON.parse(JSON.stringify(apiCache.dashboard));
+  }
 
   const res = await fetch(`${BASE_URL}/users/dashboard`, {
     headers: {
@@ -66,7 +85,15 @@ export async function getDashboardAPI() {
     await handleApiError(res, "Failed to load dashboard data");
   }
 
-  return res.json();
+  const data = await res.json();
+  
+  // Save to cache
+  if (data.success) {
+    apiCache.dashboard = data;
+    apiCache.lastFetched.dashboard = Date.now();
+  }
+  
+  return data;
 }
 
 export async function addXpAPI(amount) {
@@ -120,7 +147,11 @@ export async function markLessonProgressAPI(courseId, lessonId, isCompleted) {
     await handleApiError(res, "Failed to update progress");
   }
 
-  return res.json();
+  const data = await res.json();
+  if (data.success) {
+    clearApiCache();
+  }
+  return data;
 }
 
 /* ------------------ COURSE APIs ------------------ */
@@ -142,17 +173,31 @@ export async function generateCourseAPI(payload) {
     await handleApiError(res, "Course generation failed");
   }
 
-  return res.json();
+  const data = await res.json();
+  if (data.success) {
+    clearApiCache();
+  }
+  return data;
 }
 
-export async function getPublicCoursesAPI() {
+export async function getPublicCoursesAPI(forceRefresh = false) {
+  if (!forceRefresh && apiCache.publicCourses && apiCache.lastFetched.publicCourses > Date.now() - 300000) {
+    return JSON.parse(JSON.stringify(apiCache.publicCourses));
+  }
+
   const res = await fetch(`${BASE_URL}/courses/public`);
 
   if (!res.ok) {
     await handleApiError(res, "Failed to fetch public courses");
   }
 
-  return res.json();
+  const data = await res.json();
+  if (data.success) {
+    apiCache.publicCourses = data;
+    apiCache.lastFetched.publicCourses = Date.now();
+  }
+  
+  return data;
 }
 
 export async function getCourseByIdAPI(id) {
@@ -221,6 +266,29 @@ export async function generateQuizAPI(payload) {
   }
 
   return res.json();
+}
+
+export async function submitQuizAPI(payload) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/quizzes/submit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Quiz submission failed");
+  }
+
+  const data = await res.json();
+  if (data.success) {
+    clearApiCache();
+  }
+  return data;
 }
 
 /* ------------------ TUTOR APIs ------------------ */

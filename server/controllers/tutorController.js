@@ -1,8 +1,9 @@
 import { chatWithLesson } from "../services/ai/gemini.service.js";
+import User from "../models/User.js";
 
 export async function handleTutorChat(req, res) {
   try {
-    const { lessonContent, history, message } = req.body;
+    const { courseId, lessonContent, history, message } = req.body;
 
     if (!lessonContent || !message) {
       return res.status(400).json({
@@ -14,7 +15,13 @@ export async function handleTutorChat(req, res) {
     // history should be an array of objects: { role: 'user' | 'model', parts: [{text: '...'}] }
     const chatHistory = history || [];
 
-    const reply = await chatWithLesson(lessonContent, chatHistory, message);
+    const userId = req.auth?.sub;
+    let user = null;
+    if (userId) {
+      user = await User.findOne({ auth0Id: userId });
+    }
+
+    const reply = await chatWithLesson(courseId, lessonContent, chatHistory, message, user);
 
     return res.json({
       success: true,

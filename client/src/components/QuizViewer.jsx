@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { generateQuizAPI, addXpAPI } from "../services/api";
+import { generateQuizAPI, addXpAPI, submitQuizAPI } from "../services/api";
 
 export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, lessonContent }) {
   const [loading, setLoading] = useState(false);
@@ -59,6 +59,25 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
 
     setScore(correctCount);
     setSubmitted(true);
+    
+    // Background memory analysis
+    try {
+      // Map user answers cleanly
+      const mappedAnswers = quizData.questions.map((q, idx) => ({
+        question: q.question,
+        userAnswer: answers[idx],
+        correctAnswer: q.correctAnswer,
+        isCorrect: answers[idx] === q.correctAnswer
+      }));
+
+      submitQuizAPI({
+        courseTopic,
+        quizQuestions: quizData.questions,
+        userAnswers: mappedAnswers
+      }); // Not awaiting, let it run in background
+    } catch (err) {
+      console.error("Failed to trigger memory analysis:", err);
+    }
 
     if (correctCount === quizData.questions.length) {
       try {

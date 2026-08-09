@@ -1,135 +1,52 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { extractJson } from "../../utils/jsonUtils.js";
+import { Orchestrator } from "./Orchestrator.js";
+import { QuizAgent } from "./agents/QuizAgent.js";
+import { TutorAgent } from "./agents/TutorAgent.js";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// Initialize Agents
+const orchestrator = new Orchestrator();
+const quizAgent = new QuizAgent();
+const tutorAgent = new TutorAgent();
 
-export async function generateCourseWithGemini(topic, level, language, goal, timeAvailable) {
-  const model = genAI.getGenerativeModel({
-    model: "gemini-3.5-flash-lite",
-    generationConfig: { responseMimeType: "application/json" }
-  });
-
-  const timeConstraint = timeAvailable ? `and they have ${timeAvailable} available to study.` : '';
-  const goalConstraint = goal ? `Their primary goal is: "${goal}". Tailor the modules heavily towards achieving this goal.` : '';
-
-  const prompt = `
-Generate a ${level} level course on "${topic}" in ${language}.
-${goalConstraint}
-${timeConstraint}
-Return ONLY raw JSON in this structure:
-
-{
-  "courseTitle": "",
-  "level": "${level}",
-  "description": "",
-  "modules": [
-    {
-      "moduleIndex": 1,
-      "moduleTitle": "",
-      "learningObjective": "",
-      "lessons": [
-        {
-          "lessonIndex": 1,
-          "title": ""
-        }
-      ],
-      "resources": {
-        "videos": [
-          "YouTube search query relevant to this module"
-        ],
-        "blogs": [
-          "Relevant blog or documentation source name"
-        ]
-      }
-    }
-  ]
-}
-
-Rules:
-- Max 5 modules
-- Max 5 lessons per module
-- Resources MUST be present for every module
-- Videos must be SEARCH QUERIES, not URLs
-- Blogs must be site or documentation names, not links
-- Beginner-friendly language
-- NO markdown
-- NO explanations
-- RAW JSON ONLY
-`;
-
-  const result = await model.generateContent(prompt);
-  const rawText = result.response.text();
-
-  return extractJson(rawText);
+// Backward compatible wrappers that use the new Multi-Agent architecture
+export async function generateCourseWithGemini(topic, level, language, goal, timeAvailable, userMemory = null) {
+  // Uses Orchestrator which combines LessonAgent + EvaluatorAgent
+  return await orchestrator.createValidatedCourse(topic, level, language, goal, timeAvailable, userMemory);
 }
 
 export async function generateQuizWithGemini(courseTopic, moduleTitle, lessonTitle, lessonContent) {
-  const model = genAI.getGenerativeModel({
-    model: "gemini-3.5-flash-lite",
-    generationConfig: { responseMimeType: "application/json" }
-  });
-
-  const prompt = `
-Generate a 3-question multiple choice quiz based strictly on the following lesson from the course "${courseTopic}" -> Module: "${moduleTitle}" -> Lesson: "${lessonTitle}".
-
-Lesson Content:
-"""
-${lessonContent.substring(0, 5000)}
-"""
-
-Return ONLY raw JSON in this exact structure:
-{
-  "questions": [
-    {
-      "question": "What is ...?",
-      "options": ["A", "B", "C", "D"],
-      "correctAnswer": "A",
-      "explanation": "A is correct because..."
-    }
-  ]
-}
-`;
-
-  const result = await model.generateContent(prompt);
-  const rawText = result.response.text();
-
-  return extractJson(rawText);
+  return await quizAgent.generateQuiz(courseTopic, moduleTitle, lessonTitle, lessonContent);
 }
 
-export async function chatWithLesson(lessonContent, chatHistory, userMessage) {
-  const model = genAI.getGenerativeModel({
-    model: "gemini-3.5-flash-lite",
-  });
-
-  const chat = model.startChat({
-    history: [
-      {
-        role: "user",
-        parts: [
-          {
-            text: `You are an AI Tutor embedded in an e-learning platform.
-Your job is to answer the user's questions strictly based on the provided lesson content.
-Be encouraging, beginner-friendly, and concise.
-
-LESSON CONTENT:
-"""
-${lessonContent.substring(0, 8000)}
-"""`
-          }
-        ]
-      },
-      {
-        role: "model",
-        parts: [
-          {
-            text: "Understood! I will act as a helpful AI tutor for this lesson. What is your question?"
-          }
-        ]
-      },
-      ...chatHistory
-    ],
-  });
-
-  const result = await chat.sendMessage(userMessage);
-  return result.response.text();
+export async function chatWithLesson(courseId, lessonContent, chatHistory, userMessage, userMemory = null) {
+  return await tutorAgent.chat(courseId, lessonContent, chatHistory, userMessage, userMemory);
 }
+
+export async function analyzeQuizForMemory(courseTopic, quizQuestions, userAnswers) {
+  return await orchestrator.analyzeAndExtractMemory(courseTopic, quizQuestions, userAnswers);
+}
+
+// -----------------------------------------------------
+// Vector Search (Phase A)
+// -----------------------------------------------------
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+let genAIInstance = null;
+export function getGenAI() {
+  if (!genAIInstance) {
+    genAIInstance = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  }
+  return genAIInstance;
+}
+
+export async function generateRemedialWithGemini(topic, failedQuestions) {
+  return await orchestrator.generateRemedial(topic, failedQuestions);
+}
+
+export async function generateEmbeddings(text) {
+  const genAI = getGenAI();
+  const embeddingModel = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
+  
+  const result = await embeddingModel.embedContent(text);
+  return result.embedding.values;
+}
+

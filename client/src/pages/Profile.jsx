@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import { getDashboardAPI } from "../services/api";
+import DashboardCharts from "../components/Analytics/DashboardCharts";
 
 /* Helpers */
 function getInitials(name = "") {
@@ -157,6 +158,57 @@ export default function Profile() {
                 <p className="text-3xl font-light text-gray-100">{stats?.totalCoursesCompleted || 0} Courses</p>
               </div>
             </div>
+
+            {/* AI Learning Memory */}
+            <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-8">
+              <h3 className="text-xl font-light text-gray-200 mb-6 border-b border-gray-800 pb-3 flex items-center gap-2">
+                <span className="text-emerald-400">🧠</span> AI Learning Profile
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                {/* Strong Topics */}
+                <div>
+                  <h4 className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span className="text-emerald-500">💪</span> Strong Topics
+                  </h4>
+                  {stats?.strongTopics && stats.strongTopics.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {stats.strongTopics.map((topic, i) => (
+                        <span key={i} className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-sm">
+                          {topic}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500 italic">Take some quizzes to discover your strengths!</p>
+                  )}
+                </div>
+
+                {/* Weak Topics */}
+                <div>
+                  <h4 className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span className="text-rose-500">🎯</span> Needs Review
+                  </h4>
+                  {stats?.weakTopics && stats.weakTopics.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {stats.weakTopics.map((topic, i) => (
+                        <span key={i} className="px-3 py-1 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-full text-sm">
+                          {topic}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500 italic">You're doing great! Keep it up.</p>
+                  )}
+                </div>
+              </div>
+              <p className="mt-6 text-xs text-gray-500">
+                Your AI Tutor and Course Generator automatically adapt to your learning profile to provide a personalized experience.
+              </p>
+            </div>
+
+            {/* Dashboard Analytics Charts */}
+            <DashboardCharts quizHistory={stats?.quizHistory} learningTime={stats?.learningTime} />
 
           </div>
         </div>
