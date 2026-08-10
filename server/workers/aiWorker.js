@@ -2,6 +2,7 @@ import { Worker } from "bullmq";
 import { connection } from "../config/queue.js";
 import { analyzeQuizForMemory, generateRemedialWithGemini } from "../services/ai/gemini.service.js";
 import User from "../models/User.js";
+import { clearUserCache } from "../utils/cacheInvalidator.js";
 
 // Ensure mongoose models are loaded before processing
 import "../models/Course.js";
@@ -48,6 +49,10 @@ const aiWorker = new Worker(
         user.weakTopics = Array.from(updatedWeak);
         
         await user.save();
+        
+        // Invalidate the cache so the dashboard reflects the new XP and stats!
+        await clearUserCache(userId);
+
         console.log(`[Worker] Memory analysis complete. Strong: ${user.strongTopics.length}, Weak: ${user.weakTopics.length}`);
       }
 

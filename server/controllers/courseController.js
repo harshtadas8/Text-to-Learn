@@ -2,6 +2,7 @@ import Course from "../models/Course.js";
 import Lesson from "../models/Lesson.js";
 import User from "../models/User.js";
 import { generateCourseWithGemini } from "../services/ai/gemini.service.js";
+import { clearUserCache, clearPublicCache } from "../utils/cacheInvalidator.js";
 
 /* =====================================================
    POST /api/courses/generate
@@ -27,6 +28,10 @@ export async function generateCourseController(req, res) {
       content,
       userId, // ✅ saved
     });
+
+    // Invalidate Redis caches
+    await clearUserCache(userId);
+    await clearPublicCache();
 
     res.status(201).json({ success: true, data: course });
   } catch (e) {

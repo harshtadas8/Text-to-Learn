@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import Course from "../models/Course.js";
 import Progress from "../models/Progress.js";
+import { clearUserCache } from "../utils/cacheInvalidator.js";
 
 /* =====================================================
    POST /api/users/sync
@@ -162,6 +163,8 @@ export async function markProgress(req, res) {
 
     await progress.save();
 
+    await clearUserCache(auth0Id);
+
     return res.json({ success: true, data: progress.completedLessons });
   } catch (error) {
     console.error("Mark progress error:", error);
@@ -205,6 +208,8 @@ export async function addXp(req, res) {
       { $inc: { xp: amount } },
       { new: true }
     );
+
+    await clearUserCache(auth0Id);
 
     return res.json({ success: true, xp: user.xp });
   } catch (error) {
