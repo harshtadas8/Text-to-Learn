@@ -6,64 +6,7 @@ import { generateEmbeddings } from "../services/ai/gemini.service.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-function generateLessonPrompt(courseTitle, moduleTitle, lessonTitle, language) {
-  let languageRules = "";
-
-  if (language === "Marathi") {
-    languageRules = `
-- Use Marathi language ONLY
-- Use Devanagari script
-- Do NOT use English except unavoidable technical terms
-`;
-  } else if (language === "Hindi") {
-    languageRules = `
-- Use Hindi language ONLY
-- Use Devanagari script
-- Do NOT use English except unavoidable technical terms
-`;
-  } else if (language === "Hinglish") {
-    languageRules = `
-- Use Hinglish (Hindi language written in English letters)
-- Do NOT use Devanagari
-- Example: "Iska matlab ye hota hai ki..."
-`;
-  } else {
-    languageRules = `
-- Use clear beginner-friendly English
-`;
-  }
-
-  return `
-You are an API that returns ONLY valid JSON.
-
-Generate a detailed lesson.
-
-Course: "${courseTitle}"
-Module: "${moduleTitle}"
-Lesson: "${lessonTitle}"
-
-LANGUAGE RULES:
-${languageRules}
-
-Return JSON ONLY in this exact structure:
-{
-  "lessonTitle": "",
-  "objectives": [],
-  "content": [
-    { "type": "heading", "text": "" },
-    { "type": "paragraph", "text": "" },
-    { "type": "code", "language": "", "code": "" },
-    { "type": "video", "query": "" }
-  ]
-}
-
-Rules:
-- NO markdown
-- NO explanations outside JSON
-- Include EXACTLY one video block
-- Video query must be specific to lesson
-`;
-}
+import { LESSON_DETAIL_PROMPT } from "../config/prompts.js";
 
 export async function generateLessonController(req, res) {
   try {
@@ -98,7 +41,7 @@ export async function generateLessonController(req, res) {
       generationConfig: { responseMimeType: "application/json" },
     });
 
-    const prompt = generateLessonPrompt(
+    const prompt = LESSON_DETAIL_PROMPT(
       courseTitle,
       moduleTitle,
       lessonTitle,
@@ -138,9 +81,16 @@ export async function generateLessonController(req, res) {
         }
         
         if (chunks.length > 0) {
-          await Course.findByIdAndUpdate(courseId, {
-            $push: { chunks: { $each: chunks } }
-          });
+          const CourseChunk = (await import("../models/CourseChunk.js")).default;
+          
+          // Map chunks to include courseId
+          const chunkDocs = chunks.map(c => ({
+            courseId,
+            text: c.text,
+            embedding: c.embedding
+          }));
+          
+          await CourseChunk.insertMany(chunkDocs);
           console.log(`[RAG] Added ${chunks.length} chunks for course ${courseId}`);
         }
       } catch (embErr) {

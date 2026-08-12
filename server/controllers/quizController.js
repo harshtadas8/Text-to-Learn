@@ -61,9 +61,9 @@ export async function submitQuizController(req, res) {
       correctCount
     });
 
-    // Trigger Remedial Agent if score is less than 60%
+    // Trigger Remedial Agent if there are any missed questions (score < 100%)
     const scorePercentage = (correctCount / quizQuestions.length) * 100;
-    if (scorePercentage < 60) {
+    if (scorePercentage < 100) {
       const failedQuestions = userAnswers.filter(ans => !ans.isCorrect).map(ans => ({
         question: ans.question,
         correctAnswer: ans.correctAnswer,

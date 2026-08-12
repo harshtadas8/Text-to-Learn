@@ -1,4 +1,4 @@
-import { connection as redisClient } from "../config/queue.js";
+import { cacheConnection as redisClient } from "../config/queue.js";
 
 /**
  * Clears all cached routes for a specific user to prevent stale data.
@@ -11,8 +11,6 @@ export async function clearUserCache(userId) {
   
   try {
     const pattern = `cache:${userId}:*`;
-    // We use keys() here because we expect a small number of keys per user.
-    // For extreme scale, SCAN is preferred, but this is fine for targeted user cache invalidation.
     const keys = await redisClient.keys(pattern);
     
     if (keys.length > 0) {
@@ -20,7 +18,7 @@ export async function clearUserCache(userId) {
       console.log(`[Redis] Cleared ${keys.length} cached routes for user ${userId}`);
     }
   } catch (error) {
-    console.error("[Redis] Failed to clear user cache:", error);
+    console.error("[Redis] Failed to clear user cache:", error.message);
   }
 }
 
@@ -37,6 +35,6 @@ export async function clearPublicCache() {
       console.log(`[Redis] Cleared ${keys.length} public cached routes`);
     }
   } catch (error) {
-    console.error("[Redis] Failed to clear public cache:", error);
+    console.error("[Redis] Failed to clear public cache:", error.message);
   }
 }

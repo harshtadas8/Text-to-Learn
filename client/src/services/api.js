@@ -247,6 +247,54 @@ export async function getFullCourseAPI(id) {
   return res.json();
 }
 
+export async function downloadCoursePdfAPI(id) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/courses/${id}/pdf`, {
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to download course PDF");
+  }
+
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `Course_${id}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(url);
+}
+
+export async function downloadCertificatePdfAPI(id) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/courses/${id}/certificate`, {
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to download certificate PDF");
+  }
+
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `Certificate_${id}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(url);
+}
+
 /* ------------------ QUIZ APIs ------------------ */
 
 export async function generateQuizAPI(payload) {

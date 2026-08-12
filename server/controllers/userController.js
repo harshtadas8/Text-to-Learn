@@ -120,7 +120,8 @@ export async function getDashboard(req, res) {
           strongTopics: user?.strongTopics || [],
           weakTopics: user?.weakTopics || [],
           quizHistory: user?.quizHistory || [],
-          learningTime: user?.learningTime || 0
+          learningTime: user?.learningTime || 0,
+          remedials: user?.remedials || []
         },
         recentCourses: enrichedCourses
       }

@@ -1,4 +1,5 @@
 import { BaseAgent } from "./BaseAgent.js";
+import { QUIZ_GENERATION_PROMPT } from "../../../config/prompts.js";
 
 export class QuizAgent extends BaseAgent {
   constructor() {
@@ -6,26 +7,7 @@ export class QuizAgent extends BaseAgent {
   }
 
   async generateQuiz(courseTopic, moduleTitle, lessonTitle, lessonContent) {
-    const prompt = `
-Generate a 3-question multiple choice quiz based strictly on the following lesson from the course "${courseTopic}" -> Module: "${moduleTitle}" -> Lesson: "${lessonTitle}".
-
-Lesson Content:
-"""
-${lessonContent.substring(0, 5000)}
-"""
-
-Return ONLY raw JSON in this exact structure:
-{
-  "questions": [
-    {
-      "question": "What is ...?",
-      "options": ["A", "B", "C", "D"],
-      "correctAnswer": "A",
-      "explanation": "A is correct because..."
-    }
-  ]
-}
-`;
+    const prompt = QUIZ_GENERATION_PROMPT(courseTopic, moduleTitle, lessonTitle, lessonContent);
     const result = await this.model.generateContent(prompt);
     const rawText = result.response.text();
     return this.extractJson(rawText);

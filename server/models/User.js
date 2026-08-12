@@ -46,7 +46,14 @@ const userSchema = new mongoose.Schema(
     learningTime: {
       type: Number, // in minutes
       default: 0,
-    }
+    },
+    remedials: [
+      {
+        topic: String,
+        content: String,
+        date: { type: Date, default: Date.now }
+      }
+    ]
   },
   { timestamps: true }
 );

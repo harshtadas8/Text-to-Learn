@@ -62,7 +62,24 @@ const aiWorker = new Worker(
         
         const remedialContent = await generateRemedialWithGemini(courseTopic, failedQuestions);
         if (remedialContent) {
-          console.log(`[Worker] Remedial lesson generated successfully! (Content: ${remedialContent.substring(0, 50)}...)`);
+          console.log(`[Worker] Remedial content generated, length: ${remedialContent.length}`);
+          const user = await User.findOne({ auth0Id: userId });
+          if (user) {
+            if (!user.remedials) user.remedials = [];
+            user.remedials.push({
+              topic: courseTopic,
+              content: remedialContent,
+              date: new Date()
+            });
+            user.markModified("remedials");
+            await user.save();
+            await clearUserCache(userId);
+            console.log(`[Worker] Remedial lesson saved successfully for user ${userId}! Total remedials now: ${user.remedials.length}`);
+          } else {
+            console.log(`[Worker] Error: User not found for ID ${userId}`);
+          }
+        } else {
+          console.log(`[Worker] Error: Remedial content was empty!`);
         }
       }
     } catch (error) {
@@ -79,6 +96,11 @@ aiWorker.on("completed", (job) => {
 
 aiWorker.on("failed", (job, err) => {
   console.error(`[Worker] Job ${job.id} failed with error:`, err.message);
+});
+
+aiWorker.on("error", (err) => {
+  // BullMQ might emit connection errors here. Catch them to prevent unhandled exceptions.
+  console.error(`[Worker] Connection error:`, err.message);
 });
 
 export default aiWorker;

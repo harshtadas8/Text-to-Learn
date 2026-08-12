@@ -1,6 +1,7 @@
 import { BaseAgent } from "./BaseAgent.js";
 import Course from "../../../models/Course.js";
 import { generateEmbeddings } from "../gemini.service.js";
+import { TUTOR_SYSTEM_PROMPT } from "../../../config/prompts.js";
 
 function cosineSimilarity(vecA, vecB) {
   let dotProduct = 0;
@@ -35,27 +36,34 @@ Adjust your explanation style accordingly (more patient and analogous for weak t
     let extraContext = '';
     if (courseId) {
       try {
-        const course = await Course.findById(courseId).lean();
-        if (course && course.chunks && course.chunks.length > 0) {
-          console.log(`[RAG] Searching ${course.chunks.length} chunks for: "${userMessage}"`);
-          const queryEmbedding = await generateEmbeddings(userMessage);
-          
-          // Calculate similarity for all chunks
-          const scoredChunks = course.chunks.map(chunk => ({
-            text: chunk.text,
-            score: cosineSimilarity(queryEmbedding, chunk.embedding)
-          }));
-          
-          // Sort by highest similarity
-          scoredChunks.sort((a, b) => b.score - a.score);
-          
-          // Take top 3 most relevant chunks
-          const topChunks = scoredChunks.slice(0, 3);
-          
-          if (topChunks[0].score > 0.5) { // Threshold
-            extraContext = `\n\nRELEVANT COURSE CONTEXT (from other lessons):\n` + topChunks.map(c => `- ${c.text}`).join('\n');
-            console.log(`[RAG] Found context with top score: ${topChunks[0].score.toFixed(3)}`);
+        const CourseChunk = (await import("../../../models/CourseChunk.js")).default;
+        const mongoose = (await import("mongoose")).default;
+        
+        console.log(`[RAG] Searching chunks for: "${userMessage}"`);
+        const queryEmbedding = await generateEmbeddings(userMessage);
+        
+        const topChunks = await CourseChunk.aggregate([
+          {
+            $vectorSearch: {
+              index: "vector_index", // Name of the index in Atlas
+              path: "embedding",
+              queryVector: queryEmbedding,
+              numCandidates: 100,
+              limit: 3,
+              filter: { courseId: new mongoose.Types.ObjectId(courseId) }
+            }
+          },
+          {
+            $project: {
+              text: 1,
+              score: { $meta: "vectorSearchScore" }
+            }
           }
+        ]);
+        
+        if (topChunks.length > 0 && topChunks[0].score > 0.5) { // Threshold
+          extraContext = `\n\nRELEVANT COURSE CONTEXT (from other lessons):\n` + topChunks.map(c => `- ${c.text}`).join('\n');
+          console.log(`[RAG] Found context with top score: ${topChunks[0].score.toFixed(3)}`);
         }
       } catch (err) {
         console.error("[RAG] Vector search failed:", err);
@@ -68,15 +76,7 @@ Adjust your explanation style accordingly (more patient and analogous for weak t
           role: "user",
           parts: [
             {
-              text: `You are an AI Tutor embedded in an e-learning platform.
-Your job is to answer the user's questions based on the provided lesson content and any extra context.
-Be encouraging, beginner-friendly, and concise.
-${memoryConstraint}
-
-CURRENT LESSON CONTENT:
-"""
-${lessonContent.substring(0, 8000)}
-"""${extraContext}`
+              text: TUTOR_SYSTEM_PROMPT(lessonContent, extraContext, memoryConstraint)
             }
           ]
         },

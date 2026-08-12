@@ -9,6 +9,7 @@ import userRoutes from "./routes/userRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
 import tutorRoutes from "./routes/tutorRoutes.js";
 import requireAuth from "./middlewares/requireAuth.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
 import "./workers/aiWorker.js"; // 🔥 START BULLMQ WORKER
 
 await connectDB();
@@ -66,14 +67,7 @@ app.use("/api/tutor", tutorRoutes);
 /* ===============================
    GLOBAL ERROR HANDLER
 ================================ */
-app.use((err, req, res, next) => {
-  if (err.name === "UnauthorizedError") {
-    return res.status(401).json({ message: "Invalid or missing authorization token" });
-  }
-  
-  console.error(err);
-  res.status(500).json({ message: "Internal Server Error" });
-});
+app.use(errorHandler);
 
 /* ===============================
    HEALTH CHECK

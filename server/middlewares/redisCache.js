@@ -1,4 +1,4 @@
-import { connection as redisClient } from "../config/queue.js";
+import { cacheConnection as redisClient } from "../config/queue.js";
 
 /**
  * Middleware to cache API responses in Redis.

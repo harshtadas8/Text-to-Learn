@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getCourseByIdAPI, getFullCourseAPI, getCourseProgressAPI, markLessonProgressAPI } from "../services/api";
+import { getCourseByIdAPI, getCourseProgressAPI, markLessonProgressAPI, downloadCoursePdfAPI } from "../services/api";
 import ModuleAccordion from "../components/ModuleAccordion";
-import { generateCoursePDF } from "../utils/coursePdf";
 import CourseSkeleton from "../components/CourseSkeleton";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -61,11 +60,10 @@ export default function CourseDetails() {
 
   const handleDownloadPDF = async () => {
     try {
-      const res = await getFullCourseAPI(id); // ✅ FULL COURSE WITH LESSONS
-      generateCoursePDF(res.data);
+      await downloadCoursePdfAPI(id);
     } catch (err) {
       console.error(err);
-      alert("Failed to generate full course PDF");
+      alert("Failed to download full course PDF");
     }
   };
 

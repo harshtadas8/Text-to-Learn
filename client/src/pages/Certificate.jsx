@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { getCourseByIdAPI } from "../services/api";
-import { toPng } from "html-to-image";
-import { jsPDF } from "jspdf";
+import { getCourseByIdAPI, downloadCertificatePdfAPI } from "../services/api";
 
 export default function Certificate() {
   const { id } = useParams();
@@ -32,26 +30,11 @@ export default function Certificate() {
   }, [id]);
 
   const handleDownloadPDF = async () => {
-    const element = document.getElementById("certificate-container");
-    if (!element) return;
-    
     try {
-      const dataUrl = await toPng(element, { 
-        cacheBust: true, 
-        backgroundColor: "#0a0a0a", 
-        pixelRatio: 2 
-      });
-      
-      const pdf = new jsPDF("l", "mm", "a4");
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const elRect = element.getBoundingClientRect();
-      const pdfHeight = (elRect.height * pdfWidth) / elRect.width;
-      
-      pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`${course.topic.replace(/\s+/g, '_')}_Certificate.pdf`);
+      await downloadCertificatePdfAPI(id);
     } catch (err) {
       console.error("Failed to generate PDF", err);
-      alert("Failed to generate PDF. Please try again. " + (err.message || err));
+      alert("Failed to download PDF. Please try again. " + (err.message || err));
     }
   };
 

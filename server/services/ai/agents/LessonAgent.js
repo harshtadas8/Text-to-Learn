@@ -1,4 +1,5 @@
 import { BaseAgent } from "./BaseAgent.js";
+import { LESSON_GENERATION_PROMPT } from "../../../config/prompts.js";
 
 export class LessonAgent extends BaseAgent {
   constructor() {
@@ -18,51 +19,7 @@ User Adaptive Profile:
 `;
     }
 
-    const prompt = `
-Generate a ${level} level course on "${topic}" in ${language}.
-${goalConstraint}
-${timeConstraint}
-${memoryConstraint}
-Return ONLY raw JSON in this structure:
-
-{
-  "courseTitle": "",
-  "level": "${level}",
-  "description": "",
-  "modules": [
-    {
-      "moduleIndex": 1,
-      "moduleTitle": "",
-      "learningObjective": "",
-      "lessons": [
-        {
-          "lessonIndex": 1,
-          "title": ""
-        }
-      ],
-      "resources": {
-        "videos": [
-          "YouTube search query relevant to this module"
-        ],
-        "blogs": [
-          "Relevant blog or documentation source name"
-        ]
-      }
-    }
-  ]
-}
-
-Rules:
-- Max 5 modules
-- Max 5 lessons per module
-- Resources MUST be present for every module
-- Videos must be SEARCH QUERIES, not URLs
-- Blogs must be site or documentation names, not links
-- Beginner-friendly language
-- NO markdown
-- NO explanations
-- RAW JSON ONLY
-`;
+    const prompt = LESSON_GENERATION_PROMPT(topic, level, language, goalConstraint, timeConstraint, memoryConstraint);
     const result = await this.model.generateContent(prompt);
     const rawText = result.response.text();
     return this.extractJson(rawText);

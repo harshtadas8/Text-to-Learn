@@ -1,3 +1,1024 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+client/
+  public/
+    vite.svg
+  src/
+    assets/
+      react.svg
+    components/
+      Analytics/
+        DashboardCharts.jsx
+      AuthButtons.jsx
+      CourseCard.jsx
+      CourseGridSkeleton.jsx
+      CourseSkeleton.jsx
+      LessonItem.jsx
+      LessonTutor.jsx
+      LessonViewer.jsx
+      Loader.jsx
+      MobileMenu.jsx
+      ModuleAccordion.jsx
+      Navbar.jsx
+      ProtectedRoute.jsx
+      QuizViewer.jsx
+      TypewriterEffect.jsx
+      UserProfile.jsx
+      VideoBlock.jsx
+    pages/
+      Certificate.jsx
+      CourseDetails.jsx
+      Courses.jsx
+      Explore.jsx
+      Home.jsx
+      Profile.jsx
+    services/
+      api.js
+      auth0Token.js
+    utils/
+      fonts/
+        NotoSansDevanagari-Regular.ttf
+      coursePdf.js
+    App.css
+    App.jsx
+    index.css
+    main.jsx
+  .gitignore
+  eslint.config.js
+  index.html
+  package.json
+  postcss.config.js
+  README.md
+  tailwind.config.js
+  vite.config.js
+screenshots/
+  auth0-login.png
+  course-view.png
+  generate-course.png
+  home.png
+  lesson-with-video.png
+  mobile-view.png
+server/
+  config/
+    db.js
+    queue.js
+  controllers/
+    courseController.js
+    lessonController.js
+    quizController.js
+    tutorController.js
+    userController.js
+  middlewares/
+    auth.js
+    error.middleware.js
+    redisCache.js
+    requireAuth.js
+  models/
+    Course.js
+    Lesson.js
+    Module.js
+    Progress.js
+    User.js
+  routes/
+    courseRoutes.js
+    lessonRoutes.js
+    quizRoutes.js
+    tutorRoutes.js
+    userRoutes.js
+    youtubeRoutes.js
+  services/
+    ai/
+      agents/
+        AnalysisAgent.js
+        BaseAgent.js
+        EvaluatorAgent.js
+        LessonAgent.js
+        QuizAgent.js
+        RemedialAgent.js
+        TutorAgent.js
+      gemini.service.js
+      index.js
+      mock.service.js
+      Orchestrator.js
+    courseService.js
+  utils/
+    apiResponse.js
+    cacheInvalidator.js
+    jsonUtils.js
+  workers/
+    aiWorker.js
+  package.json
+  server.js
+.gitignore
+README.md
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="client/public/vite.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="31.88" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 257"><defs><linearGradient id="IconifyId1813088fe1fbc01fb466" x1="-.828%" x2="57.636%" y1="7.652%" y2="78.411%"><stop offset="0%" stop-color="#41D1FF"></stop><stop offset="100%" stop-color="#BD34FE"></stop></linearGradient><linearGradient id="IconifyId1813088fe1fbc01fb467" x1="43.376%" x2="50.316%" y1="2.242%" y2="89.03%"><stop offset="0%" stop-color="#FFEA83"></stop><stop offset="8.333%" stop-color="#FFDD35"></stop><stop offset="100%" stop-color="#FFA800"></stop></linearGradient></defs><path fill="url(#IconifyId1813088fe1fbc01fb466)" d="M255.153 37.938L134.897 252.976c-2.483 4.44-8.862 4.466-11.382.048L.875 37.958c-2.746-4.814 1.371-10.646 6.827-9.67l120.385 21.517a6.537 6.537 0 0 0 2.322-.004l117.867-21.483c5.438-.991 9.574 4.796 6.877 9.62Z"></path><path fill="url(#IconifyId1813088fe1fbc01fb467)" d="M185.432.063L96.44 17.501a3.268 3.268 0 0 0-2.634 3.014l-5.474 92.456a3.268 3.268 0 0 0 3.997 3.378l24.777-5.718c2.318-.535 4.413 1.507 3.936 3.838l-7.361 36.047c-.495 2.426 1.782 4.5 4.151 3.78l15.304-4.649c2.372-.72 4.652 1.36 4.15 3.788l-11.698 56.621c-.732 3.542 3.979 5.473 5.943 2.437l1.313-2.028l72.516-144.72c1.215-2.423-.88-5.186-3.54-4.672l-25.505 4.922c-2.396.462-4.435-1.77-3.759-4.114l16.646-57.705c.677-2.35-1.37-4.583-3.769-4.113Z"></path></svg>
+</file>
+
+<file path="client/src/assets/react.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+</file>
+
+<file path="client/src/components/Analytics/DashboardCharts.jsx">
+import React from 'react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
+
+export default function DashboardCharts({ quizHistory = [], learningTime = 0 }) {
+  
+  // Format quiz history data
+  const data = quizHistory.map((q, i) => ({
+    name: `Quiz ${i + 1}`,
+    score: Math.round((q.score / q.total) * 100) || 0,
+    date: new Date(q.date).toLocaleDateString(),
+  }));
+
+  // If no quiz history, show empty state
+  if (data.length === 0) {
+    return (
+      <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-8 mt-8 text-center text-gray-500">
+        <p>No analytics available yet. Complete some quizzes to see your progress!</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+      {/* Quiz Scores Over Time */}
+      <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-6">
+        <h3 className="text-lg font-light text-gray-200 mb-6">Quiz Score Trends</h3>
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
+              <XAxis dataKey="name" stroke="#6b7280" fontSize={12} tickLine={false} axisLine={false} />
+              <YAxis stroke="#6b7280" fontSize={12} tickLine={false} axisLine={false} domain={[0, 100]} tickFormatter={(val) => `${val}%`} />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', color: '#f3f4f6' }}
+                itemStyle={{ color: '#34d399' }}
+              />
+              <Line type="monotone" dataKey="score" stroke="#34d399" strokeWidth={3} dot={{ r: 4, fill: '#34d399', strokeWidth: 2, stroke: '#064e3b' }} activeDot={{ r: 6 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Learning Time */}
+      <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-6 flex flex-col justify-center items-center text-center">
+        <h3 className="text-lg font-light text-gray-200 mb-2 w-full text-left">Total Learning Time</h3>
+        <div className="w-full flex-1 flex flex-col items-center justify-center">
+           <div className="text-6xl font-light text-emerald-400 mb-2">{learningTime}</div>
+           <div className="text-gray-500 uppercase tracking-widest text-sm font-medium">Minutes Spent Learning</div>
+           <p className="text-gray-600 mt-4 text-xs max-w-[200px]">Keep up the great work! Consistent learning time leads to better mastery.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/components/AuthButtons.jsx">
+import { useAuth0 } from "@auth0/auth0-react";
+
+export default function AuthButtons() {
+  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) {
+    return <span className="text-gray-400 text-sm">Loading...</span>;
+  }
+
+  if (isAuthenticated) return null;
+
+  return (
+    <button
+      onClick={() => loginWithRedirect()}
+      className="px-4 py-2 rounded-lg
+                 bg-gradient-to-r from-emerald-400 to-blue-500
+                 text-black font-semibold hover:opacity-90 transition"
+    >
+      Login
+    </button>
+  );
+}
+</file>
+
+<file path="client/src/components/CourseCard.jsx">
+
+</file>
+
+<file path="client/src/components/CourseGridSkeleton.jsx">
+export default function CourseGridSkeleton() {
+  return (
+    <div className="min-h-screen bg-black text-white px-4 py-12">
+      <div className="max-w-6xl mx-auto">
+        <div className="h-10 bg-gray-900 rounded w-48 mb-8 animate-pulse" />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div
+              key={i}
+              className="bg-gray-900 border border-gray-800 rounded-xl p-5 animate-pulse h-32"
+            >
+              <div className="h-6 bg-gray-800 rounded w-3/4 mb-3" />
+              <div className="h-4 bg-gray-800 rounded w-1/2 mb-4" />
+              <div className="h-3 bg-gray-800 rounded w-1/4" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/components/CourseSkeleton.jsx">
+export default function CourseSkeleton() {
+  return (
+    <div className="min-h-screen bg-black text-white px-4 py-8 animate-pulse">
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div className="h-8 bg-gray-800 rounded w-3/4" />
+        <div className="h-4 bg-gray-800 rounded w-1/2" />
+
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-16 bg-gray-900 rounded-xl" />
+        ))}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/components/LessonItem.jsx">
+import { useState } from "react";
+
+export default function LessonItem({ lesson }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="border border-gray-800 rounded-lg mb-3">
+      {/* HEADER */}
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full text-left px-4 py-3 bg-gray-900 hover:bg-gray-800 flex justify-between items-center"
+      >
+        <span className="text-white">
+          {lesson.lessonIndex}. {lesson.title}
+        </span>
+        <span className="text-gray-400">{open ? "−" : "+"}</span>
+      </button>
+
+      {/* BODY */}
+      {open && (
+        <div className="px-4 py-4 bg-black space-y-4">
+          {/* Explanation */}
+          {lesson.explanation && (
+            <p className="text-gray-300 text-sm leading-relaxed">
+              {lesson.explanation}
+            </p>
+          )}
+
+          {/* Resources */}
+          {lesson.resources && (
+            <div className="space-y-2">
+              {lesson.resources.youtube?.length > 0 && (
+                <div>
+                  <h4 className="text-emerald-400 text-sm mb-1">
+                    📺 YouTube
+                  </h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-300">
+                    {lesson.resources.youtube.map((y, i) => (
+                      <li key={i}>
+                        <a
+                          href={y.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="hover:underline"
+                        >
+                          {y.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {lesson.resources.blogs?.length > 0 && (
+                <div>
+                  <h4 className="text-emerald-400 text-sm mb-1">
+                    📘 Blogs
+                  </h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-300">
+                    {lesson.resources.blogs.map((b, i) => (
+                      <li key={i}>
+                        <a
+                          href={b.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="hover:underline"
+                        >
+                          {b.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/components/Loader.jsx">
+
+</file>
+
+<file path="client/src/components/ProtectedRoute.jsx">
+import { useAuth0 } from "@auth0/auth0-react";
+import { Navigate } from "react-router-dom";
+
+export default function ProtectedRoute({ children }) {
+  const { isAuthenticated, isLoading } = useAuth0();
+
+  // While auth state is loading
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center text-sm">
+        Checking authentication…
+      </div>
+    );
+  }
+
+  // If not logged in → redirect to home
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
+  // If logged in → allow access
+  return children;
+}
+</file>
+
+<file path="client/src/components/TypewriterEffect.jsx">
+import React, { useState, useEffect } from 'react';
+
+export default function TypewriterEffect({ text, speed = 10, onComplete }) {
+  const [displayedText, setDisplayedText] = useState('');
+  const [isTyping, setIsTyping] = useState(true);
+
+  useEffect(() => {
+    let i = 0;
+    setDisplayedText('');
+    setIsTyping(true);
+    
+    if (!text) {
+      setIsTyping(false);
+      if (onComplete) onComplete();
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      setDisplayedText((prev) => prev + text.charAt(i));
+      i++;
+      
+      if (i >= text.length) {
+        clearInterval(intervalId);
+        setIsTyping(false);
+        if (onComplete) onComplete();
+      }
+    }, speed);
+
+    return () => clearInterval(intervalId);
+  }, [text, speed, onComplete]);
+
+  return (
+    <span>
+      {displayedText}
+      {isTyping && <span className="animate-pulse font-light text-emerald-400">|</span>}
+    </span>
+  );
+}
+</file>
+
+<file path="client/src/components/UserProfile.jsx">
+import { useAuth0 } from "@auth0/auth0-react";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+/* Generate initials from user name */
+function getInitials(name = "") {
+  const parts = name.trim().split(" ").filter(Boolean);
+
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+
+  return "U";
+}
+
+/* Generate consistent background color */
+function getAvatarColor(name = "") {
+  const colors = [
+    "from-emerald-500 to-teal-500",
+    "from-blue-500 to-indigo-500",
+    "from-purple-500 to-pink-500",
+    "from-rose-500 to-red-500",
+    "from-amber-500 to-orange-500",
+  ];
+
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  return colors[Math.abs(hash) % colors.length];
+}
+
+export default function UserProfile() {
+  const { user, isAuthenticated, logout } = useAuth0();
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const navigate = useNavigate();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  if (!isAuthenticated || !user) return null;
+
+  const initials = getInitials(user.name);
+  const bgGradient = getAvatarColor(user.name);
+
+  return (
+    <div className="relative" ref={ref}>
+      {/* Avatar */}
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        className={`w-9 h-9 rounded-full flex items-center justify-center
+                    bg-gradient-to-br ${bgGradient}
+                    text-black font-bold text-sm
+                    border-2 border-gray-700 hover:border-emerald-400 transition`}
+        title={user.name}
+      >
+        {initials}
+      </button>
+
+      {/* Dropdown */}
+      {open && (
+        <div className="absolute right-0 mt-3 w-44 rounded-xl
+                        bg-gray-900 border border-gray-800
+                        shadow-lg overflow-hidden z-50">
+
+          <button
+            onClick={() => {
+              setOpen(false);
+              navigate("/profile"); // placeholder route
+            }}
+            className="w-full text-left px-4 py-3 text-sm text-gray-300
+                       hover:bg-gray-800 hover:text-white transition"
+          >
+            My Profile
+          </button>
+
+          <button
+            onClick={() => {
+              setOpen(false);
+              navigate("/courses");
+            }}
+            className="w-full text-left px-4 py-3 text-sm text-gray-300
+                       hover:bg-gray-800 hover:text-white transition"
+          >
+            My Courses
+          </button>
+
+          <div className="border-t border-gray-800" />
+
+          <button
+            onClick={() =>
+              logout({ logoutParams: { returnTo: window.location.origin } })
+            }
+            className="w-full text-left px-4 py-3 text-sm
+                       text-red-400 hover:bg-red-500/10 transition"
+          >
+            Logout
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/pages/Certificate.jsx">
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import { getCourseByIdAPI } from "../services/api";
+import { toPng } from "html-to-image";
+import { jsPDF } from "jspdf";
+
+export default function Certificate() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { user, isAuthenticated, isLoading } = useAuth0();
+  
+  const [course, setCourse] = useState(null);
+  const [fetching, setFetching] = useState(true);
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const res = await getCourseByIdAPI(id);
+        if (res.success) {
+          setCourse(res.data);
+        } else {
+          console.error("Failed to fetch course for certificate");
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setFetching(false);
+      }
+    };
+    fetchCourse();
+  }, [id]);
+
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById("certificate-container");
+    if (!element) return;
+    
+    try {
+      const dataUrl = await toPng(element, { 
+        cacheBust: true, 
+        backgroundColor: "#0a0a0a", 
+        pixelRatio: 2 
+      });
+      
+      const pdf = new jsPDF("l", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const elRect = element.getBoundingClientRect();
+      const pdfHeight = (elRect.height * pdfWidth) / elRect.width;
+      
+      pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${course.topic.replace(/\s+/g, '_')}_Certificate.pdf`);
+    } catch (err) {
+      console.error("Failed to generate PDF", err);
+      alert("Failed to generate PDF. Please try again. " + (err.message || err));
+    }
+  };
+
+  if (isLoading || fetching) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-400"></div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
+        <p className="text-xl mb-4">Please login to view your certificate.</p>
+        <button onClick={() => navigate("/")} className="px-6 py-2 bg-emerald-500 text-black font-bold rounded-lg hover:bg-emerald-400 transition">
+          Go Home
+        </button>
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
+        <p className="text-xl mb-4">Course not found.</p>
+        <button onClick={() => navigate("/courses")} className="px-6 py-2 bg-emerald-500 text-black font-bold rounded-lg hover:bg-emerald-400 transition">
+          Back to Dashboard
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-black text-white flex flex-col items-center py-12 px-4 print:bg-white print:text-black print:py-0 print:px-0">
+      
+      {/* Controls - Hidden during print */}
+      <div className="max-w-4xl w-full flex justify-between items-center mb-8">
+        <button 
+          onClick={() => navigate(`/course/${id}`)}
+          className="px-5 py-2 bg-gray-800 text-gray-300 font-medium rounded-lg hover:bg-gray-700 hover:text-white transition flex items-center"
+        >
+          Back to Course
+        </button>
+        <button 
+          onClick={handleDownloadPDF}
+          className="px-6 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-black font-bold rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:shadow-[0_0_25px_rgba(16,185,129,0.6)] transition"
+        >
+          Download PDF
+        </button>
+      </div>
+
+      {/* Certificate Container */}
+      <div 
+        id="certificate-container"
+        className="relative w-full max-w-3xl aspect-[1.414/1] bg-[#0a0a0a] border border-gray-800 p-2 shadow-2xl rounded-sm"
+      >
+        
+        {/* Inner Border */}
+        <div className="w-full h-full border border-gray-700 p-6 sm:p-12 flex flex-col items-center text-center relative overflow-hidden">
+          
+          {/* Background watermark/glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-500/20 to-transparent rounded-full pointer-events-none"></div>
+
+          {/* Header */}
+          <div className="mb-6 relative z-10">
+            <h1 className="text-3xl sm:text-5xl font-serif text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-200 uppercase tracking-[0.2em]">
+              Certificate
+            </h1>
+            <p className="text-xs sm:text-sm text-emerald-400/80 tracking-[0.4em] uppercase mt-2">
+              of Completion
+            </p>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 flex flex-col justify-center items-center w-full relative z-10">
+            <p className="text-gray-400 text-xs sm:text-sm mb-3">This is to certify that</p>
+            <h2 className="text-2xl sm:text-4xl font-bold text-white mb-6 border-b border-gray-800 pb-2 min-w-[250px] sm:min-w-[400px] break-all px-4">
+              {user.name || "Learner"}
+            </h2>
+
+            <p className="text-gray-400 text-xs sm:text-sm mb-3">has successfully completed the AI-generated course</p>
+            <h3 className="text-xl sm:text-2xl font-bold text-emerald-400 mb-6 max-w-xl">
+              {course.topic}
+            </h3>
+
+            <p className="text-gray-500 text-xs max-w-lg mx-auto">
+              Demonstrating proficiency at the <span className="text-gray-300 font-semibold">{course.level}</span> level in <span className="text-gray-300 font-semibold">{course.language}</span>.
+            </p>
+          </div>
+
+          {/* Footer */}
+          <div className="w-full flex justify-between items-end mt-8 relative z-10 border-t border-gray-800/50 pt-6">
+            <div className="text-left">
+              <p className="text-white text-base font-bold">Text-to-Learn</p>
+              <p className="text-[10px] text-gray-500">AI Learning Platform</p>
+            </div>
+
+            <div className="w-16 h-16 rounded-full border border-gray-700 flex items-center justify-center bg-[#0a0a0a]">
+              <span className="text-2xl">🏆</span>
+            </div>
+
+            <div className="text-right">
+              <p className="text-white text-base font-bold">
+                {new Date().toLocaleDateString()}
+              </p>
+              <p className="text-[10px] text-gray-500">Date of Achievement</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/pages/Explore.jsx">
+import { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { getPublicCoursesAPI } from "../services/api";
+
+export default function Explore() {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Filter & Search States
+  const [searchQuery, setSearchQuery] = useState("");
+  const [levelFilter, setLevelFilter] = useState("All");
+  const [languageFilter, setLanguageFilter] = useState("All");
+  const [sortBy, setSortBy] = useState("newest");
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const res = await getPublicCoursesAPI();
+      if (res.success) {
+        setCourses(res.data);
+      } else {
+        setError(res.message);
+      }
+    } catch (err) {
+      setError("Failed to fetch public courses");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Derived unique values for filters
+  const uniqueLevels = useMemo(() => ["All", ...new Set(courses.map(c => c.level))], [courses]);
+  const uniqueLanguages = useMemo(() => ["All", ...new Set(courses.map(c => c.language))], [courses]);
+
+  // Filtered and Sorted Courses
+  const filteredCourses = useMemo(() => {
+    let result = [...courses];
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(c => 
+        c.topic.toLowerCase().includes(query) || 
+        (c.goal && c.goal.toLowerCase().includes(query))
+      );
+    }
+
+    // Level filter
+    if (levelFilter !== "All") {
+      result = result.filter(c => c.level === levelFilter);
+    }
+
+    // Language filter
+    if (languageFilter !== "All") {
+      result = result.filter(c => c.language === languageFilter);
+    }
+
+    // Sorting
+    result.sort((a, b) => {
+      if (sortBy === "newest") {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      } else if (sortBy === "oldest") {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      } else if (sortBy === "a-z") {
+        return a.topic.localeCompare(b.topic);
+      }
+      return 0;
+    });
+
+    return result;
+  }, [courses, searchQuery, levelFilter, languageFilter, sortBy]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[calc(100vh-80px)]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-400"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-red-950 border border-red-900 rounded-lg p-6">
+          <p className="text-red-400">{error}</p>
+          <button 
+            onClick={fetchCourses}
+            className="mt-4 px-4 py-2 bg-red-900 hover:bg-red-800 text-white rounded transition"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      
+      {/* Header Section */}
+      <div className="mb-12">
+        <h1 className="text-3xl sm:text-4xl font-bold text-emerald-400 mb-6">
+          Explore Community Courses
+        </h1>
+        <p className="text-gray-400 text-lg max-w-2xl">
+          Discover a wide range of AI-generated courses created by other learners. 
+          Dive into a topic, complete lessons, and earn XP to level up!
+        </p>
+      </div>
+
+      {/* Search and Filters Section */}
+      {courses.length > 0 && (
+        <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 mb-10 flex flex-col md:flex-row gap-4 items-end">
+          
+          {/* Search Bar */}
+          <div className="flex-1 w-full">
+            <label className="block text-sm font-medium text-gray-400 mb-2">Search Courses</label>
+            <input 
+              type="text" 
+              placeholder="Search by topic or goal..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-black border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
+            />
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap sm:flex-nowrap gap-4 w-full md:w-auto">
+            <div className="flex-1 min-w-[120px]">
+              <label className="block text-sm font-medium text-gray-400 mb-2">Level</label>
+              <select 
+                value={levelFilter}
+                onChange={(e) => setLevelFilter(e.target.value)}
+                className="w-full bg-black border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition appearance-none"
+              >
+                {uniqueLevels.map(lvl => (
+                  <option key={lvl} value={lvl}>{lvl}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex-1 min-w-[120px]">
+              <label className="block text-sm font-medium text-gray-400 mb-2">Language</label>
+              <select 
+                value={languageFilter}
+                onChange={(e) => setLanguageFilter(e.target.value)}
+                className="w-full bg-black border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition appearance-none"
+              >
+                {uniqueLanguages.map(lang => (
+                  <option key={lang} value={lang}>{lang}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex-1 min-w-[140px]">
+              <label className="block text-sm font-medium text-gray-400 mb-2">Sort By</label>
+              <select 
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full bg-black border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition appearance-none"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="a-z">Topic (A-Z)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Results Header */}
+      {courses.length > 0 && (
+        <div className="mb-6 text-gray-400">
+          Showing {filteredCourses.length} {filteredCourses.length === 1 ? 'course' : 'courses'}
+        </div>
+      )}
+
+      {/* Courses Grid */}
+      {courses.length === 0 ? (
+        <div className="text-center py-12 bg-gray-950 rounded-xl border border-gray-800">
+          <p className="text-gray-400 text-lg">No public courses available yet. Be the first to generate one!</p>
+          <Link to="/" className="inline-block mt-4 text-emerald-400 hover:text-emerald-300">
+            Generate a Course
+          </Link>
+        </div>
+      ) : filteredCourses.length === 0 ? (
+        <div className="text-center py-12 bg-gray-950 rounded-xl border border-gray-800">
+          <p className="text-gray-400 text-lg">No courses found matching your filters.</p>
+          <button 
+            onClick={() => {
+              setSearchQuery("");
+              setLevelFilter("All");
+              setLanguageFilter("All");
+            }}
+            className="inline-block mt-4 text-emerald-400 hover:text-emerald-300"
+          >
+            Clear Filters
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCourses.map((course) => (
+            <Link
+              key={course._id}
+              to={`/course/${course._id}`}
+              className="bg-gray-950 rounded-xl p-6 border border-gray-800 hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.1)] transition-all duration-300 group flex flex-col h-full cursor-pointer"
+            >
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-gray-100 mb-2 group-hover:text-emerald-400 transition-colors line-clamp-2">
+                  {course.topic}
+                </h3>
+                
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="px-3 py-1 bg-gray-900 text-gray-300 text-xs rounded-full border border-gray-800">
+                    {course.level}
+                  </span>
+                  <span className="px-3 py-1 bg-emerald-950 text-emerald-400 text-xs rounded-full border border-emerald-900/50">
+                    {course.language}
+                  </span>
+                </div>
+                
+                {course.goal && (
+                  <p className="text-gray-400 text-sm line-clamp-3 mb-4">
+                    {course.goal}
+                  </p>
+                )}
+              </div>
+              
+              <div className="pt-4 border-t border-gray-800/50 mt-auto flex justify-between items-center">
+                <span className="text-xs text-gray-500">
+                  {new Date(course.createdAt).toLocaleDateString()}
+                </span>
+                <span className="text-sm font-medium text-emerald-400 group-hover:translate-x-1 transition-transform inline-block">
+                  Start Learning
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/services/auth0Token.js">
+import { getAuth0Client } from "@auth0/auth0-react";
+
+let auth0Client = null;
+
+export const setAuth0Client = (client) => {
+  auth0Client = client;
+};
+
+export const getAccessToken = async () => {
+  if (!auth0Client) return null;
+
+  try {
+    return await auth0Client.getTokenSilently();
+  } catch (err) {
+    console.error("Failed to get access token", err);
+    return null;
+  }
+};
+</file>
+
+<file path="client/src/utils/coursePdf.js">
 import jsPDF from "jspdf";
 
 /* ======================================================
@@ -169,3 +1190,4672 @@ export function generateCoursePDF(course) {
     `${course.content.courseTitle.replace(/\s+/g, "_")}.pdf`
   );
 }
+</file>
+
+<file path="client/src/App.css">
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+</file>
+
+<file path="client/.gitignore">
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+</file>
+
+<file path="client/eslint.config.js">
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{js,jsx}'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
+])
+</file>
+
+<file path="client/postcss.config.js">
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {},
+    autoprefixer: {},
+  },
+};
+</file>
+
+<file path="client/README.md">
+# React + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+</file>
+
+<file path="client/tailwind.config.js">
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,jsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+</file>
+
+<file path="client/vite.config.js">
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+</file>
+
+<file path="server/config/db.js">
+import mongoose from "mongoose";
+
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`MongoDB connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error("MongoDB connection error:", error.message);
+    process.exit(1);
+  }
+};
+
+export default connectDB;
+</file>
+
+<file path="server/config/queue.js">
+import { Queue } from "bullmq";
+import Redis from "ioredis";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+// Connect to Upstash Redis using the provided URL
+// Upstash URLs typically start with rediss:// and we use maxRetriesPerRequest to comply with BullMQ rules
+export const connection = new Redis(process.env.REDIS_URL, {
+  maxRetriesPerRequest: null,
+  enableReadyCheck: false,
+});
+
+connection.on("error", (err) => {
+  console.error("[Redis] Connection error:", err.message);
+});
+
+connection.on("connect", () => {
+  console.log("[Redis] Connected to Upstash Redis");
+});
+
+// Create queues
+export const aiQueue = new Queue("ai-tasks", { connection });
+
+aiQueue.on("error", (err) => {
+  console.error("[Queue] Queue error:", err.message);
+});
+</file>
+
+<file path="server/middlewares/auth.js">
+import { auth } from "express-oauth2-jwt-bearer";
+
+export const requireAuth = auth({
+  audience: "https://texttolearn/api",
+  issuerBaseURL: "https://dev-1dhhjax6mpux65zz.us.auth0.com/",
+  tokenSigningAlg: "RS256",
+});
+</file>
+
+<file path="server/middlewares/error.middleware.js">
+
+</file>
+
+<file path="server/middlewares/redisCache.js">
+import { connection as redisClient } from "../config/queue.js";
+
+/**
+ * Middleware to cache API responses in Redis.
+ * @param {number} durationInSeconds - How long the cache should live (e.g. 300 for 5 mins)
+ */
+export const cacheResponse = (durationInSeconds = 300) => {
+  return async (req, res, next) => {
+    try {
+      // Create a unique key for the request.
+      // If the user is authenticated, append their userId to the key so caches don't bleed across users.
+      // Otherwise, just use the URL.
+      const userId = req.auth?.sub || "public";
+      const key = `cache:${userId}:${req.originalUrl}`;
+
+      // Check if data exists in Redis
+      const cachedData = await redisClient.get(key);
+
+      if (cachedData) {
+        console.log(`[Redis] Cache HIT for ${key}`);
+        return res.json(JSON.parse(cachedData));
+      }
+
+      console.log(`[Redis] Cache MISS for ${key}`);
+
+      // Override res.json to capture the response data before it gets sent
+      const originalJson = res.json.bind(res);
+
+      res.json = (body) => {
+        // Only cache successful responses
+        if (res.statusCode >= 200 && res.statusCode < 300 && body.success !== false) {
+          redisClient.setex(key, durationInSeconds, JSON.stringify(body))
+            .catch(err => console.error("[Redis] Cache Set Error:", err));
+        }
+        
+        // Send the actual response
+        return originalJson(body);
+      };
+
+      next();
+    } catch (error) {
+      console.error("[Redis] Cache Middleware Error:", error);
+      // If Redis fails, gracefully fall back to executing the route normally
+      next();
+    }
+  };
+};
+</file>
+
+<file path="server/models/Lesson.js">
+import mongoose from "mongoose";
+
+const lessonSchema = new mongoose.Schema(
+  {
+    courseId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+    },
+
+    moduleIndex: {
+      type: Number,
+      required: true,
+    },
+
+    lessonIndex: {
+      type: Number,
+      required: true,
+    },
+
+    lessonTitle: {
+      type: String,
+      required: true,
+    },
+
+    language: {
+      type: String,
+      required: true,
+      enum: ["English", "Hindi", "Marathi", "Hinglish"],
+      default: "English",
+    },
+
+    content: {
+      type: mongoose.Schema.Types.Mixed,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+// ✅ UNIQUE PER LANGUAGE
+lessonSchema.index(
+  {
+    courseId: 1,
+    moduleIndex: 1,
+    lessonIndex: 1,
+    language: 1,
+  },
+  { unique: true }
+);
+
+const Lesson = mongoose.model("Lesson", lessonSchema);
+export default Lesson;
+</file>
+
+<file path="server/models/Module.js">
+import mongoose from "mongoose";
+
+const moduleSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+    },
+    lessons: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Lesson",
+      },
+    ],
+  },
+  { timestamps: true }
+);
+
+const Module = mongoose.model("Module", moduleSchema);
+
+export default Module;
+</file>
+
+<file path="server/models/Progress.js">
+import mongoose from "mongoose";
+
+const progressSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: String, // Auth0 user ID
+      required: true,
+      index: true,
+    },
+    courseId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+      index: true,
+    },
+    completedLessons: {
+      // Store an array of lesson identifiers, e.g., "1-1", "1-2" (moduleIndex-lessonIndex)
+      type: [String],
+      default: [],
+    },
+  },
+  { timestamps: true }
+);
+
+// A user can only have one progress document per course
+progressSchema.index({ userId: 1, courseId: 1 }, { unique: true });
+
+export default mongoose.model("Progress", progressSchema);
+</file>
+
+<file path="server/routes/tutorRoutes.js">
+import express from "express";
+import requireAuth from "../middlewares/requireAuth.js"; 
+import { handleTutorChat } from "../controllers/tutorController.js";
+
+const router = express.Router();
+
+// POST /api/tutor/chat
+router.post("/chat", requireAuth, handleTutorChat);
+
+export default router;
+</file>
+
+<file path="server/services/ai/agents/AnalysisAgent.js">
+import { BaseAgent } from "./BaseAgent.js";
+
+export class AnalysisAgent extends BaseAgent {
+  constructor() {
+    super("gemini-3.5-flash-lite", true);
+  }
+
+  async analyzeQuizResults(courseTopic, quizQuestions, userAnswers) {
+    const prompt = `
+You are an AI Learning Analyst. 
+A student just completed a quiz on the topic "${courseTopic}". 
+Analyze the questions they got wrong and the questions they got right to determine their weak topics and strong topics.
+
+Quiz Data:
+Questions: ${JSON.stringify(quizQuestions)}
+User Answers: ${JSON.stringify(userAnswers)}
+
+Extract 1 to 3 core concepts they are STRONG at (based on correct answers).
+Extract 1 to 3 core concepts they are WEAK at (based on incorrect answers).
+Be concise (2-4 words per concept).
+
+Return ONLY raw JSON in this exact structure:
+{
+  "newStrongTopics": ["Concept A", "Concept B"],
+  "newWeakTopics": ["Concept C"]
+}
+`;
+    const result = await this.model.generateContent(prompt);
+    const rawText = result.response.text();
+    return this.extractJson(rawText);
+  }
+}
+</file>
+
+<file path="server/services/ai/agents/BaseAgent.js">
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { extractJson } from "../../../utils/jsonUtils.js";
+
+export class BaseAgent {
+  constructor(modelName = "gemini-3.5-flash-lite", requireJson = false) {
+    this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const config = { model: modelName };
+    if (requireJson) {
+      config.generationConfig = { responseMimeType: "application/json" };
+    }
+    this.model = this.genAI.getGenerativeModel(config);
+  }
+
+  extractJson(text) {
+    return extractJson(text);
+  }
+}
+</file>
+
+<file path="server/services/ai/agents/EvaluatorAgent.js">
+import { BaseAgent } from "./BaseAgent.js";
+
+export class EvaluatorAgent extends BaseAgent {
+  constructor() {
+    // We use a stronger model for evaluation if needed, but flash is good for structure
+    super("gemini-3.5-flash-lite", true);
+  }
+
+  async evaluateCourse(courseJson) {
+    const prompt = `
+You are an expert curriculum evaluator. 
+Review the following generated course JSON for quality, structure, and hallucinations.
+Check if it follows the basic rules:
+1. Valid structure (courseTitle, modules, lessons, resources).
+2. Appropriate difficulty level.
+3. Logical progression of topics.
+
+Course JSON:
+"""
+${JSON.stringify(courseJson)}
+"""
+
+Return ONLY raw JSON in this exact structure:
+{
+  "isValid": true/false,
+  "feedback": "Explain why it is valid or invalid",
+  "fixedCourse": <If invalid but fixable, provide the fixed JSON here. If valid, return the original JSON here>
+}
+`;
+    const result = await this.model.generateContent(prompt);
+    const rawText = result.response.text();
+    return this.extractJson(rawText);
+  }
+}
+</file>
+
+<file path="server/services/ai/agents/LessonAgent.js">
+import { BaseAgent } from "./BaseAgent.js";
+
+export class LessonAgent extends BaseAgent {
+  constructor() {
+    super("gemini-3.5-flash-lite", true);
+  }
+
+  async generateCourse(topic, level, language, goal, timeAvailable, userMemory = null) {
+    const timeConstraint = timeAvailable ? `and they have ${timeAvailable} available to study.` : '';
+    const goalConstraint = goal ? `Their primary goal is: "${goal}". Tailor the modules heavily towards achieving this goal.` : '';
+    
+    let memoryConstraint = '';
+    if (userMemory && (userMemory.weakTopics?.length > 0 || userMemory.strongTopics?.length > 0)) {
+      memoryConstraint = `
+User Adaptive Profile:
+- The user is STRONG at: ${userMemory.strongTopics?.join(', ') || 'N/A'} (Skip the absolute basics for these topics if they appear).
+- The user is WEAK at: ${userMemory.weakTopics?.join(', ') || 'N/A'} (Explain these topics in much simpler terms if they appear, providing more analogies).
+`;
+    }
+
+    const prompt = `
+Generate a ${level} level course on "${topic}" in ${language}.
+${goalConstraint}
+${timeConstraint}
+${memoryConstraint}
+Return ONLY raw JSON in this structure:
+
+{
+  "courseTitle": "",
+  "level": "${level}",
+  "description": "",
+  "modules": [
+    {
+      "moduleIndex": 1,
+      "moduleTitle": "",
+      "learningObjective": "",
+      "lessons": [
+        {
+          "lessonIndex": 1,
+          "title": ""
+        }
+      ],
+      "resources": {
+        "videos": [
+          "YouTube search query relevant to this module"
+        ],
+        "blogs": [
+          "Relevant blog or documentation source name"
+        ]
+      }
+    }
+  ]
+}
+
+Rules:
+- Max 5 modules
+- Max 5 lessons per module
+- Resources MUST be present for every module
+- Videos must be SEARCH QUERIES, not URLs
+- Blogs must be site or documentation names, not links
+- Beginner-friendly language
+- NO markdown
+- NO explanations
+- RAW JSON ONLY
+`;
+    const result = await this.model.generateContent(prompt);
+    const rawText = result.response.text();
+    return this.extractJson(rawText);
+  }
+}
+</file>
+
+<file path="server/services/ai/agents/QuizAgent.js">
+import { BaseAgent } from "./BaseAgent.js";
+
+export class QuizAgent extends BaseAgent {
+  constructor() {
+    super("gemini-3.5-flash-lite", true);
+  }
+
+  async generateQuiz(courseTopic, moduleTitle, lessonTitle, lessonContent) {
+    const prompt = `
+Generate a 3-question multiple choice quiz based strictly on the following lesson from the course "${courseTopic}" -> Module: "${moduleTitle}" -> Lesson: "${lessonTitle}".
+
+Lesson Content:
+"""
+${lessonContent.substring(0, 5000)}
+"""
+
+Return ONLY raw JSON in this exact structure:
+{
+  "questions": [
+    {
+      "question": "What is ...?",
+      "options": ["A", "B", "C", "D"],
+      "correctAnswer": "A",
+      "explanation": "A is correct because..."
+    }
+  ]
+}
+`;
+    const result = await this.model.generateContent(prompt);
+    const rawText = result.response.text();
+    return this.extractJson(rawText);
+  }
+}
+</file>
+
+<file path="server/services/ai/agents/RemedialAgent.js">
+import { BaseAgent } from "./BaseAgent.js";
+
+export class RemedialAgent extends BaseAgent {
+  constructor() {
+    super("gemini-3.5-flash-lite", false);
+  }
+
+  async generateRemedialLesson(topic, failedQuestions) {
+    // Add system instruction inside the model config by getting a new model instance if needed,
+    // or just pass it in the prompt. Since BaseAgent doesn't allow systemInstruction in constructor,
+    // we can either modify BaseAgent OR just prepend the system instruction to the prompt.
+    // Prepending is safer and doesn't require modifying BaseAgent.
+    
+    const systemInstruction = `You are an empathetic, encouraging AI Remedial Teacher.
+The student has just failed a quiz on ${topic}.
+Based on the questions they got wrong, generate a very short, highly focused "Micro-Lesson" (max 300 words).
+Focus ONLY on explaining the concepts they missed in a simple, easy-to-understand way.
+Use analogies if helpful. Do not scold them.
+Return the output in Markdown format without a markdown codeblock around it.`;
+
+    const failedConcepts = failedQuestions.map(q => `Question: ${q.question}\nCorrect Answer: ${q.correctAnswer}\nStudent Answer: ${q.studentAnswer}`).join('\n\n');
+
+    const prompt = `${systemInstruction}\n\nHere are the questions the student got wrong:\n${failedConcepts}\n\nPlease generate the remedial micro-lesson now.`;
+
+    try {
+      const result = await this.model.generateContent(prompt);
+      const response = await result.response;
+      return response.text();
+    } catch (error) {
+      console.error("[RemedialAgent] Failed to generate remedial lesson", error);
+      throw error;
+    }
+  }
+}
+</file>
+
+<file path="server/services/ai/agents/TutorAgent.js">
+import { BaseAgent } from "./BaseAgent.js";
+import Course from "../../../models/Course.js";
+import { generateEmbeddings } from "../gemini.service.js";
+
+function cosineSimilarity(vecA, vecB) {
+  let dotProduct = 0;
+  let normA = 0;
+  let normB = 0;
+  for (let i = 0; i < vecA.length; i++) {
+    dotProduct += vecA[i] * vecB[i];
+    normA += vecA[i] * vecA[i];
+    normB += vecB[i] * vecB[i];
+  }
+  if (normA === 0 || normB === 0) return 0;
+  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+
+export class TutorAgent extends BaseAgent {
+  constructor() {
+    super("gemini-3.5-flash-lite", false);
+  }
+
+  async chat(courseId, lessonContent, chatHistory, userMessage, userMemory = null) {
+    let memoryConstraint = '';
+    if (userMemory && (userMemory.weakTopics?.length > 0 || userMemory.strongTopics?.length > 0)) {
+      memoryConstraint = `
+Be aware of the student's learning profile:
+- They are STRONG at: ${userMemory.strongTopics?.join(', ') || 'N/A'}.
+- They are WEAK at: ${userMemory.weakTopics?.join(', ') || 'N/A'}.
+Adjust your explanation style accordingly (more patient and analogous for weak topics, more direct for strong topics).
+`;
+    }
+
+    // --- VECTOR SEARCH (RAG) ---
+    let extraContext = '';
+    if (courseId) {
+      try {
+        const course = await Course.findById(courseId).lean();
+        if (course && course.chunks && course.chunks.length > 0) {
+          console.log(`[RAG] Searching ${course.chunks.length} chunks for: "${userMessage}"`);
+          const queryEmbedding = await generateEmbeddings(userMessage);
+          
+          // Calculate similarity for all chunks
+          const scoredChunks = course.chunks.map(chunk => ({
+            text: chunk.text,
+            score: cosineSimilarity(queryEmbedding, chunk.embedding)
+          }));
+          
+          // Sort by highest similarity
+          scoredChunks.sort((a, b) => b.score - a.score);
+          
+          // Take top 3 most relevant chunks
+          const topChunks = scoredChunks.slice(0, 3);
+          
+          if (topChunks[0].score > 0.5) { // Threshold
+            extraContext = `\n\nRELEVANT COURSE CONTEXT (from other lessons):\n` + topChunks.map(c => `- ${c.text}`).join('\n');
+            console.log(`[RAG] Found context with top score: ${topChunks[0].score.toFixed(3)}`);
+          }
+        }
+      } catch (err) {
+        console.error("[RAG] Vector search failed:", err);
+      }
+    }
+
+    const chat = this.model.startChat({
+      history: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `You are an AI Tutor embedded in an e-learning platform.
+Your job is to answer the user's questions based on the provided lesson content and any extra context.
+Be encouraging, beginner-friendly, and concise.
+${memoryConstraint}
+
+CURRENT LESSON CONTENT:
+"""
+${lessonContent.substring(0, 8000)}
+"""${extraContext}`
+            }
+          ]
+        },
+        {
+          role: "model",
+          parts: [
+            {
+              text: "Understood! I will act as a helpful AI tutor for this lesson. What is your question?"
+            }
+          ]
+        },
+        ...chatHistory
+      ],
+    });
+
+    const result = await chat.sendMessage(userMessage);
+    return result.response.text();
+  }
+}
+</file>
+
+<file path="server/services/ai/index.js">
+import { generateWithGemini } from "./gemini.service.js";
+import { generateWithMock } from "./mock.service.js";
+
+export async function generateCourse(topic, level) {
+  const provider = process.env.AI_PROVIDER?.toLowerCase();
+
+  if (provider === "gemini") {
+    console.log("✨ Using Gemini AI");
+    return generateWithGemini(topic, level);
+  }
+
+  console.log("🤖 Using Mock AI");
+  return generateWithMock(topic, level);
+}
+</file>
+
+<file path="server/services/ai/mock.service.js">
+export function generateWithMock(topic, level) {
+  return {
+    title: `Create a ${level} level course on ${topic}`,
+    description: "Mock AI-generated course",
+    level,
+    modules: [
+      {
+        moduleTitle: "Introduction",
+        lessons: [
+          "What is the topic?",
+          "Why this topic matters",
+          "Real-world applications",
+        ],
+      },
+    ],
+  };
+}
+</file>
+
+<file path="server/services/ai/Orchestrator.js">
+import { LessonAgent } from "./agents/LessonAgent.js";
+import { EvaluatorAgent } from "./agents/EvaluatorAgent.js";
+import { AnalysisAgent } from "./agents/AnalysisAgent.js";
+import { RemedialAgent } from "./agents/RemedialAgent.js";
+
+export class Orchestrator {
+  constructor() {
+    this.lessonAgent = new LessonAgent();
+    this.evaluatorAgent = new EvaluatorAgent();
+    this.analysisAgent = new AnalysisAgent();
+    this.remedialAgent = new RemedialAgent();
+  }
+
+  async createValidatedCourse(topic, level, language, goal, timeAvailable, userMemory, maxRetries = 2) {
+    let attempts = 0;
+    while (attempts < maxRetries) {
+      console.log(`[Orchestrator] Attempt ${attempts + 1} to generate course...`);
+      const course = await this.lessonAgent.generateCourse(topic, level, language, goal, timeAvailable, userMemory);
+      
+      console.log(`[Orchestrator] Evaluating generated course...`);
+      const evaluation = await this.evaluatorAgent.evaluateCourse(course);
+      
+      if (evaluation.isValid) {
+        console.log(`[Orchestrator] Course is valid!`);
+        // If the evaluator fixed minor issues, use the fixed version. Otherwise use original.
+        return evaluation.fixedCourse || course; 
+      }
+      
+      console.log(`[Orchestrator] Course rejected by Evaluator. Reason: ${evaluation.feedback}`);
+      attempts++;
+    }
+    
+    throw new Error("Failed to generate a valid course after multiple attempts. The AI Evaluator repeatedly rejected the output.");
+  }
+
+  async analyzeAndExtractMemory(courseTopic, quizQuestions, userAnswers) {
+    console.log(`[Orchestrator] Analyzing quiz results for user memory...`);
+    return await this.analysisAgent.analyzeQuizResults(courseTopic, quizQuestions, userAnswers);
+  }
+
+  async generateRemedial(topic, failedQuestions) {
+    console.log(`[Orchestrator] Generating remedial lesson for missed questions on ${topic}...`);
+    return await this.remedialAgent.generateRemedialLesson(topic, failedQuestions);
+  }
+}
+</file>
+
+<file path="server/services/courseService.js">
+export const buildDummyCourse = (topic, level) => {
+  return {
+    title: `${topic} – ${level} Course`,
+    description: `A ${level}-level course on ${topic}`,
+    modules: [
+      {
+        title: `Introduction to ${topic}`,
+        lessons: [
+          `What is ${topic}?`,
+          `Why learn ${topic}?`,
+        ],
+      },
+      {
+        title: `Core Concepts of ${topic}`,
+        lessons: [
+          `${topic} fundamentals`,
+          `Real-world use cases`,
+        ],
+      },
+    ],
+  };
+};
+</file>
+
+<file path="server/utils/apiResponse.js">
+
+</file>
+
+<file path="server/utils/cacheInvalidator.js">
+import { connection as redisClient } from "../config/queue.js";
+
+/**
+ * Clears all cached routes for a specific user to prevent stale data.
+ * Useful after a mutation (e.g., finishing a quiz, generating a course).
+ * 
+ * @param {string} userId - The Auth0 ID of the user
+ */
+export async function clearUserCache(userId) {
+  if (!userId) return;
+  
+  try {
+    const pattern = `cache:${userId}:*`;
+    // We use keys() here because we expect a small number of keys per user.
+    // For extreme scale, SCAN is preferred, but this is fine for targeted user cache invalidation.
+    const keys = await redisClient.keys(pattern);
+    
+    if (keys.length > 0) {
+      await redisClient.del(...keys);
+      console.log(`[Redis] Cleared ${keys.length} cached routes for user ${userId}`);
+    }
+  } catch (error) {
+    console.error("[Redis] Failed to clear user cache:", error);
+  }
+}
+
+/**
+ * Clears public cached routes (like the public courses list).
+ */
+export async function clearPublicCache() {
+  try {
+    const pattern = `cache:public:*`;
+    const keys = await redisClient.keys(pattern);
+    
+    if (keys.length > 0) {
+      await redisClient.del(...keys);
+      console.log(`[Redis] Cleared ${keys.length} public cached routes`);
+    }
+  } catch (error) {
+    console.error("[Redis] Failed to clear public cache:", error);
+  }
+}
+</file>
+
+<file path="server/utils/jsonUtils.js">
+export function extractJson(rawText) {
+  try {
+    // 1. If it's already perfectly valid JSON, just parse and return it.
+    // Sometimes the model outputs raw JSON without any markdown or conversational wrapper.
+    return JSON.parse(rawText);
+  } catch (err) {
+    // 2. If standard parsing fails, try to extract it from markdown blocks or find the outermost curly braces.
+    const first = rawText.indexOf("{");
+    const last = rawText.lastIndexOf("}");
+
+    if (first === -1 || last === -1) {
+      throw new Error("Invalid JSON from AI: No JSON object found in response");
+    }
+
+    try {
+      return JSON.parse(rawText.slice(first, last + 1));
+    } catch (parseErr) {
+      console.error("AI JSON Parse Error on extracted string:", parseErr);
+      throw new Error("Invalid JSON from AI: Extracted JSON is malformed");
+    }
+  }
+}
+</file>
+
+<file path=".gitignore">
+# node
+node_modules/
+npm-debug.log*
+
+# env files
+.env
+.env.local
+.env.production
+
+# build outputs
+client/dist/
+client/build/
+server/dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+</file>
+
+<file path="README.md">
+# 🚀 Text-to-Learn — AI-Powered Learning Platform
+
+> **An end-to-end, production-deployed AI learning platform that generates structured courses, lessons, and videos — built with a real frontend, real backend, real authentication, and real deployment challenges.**
+
+🔗 **Live App:** https://text-to-learn-psi.vercel.app  
+🔗 **Backend API:** https://text-to-learn-backend.onrender.com  
+
+---
+
+## 📌 What is Text-to-Learn?
+
+**Text-to-Learn** is a full-stack AI learning platform where users can:
+
+- Generate **AI-powered courses** from a topic
+- Break courses into **modules & lessons**
+- Auto-attach **relevant YouTube videos** per lesson
+- Securely log in using **Auth0**
+- Access their personalized learning content anywhere
+
+This is **not a demo app** — it is fully deployed and production-ready.
+
+---
+
+## ✨ Key Features
+
+- 🧠 **AI Course Generation** (topic → structured roadmap)
+- 📚 **Lesson-wise Content Generation**
+- 🎥 **Automatic YouTube Video Recommendations**
+- 🔐 **Secure Authentication (Auth0 + JWT)**
+- 🌐 **Production-grade Deployment (Vercel + Render)**
+- 📱 **Responsive UI (Desktop + Mobile)**
+- ⚡ **Real API Integration (YouTube Data API)**
+
+---
+
+## 📸 Screenshots
+
+### 🏠 Home Page
+> Landing page where users generate AI-powered courses
+
+![Home Page](screenshots/home.png)
+
+---
+
+### 🔐 Auth0 Authentication
+> Secure Universal Login powered by Auth0
+
+![Auth0 Login](screenshots/auth0-login.png)
+
+---
+
+### 🚀 Course Generation
+> Generate structured courses from any topic
+
+![Generate Course](screenshots/generate-course.png)
+
+---
+
+### 📚 Course & Modules View
+> Automatically generated modules and lessons
+
+![Course View](screenshots/course-view.png)
+
+---
+
+### 🎥 Lesson with Video Integration
+> Lesson content with auto-attached YouTube video
+
+![Lesson Video](screenshots/lesson-with-video.png)
+
+---
+
+### 📱 Mobile Responsive UI
+> Fully responsive experience on mobile devices
+
+![Mobile View](screenshots/mobile-view.png)
+
+## 🛠 Tech Stack
+
+### Frontend
+- React (Vite)
+- Tailwind CSS
+- Auth0 React SDK
+- Deployed on **Vercel**
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- JWT Authentication (Auth0)
+- YouTube Data API
+- Deployed on **Render**
+
+---
+
+## 🏗 System Architecture
+
+```text
+User (Browser)
+   ↓
+Frontend (Vercel)
+   ↓ Auth0 Token (JWT)
+Backend API (Render)
+   ↓
+MongoDB + AI APIs + YouTube API
+```
+---
+## 🔐 Authentication (Auth0)
+
+This project uses **Auth0 Universal Login** to provide secure, enterprise-grade authentication.
+
+### Authentication Flow
+- Users authenticate via Auth0 Universal Login
+- Access tokens are:
+  - Stored securely by Auth0
+  - Sent with each protected request as:
+    ```
+    Authorization: Bearer <JWT>
+    ```
+---
+### Backend Token Verification
+The backend validates every protected request by checking:
+- ✅ **Audience**
+- ✅ **Issuer**
+- ✅ **Signing Algorithm (RS256)**
+- ✅ **JWKS endpoint** for public key verification
+
+This authentication setup closely mirrors **real-world enterprise systems** used in production environments.
+
+---
+
+## 🌐 API Flow Example
+
+### Course Generation Flow
+
+```text
+Frontend → Backend API → AI Service → Database → Response
+```
+```text
+POST /api/courses/generate
+Authorization: Bearer <JWT>
+Content-Type: application/json
+```
+---
+## Backend Processing Steps
+- Verifies the JWT token
+- Authenticates the user
+- Generates AI-powered course content
+- Saves the course to the database
+- Returns structured course data to the frontend
+---
+## 📁 Project Structure
+```text
+Text-to-Learn/
+├── client/        # React frontend (Vite + Tailwind)
+├── server/        # Node.js backend (Express + MongoDB)
+├── screenshots/   # Screenshots used in README
+└── README.md👨‍💻
+```
+---
+
+## 👨‍💻 Author
+
+**Harsh Tadas**  
+Full-Stack Developer  
+
+Focused on building **real, production-ready systems** with:
+- Secure authentication
+- Scalable backend APIs
+- Clean frontend architecture
+- Real-world deployment practices
+
+🔗 **GitHub:** https://github.com/harshtadas8
+</file>
+
+<file path="client/src/components/LessonTutor.jsx">
+import { useState, useRef, useEffect } from "react";
+import { chatWithTutorAPI } from "../services/api";
+import ReactMarkdown from "react-markdown";
+
+export default function LessonTutor({ lessonContent, courseId }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    {
+      role: "model",
+      text: "Hi! I'm your AI Tutor. I've read the lesson above. What questions do you have?",
+    },
+  ]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isOpen]);
+
+  const handleSend = async (e) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+
+    const userMessage = input.trim();
+    setInput("");
+    setError("");
+
+    // Add user message to UI
+    const updatedMessages = [
+      ...messages,
+      { role: "user", text: userMessage },
+    ];
+    setMessages(updatedMessages);
+    setIsLoading(true);
+
+    try {
+      // Convert UI messages to Gemini history format (excluding the very first greeting and the latest message)
+      const history = messages
+        .slice(1) // skip greeting
+        .map((msg) => ({
+          role: msg.role,
+          parts: [{ text: msg.text }],
+        }));
+
+      // In lessonContent we pass the raw string version of the JSON content
+      const stringifiedContent = typeof lessonContent === 'string' ? lessonContent : JSON.stringify(lessonContent, null, 2);
+
+      const res = await chatWithTutorAPI({
+        courseId,
+        lessonContent: stringifiedContent,
+        history,
+        message: userMessage,
+      });
+
+      if (res.success && res.data?.reply) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "model", text: res.data.reply },
+        ]);
+      } else {
+        throw new Error("Invalid response from tutor");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (!isOpen) {
+    return (
+      <div className="mt-6 border-t border-gray-800 pt-6 text-center">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-lg shadow-indigo-500/20 transition flex items-center justify-center gap-2 mx-auto"
+        >
+          <span>Ask AI Tutor</span>
+          <span>🤖</span>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-8 border border-gray-800 rounded-xl overflow-hidden shadow-2xl bg-gray-900 flex flex-col h-[500px]">
+      {/* Header */}
+      <div className="bg-gray-800 p-4 border-b border-gray-700 flex justify-between items-center">
+        <h3 className="font-bold text-indigo-400 flex items-center gap-2">
+          <span>🤖</span> AI Tutor
+        </h3>
+        <button
+          onClick={() => setIsOpen(false)}
+          className="text-gray-400 hover:text-white transition"
+        >
+          Close
+        </button>
+      </div>
+
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.map((msg, idx) => (
+          <div
+            key={idx}
+            className={`flex ${
+              msg.role === "user" ? "justify-end" : "justify-start"
+            }`}
+          >
+            <div
+              className={`max-w-[85%] p-3 rounded-lg text-sm ${
+                msg.role === "user"
+                  ? "bg-indigo-600 text-white rounded-br-none"
+                  : "bg-gray-800 border border-gray-700 text-gray-200 rounded-bl-none"
+              }`}
+            >
+              <ReactMarkdown 
+                components={{
+                  strong: ({node, ...props}) => <strong className="font-bold text-white" {...props} />,
+                  ul: ({node, ...props}) => <ul className="list-disc pl-4 my-2" {...props} />,
+                  ol: ({node, ...props}) => <ol className="list-decimal pl-4 my-2" {...props} />,
+                  li: ({node, ...props}) => <li className="my-1" {...props} />,
+                  p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                  a: ({node, ...props}) => <a className="text-indigo-400 hover:underline" {...props} />
+                }}
+              >
+                {msg.text}
+              </ReactMarkdown>
+            </div>
+          </div>
+        ))}
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="max-w-[80%] p-3 rounded-lg text-sm bg-gray-800 border border-gray-700 text-gray-400 rounded-bl-none flex gap-1">
+              <span className="animate-bounce">●</span>
+              <span className="animate-bounce" style={{ animationDelay: "0.2s" }}>●</span>
+              <span className="animate-bounce" style={{ animationDelay: "0.4s" }}>●</span>
+            </div>
+          </div>
+        )}
+        {error && (
+          <div className="text-center text-red-400 text-xs">
+            {error}
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input Area */}
+      <form onSubmit={handleSend} className="p-4 bg-gray-800 border-t border-gray-700 flex gap-2">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Ask a question about this lesson..."
+          disabled={isLoading}
+          className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500 transition disabled:opacity-50"
+        />
+        <button
+          type="submit"
+          disabled={isLoading || !input.trim()}
+          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition disabled:opacity-50"
+        >
+          Send
+        </button>
+      </form>
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/components/Navbar.jsx">
+import { Link, useLocation } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import UserProfile from "./UserProfile";
+import AuthButtons from "./AuthButtons";
+
+export default function Navbar({ onMenuClick }) {
+  const { isAuthenticated } = useAuth0();
+  const location = useLocation();
+
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Explore", path: "/explore" },
+  ];
+  
+  if (isAuthenticated) {
+    navLinks.push({ name: "My Courses", path: "/courses" });
+    navLinks.push({ name: "Profile", path: "/profile" });
+  }
+
+  return (
+    <header className="flex justify-between items-center px-4 sm:px-6 py-4 border-b border-gray-800 bg-black sticky top-0 z-30">
+      <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onMenuClick}
+            className="sm:hidden text-gray-300 hover:text-white transition text-2xl focus:outline-none"
+          >
+            ☰
+          </button>
+          <Link to="/" className="text-xl sm:text-2xl font-bold text-emerald-400 hover:text-emerald-300 transition leading-none">
+            Text-to-Learn
+          </Link>
+        </div>
+
+        {/* Desktop Navigation Links */}
+        <nav className="hidden sm:flex items-center gap-6 ml-4">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              className={`text-base font-medium transition ${
+                location.pathname === link.path
+                  ? "text-emerald-400"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </nav>
+      </div>
+
+      <div className="hidden sm:flex items-center gap-4">
+        <UserProfile />
+        <AuthButtons />
+      </div>
+
+      <div className="sm:hidden">
+        <UserProfile />
+      </div>
+    </header>
+  );
+}
+</file>
+
+<file path="client/src/components/QuizViewer.jsx">
+import { useState } from "react";
+import { generateQuizAPI, addXpAPI, submitQuizAPI } from "../services/api";
+
+export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, lessonContent }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [quizData, setQuizData] = useState(null);
+  
+  // user answers mapping: index -> selected option string
+  const [answers, setAnswers] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [score, setScore] = useState(0);
+
+  const handleGenerateQuiz = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      
+      const res = await generateQuizAPI({
+        courseTopic,
+        moduleTitle,
+        lessonTitle,
+        lessonContent
+      });
+
+      if (res.data && res.data.questions) {
+        setQuizData(res.data);
+      } else {
+        throw new Error("Invalid quiz data format");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Failed to generate quiz. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOptionSelect = (qIndex, option) => {
+    if (submitted) return;
+    setAnswers({
+      ...answers,
+      [qIndex]: option
+    });
+  };
+
+  const handleSubmit = async () => {
+    if (Object.keys(answers).length < quizData.questions.length) {
+      alert("Please answer all questions before submitting.");
+      return;
+    }
+
+    let correctCount = 0;
+    quizData.questions.forEach((q, idx) => {
+      if (answers[idx] === q.correctAnswer) {
+        correctCount++;
+      }
+    });
+
+    setScore(correctCount);
+    setSubmitted(true);
+    
+    // Background memory analysis
+    try {
+      // Map user answers cleanly
+      const mappedAnswers = quizData.questions.map((q, idx) => ({
+        question: q.question,
+        userAnswer: answers[idx],
+        correctAnswer: q.correctAnswer,
+        isCorrect: answers[idx] === q.correctAnswer
+      }));
+
+      submitQuizAPI({
+        courseTopic,
+        quizQuestions: quizData.questions,
+        userAnswers: mappedAnswers
+      }); // Not awaiting, let it run in background
+    } catch (err) {
+      console.error("Failed to trigger memory analysis:", err);
+    }
+
+    if (correctCount === quizData.questions.length) {
+      try {
+        await addXpAPI(50);
+      } catch (err) {
+        console.error("Failed to award XP:", err);
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="mt-8 p-6 bg-gray-900 border border-gray-800 rounded-xl text-center">
+        <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-gray-400">AI is reading the lesson and generating your quiz...</p>
+      </div>
+    );
+  }
+
+  if (!quizData) {
+    return (
+      <div className="mt-8 p-6 bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-xl text-center shadow-lg">
+        <h3 className="text-xl font-bold mb-2">Test Your Knowledge</h3>
+        <p className="text-gray-400 text-sm mb-4 max-w-md mx-auto">
+          Our AI can generate a personalized 3-question quiz based specifically on what you just read.
+        </p>
+        {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
+        <button
+          onClick={handleGenerateQuiz}
+          className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-black font-semibold rounded-lg transition"
+        >
+          Generate Quiz 🧠
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-8 p-6 bg-gray-900 border border-gray-800 rounded-xl shadow-xl">
+      <h3 className="text-2xl font-bold mb-6 text-emerald-400">Lesson Quiz</h3>
+      
+      <div className="space-y-8">
+        {quizData.questions.map((q, idx) => (
+          <div key={idx} className="bg-black p-5 rounded-lg border border-gray-800">
+            <p className="font-semibold text-base mb-4">{idx + 1}. {q.question}</p>
+            <div className="space-y-2">
+              {q.options.map((opt, i) => {
+                const isSelected = answers[idx] === opt;
+                let optionStyle = "border-gray-700 hover:border-gray-500 bg-gray-900 text-gray-300";
+                
+                if (submitted) {
+                  if (opt === q.correctAnswer) {
+                    optionStyle = "border-emerald-500 bg-emerald-500/10 text-emerald-400";
+                  } else if (isSelected && opt !== q.correctAnswer) {
+                    optionStyle = "border-red-500 bg-red-500/10 text-red-400";
+                  } else {
+                    optionStyle = "border-gray-800 bg-gray-900/50 opacity-50";
+                  }
+                } else if (isSelected) {
+                  optionStyle = "border-emerald-500 bg-emerald-500/20 text-emerald-400";
+                }
+
+                return (
+                  <button
+                    key={i}
+                    onClick={() => handleOptionSelect(idx, opt)}
+                    disabled={submitted}
+                    className={`w-full text-left p-3 rounded-lg border transition text-base ${optionStyle}`}
+                  >
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+            
+            {submitted && (
+              <div className={`mt-4 p-4 rounded-lg text-base ${answers[idx] === q.correctAnswer ? 'bg-emerald-500/10 text-emerald-300' : 'bg-red-500/10 text-red-300'}`}>
+                <p className="font-semibold mb-1">
+                  {answers[idx] === q.correctAnswer ? '✅ Correct!' : '❌ Incorrect'}
+                </p>
+                <p>{q.explanation}</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {!submitted ? (
+        <button
+          onClick={handleSubmit}
+          className="mt-8 w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-black font-bold rounded-lg transition shadow-lg shadow-emerald-500/20"
+        >
+          Submit Answers
+        </button>
+      ) : (
+        <div className="mt-8 text-center p-6 bg-black border border-gray-800 rounded-lg">
+          <h4 className="text-2xl font-bold mb-2">
+            You scored {score} out of {quizData.questions.length}!
+          </h4>
+          <p className="text-gray-400 mb-4">
+            {score === quizData.questions.length 
+              ? "Perfect! You've mastered this lesson." 
+              : "Review the explanations above to learn from your mistakes."}
+          </p>
+          {score === quizData.questions.length && (
+            <div className="mb-6 inline-block bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 px-4 py-2 rounded-full font-bold animate-bounce">
+              🌟 +50 XP Awarded!
+            </div>
+          )}
+          <button
+            onClick={() => {
+              setQuizData(null);
+              setAnswers({});
+              setSubmitted(false);
+              setScore(0);
+            }}
+            className="px-6 py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg transition"
+          >
+            Try Another Quiz
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/pages/CourseDetails.jsx">
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { getCourseByIdAPI, getFullCourseAPI, getCourseProgressAPI, markLessonProgressAPI } from "../services/api";
+import ModuleAccordion from "../components/ModuleAccordion";
+import { generateCoursePDF } from "../utils/coursePdf";
+import CourseSkeleton from "../components/CourseSkeleton";
+import { useAuth0 } from "@auth0/auth0-react";
+
+export default function CourseDetails() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const { isAuthenticated } = useAuth0();
+
+  const [course, setCourse] = useState(null);
+  const [completedLessons, setCompletedLessons] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  /* -------------------- FETCH COURSE & PROGRESS -------------------- */
+
+  useEffect(() => {
+    async function fetchCourseData() {
+      try {
+        const res = await getCourseByIdAPI(id);
+        setCourse(res.data);
+
+        // Fetch progress if authenticated
+        if (isAuthenticated) {
+          const progRes = await getCourseProgressAPI(id);
+          setCompletedLessons(progRes.data || []);
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load course");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCourseData();
+  }, [id, isAuthenticated]);
+
+  /* -------------------- PROGRESS HANDLER -------------------- */
+
+  const handleToggleComplete = async (lessonId, isCompleted) => {
+    if (!isAuthenticated) return;
+    try {
+      if (isCompleted) {
+        setCompletedLessons(prev => [...prev, lessonId]);
+      } else {
+        setCompletedLessons(prev => prev.filter(id => id !== lessonId));
+      }
+      await markLessonProgressAPI(id, lessonId, isCompleted);
+    } catch (err) {
+      console.error("Failed to update progress:", err);
+    }
+  };
+
+  /* -------------------- PDF HANDLER (FULL COURSE) -------------------- */
+
+  const handleDownloadPDF = async () => {
+    try {
+      const res = await getFullCourseAPI(id); // ✅ FULL COURSE WITH LESSONS
+      generateCoursePDF(res.data);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to generate full course PDF");
+    }
+  };
+
+  /* -------------------- LOADING / ERROR -------------------- */
+
+  if (loading) {
+    return <CourseSkeleton />;
+  }
+
+  if (error || !course || !course.content) {
+    return (
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 animate-fade-in">
+        <div className="text-5xl mb-4">⚠️</div>
+        <h2 className="text-2xl font-bold text-red-400 mb-2">Oops! Something went wrong</h2>
+        <p className="text-gray-400 mb-6 text-center max-w-md">
+          {error || "We couldn't find the course you're looking for. It may have been deleted or the link is invalid."}
+        </p>
+        <button
+          onClick={() => navigate("/")}
+          className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition"
+        >
+          Return Home
+        </button>
+      </div>
+    );
+  }
+
+  /* -------------------- SAFE DATA -------------------- */
+
+  const {
+    topic,
+    level,
+    language,
+    content: { courseTitle, description, modules = [] },
+  } = course;
+
+  /* -------------------- UI -------------------- */
+
+  return (
+    <div className="min-h-screen bg-black text-white px-4 py-16 animate-fade-in">
+      <div className="max-w-4xl mx-auto space-y-10">
+
+        {/* META */}
+        <div>
+          <p className="text-sm text-gray-400 mb-2">
+            Level: <span className="text-emerald-400">{level}</span> •
+            Topic: <span className="text-emerald-400">{topic}</span>
+          </p>
+
+          <h1 className="text-4xl font-bold text-emerald-400 mb-4">
+            {courseTitle || "Untitled Course"}
+          </h1>
+
+          <p className="text-gray-300 leading-relaxed max-w-3xl mb-6">
+            {description || "This course does not have a description yet."}
+          </p>
+
+          {/* PROGRESS BAR */}
+          {isAuthenticated && (
+            <div className="bg-gray-900 border border-gray-800 p-4 rounded-xl max-w-xl">
+              <div className="flex justify-between text-sm text-gray-300 mb-2">
+                <span>Course Progress</span>
+                <span className="font-semibold text-emerald-400">
+                  {completedLessons.length} completed
+                </span>
+              </div>
+              <div className="w-full bg-black rounded-full h-2.5">
+                <div 
+                  className="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" 
+                  style={{ width: `${modules.length > 0 ? Math.min(100, Math.round((completedLessons.length / modules.reduce((acc, m) => acc + m.lessons.length, 0)) * 100)) : 0}%` }}
+                ></div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* MODULES */}
+        <div>
+          {modules.length === 0 ? (
+            <p className="text-gray-400">
+              No modules generated for this course.
+            </p>
+          ) : (
+            modules.map((module, index) => (
+              <ModuleAccordion
+                key={index}
+                module={module}
+                courseId={course._id}       // ✅ REQUIRED FOR CACHING
+                courseTitle={courseTitle}
+                language={language}
+                completedLessons={completedLessons}
+                onToggleComplete={handleToggleComplete}
+              />
+            ))
+          )}
+        </div>
+
+        {/* ACTIONS */}
+        <div className="flex flex-wrap gap-4 pt-6">
+          <button
+            onClick={() => navigate("/")}
+            className="px-6 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition"
+          >
+            ← Generate Another Course
+          </button>
+
+          <button
+            onClick={handleDownloadPDF}
+            className="px-5 py-2 rounded-lg bg-emerald-500 text-black font-semibold hover:bg-emerald-400 transition"
+          >
+            Download PDF 📄
+          </button>
+          
+          {isAuthenticated && modules.length > 0 && completedLessons.length === modules.reduce((acc, m) => acc + m.lessons.length, 0) && (
+            <button
+              onClick={() => navigate(`/certificate/${course._id}`)}
+              className="px-5 py-2 rounded-lg bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-bold shadow-[0_0_15px_rgba(251,191,36,0.4)] hover:shadow-[0_0_25px_rgba(251,191,36,0.6)] transition"
+            >
+              View Certificate 🏆
+            </button>
+          )}
+        </div>
+
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/index.css">
+@import "tailwindcss";
+
+@theme {
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-slide-up: slide-up 0.5s ease-out forwards;
+
+  @keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes slide-up {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* Custom Scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}
+</file>
+
+<file path="client/index.html">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text-to-Learn</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+</file>
+
+<file path="server/controllers/quizController.js">
+import { generateQuizWithGemini } from "../services/ai/gemini.service.js";
+import { aiQueue } from "../config/queue.js";
+import User from "../models/User.js";
+
+/* =====================================================
+   POST /api/quizzes/generate
+===================================================== */
+export async function generateQuizController(req, res) {
+  try {
+    const { courseTopic, moduleTitle, lessonTitle, lessonContent } = req.body;
+
+    if (!lessonContent || !lessonTitle) {
+      return res.status(400).json({ success: false, message: "Missing lesson details" });
+    }
+
+    const quizData = await generateQuizWithGemini(courseTopic, moduleTitle, lessonTitle, lessonContent);
+
+    if (!quizData || !quizData.questions) {
+      throw new Error("Failed to generate quiz from AI");
+    }
+
+    return res.status(201).json({
+      success: true,
+      data: quizData
+    });
+
+  } catch (error) {
+    console.error("Quiz generation error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Quiz generation failed"
+    });
+  }
+}
+
+/* =====================================================
+   POST /api/quizzes/submit
+===================================================== */
+export async function submitQuizController(req, res) {
+  try {
+    const { courseTopic, quizQuestions, userAnswers } = req.body;
+    const userId = req.auth.sub;
+
+    // We respond immediately so the frontend score updates instantly
+    res.status(200).json({ success: true, message: "Quiz submitted, memory analysis started in background." });
+
+    // Calculate score based on userAnswers array
+    let correctCount = 0;
+    userAnswers.forEach(ans => {
+      if (ans.isCorrect) correctCount++;
+    });
+
+    // --- BACKGROUND QUEUE PROCESSING ---
+    
+    // Dispatch memory-analysis job
+    await aiQueue.add("memory-analysis", {
+      userId,
+      courseTopic,
+      quizQuestions,
+      userAnswers,
+      correctCount
+    });
+
+    // Trigger Remedial Agent if there are any missed questions (score < 100%)
+    const scorePercentage = (correctCount / quizQuestions.length) * 100;
+    if (scorePercentage < 100) {
+      const failedQuestions = userAnswers.filter(ans => !ans.isCorrect).map(ans => ({
+        question: ans.question,
+        correctAnswer: ans.correctAnswer,
+        studentAnswer: ans.userAnswer || "No answer provided"
+      }));
+      
+      // Dispatch remedial-lesson job
+      await aiQueue.add("remedial-lesson", {
+        userId,
+        courseTopic,
+        failedQuestions
+      });
+    }
+
+  } catch (error) {
+    console.error("Quiz submission error:", error);
+    // Even if it fails to start, we don't want to crash the frontend quiz flow
+    if (!res.headersSent) {
+      return res.status(500).json({ success: false, message: "Failed to submit quiz" });
+    }
+  }
+}
+</file>
+
+<file path="server/controllers/tutorController.js">
+import { chatWithLesson } from "../services/ai/gemini.service.js";
+import User from "../models/User.js";
+
+export async function handleTutorChat(req, res) {
+  try {
+    const { courseId, lessonContent, history, message } = req.body;
+
+    if (!lessonContent || !message) {
+      return res.status(400).json({
+        success: false,
+        message: "lessonContent and message are required"
+      });
+    }
+
+    // history should be an array of objects: { role: 'user' | 'model', parts: [{text: '...'}] }
+    const chatHistory = history || [];
+
+    const userId = req.auth?.sub;
+    let user = null;
+    if (userId) {
+      user = await User.findOne({ auth0Id: userId });
+    }
+
+    const reply = await chatWithLesson(courseId, lessonContent, chatHistory, message, user);
+
+    return res.json({
+      success: true,
+      data: {
+        reply
+      }
+    });
+
+  } catch (err) {
+    console.error("❌ Tutor chat error:", err.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get response from AI Tutor"
+    });
+  }
+}
+</file>
+
+<file path="server/models/User.js">
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema(
+  {
+    auth0Id: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+    },
+    picture: {
+      type: String,
+    },
+    xp: {
+      type: Number,
+      default: 0,
+    },
+    streak: {
+      type: Number,
+      default: 0,
+    },
+    strongTopics: [{
+      type: String,
+    }],
+    weakTopics: [{
+      type: String,
+    }],
+    lastActive: {
+      type: Date,
+      default: Date.now,
+    },
+    quizHistory: [
+      {
+        date: { type: Date, default: Date.now },
+        score: Number,
+        total: Number,
+      }
+    ],
+    learningTime: {
+      type: Number, // in minutes
+      default: 0,
+    },
+    remedials: [
+      {
+        topic: String,
+        content: String,
+        date: { type: Date, default: Date.now }
+      }
+    ]
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("User", userSchema);
+</file>
+
+<file path="server/routes/lessonRoutes.js">
+import express from "express";
+import { generateLessonController } from "../controllers/lessonController.js";
+
+const router = express.Router();
+
+import { requireAuth } from "../middlewares/auth.js";
+
+router.post("/generate", requireAuth, generateLessonController);
+
+
+export default router;
+</file>
+
+<file path="server/routes/quizRoutes.js">
+import express from "express";
+import requireAuth from "../middlewares/requireAuth.js";
+import { generateQuizController, submitQuizController } from "../controllers/quizController.js";
+
+const router = express.Router();
+
+router.post("/generate", requireAuth, generateQuizController);
+router.post("/submit", requireAuth, submitQuizController);
+
+export default router;
+</file>
+
+<file path="server/routes/userRoutes.js">
+import express from "express";
+import { syncUser, getDashboard, markProgress, getCourseProgress, addXp } from "../controllers/userController.js";
+import requireAuth from "../middlewares/requireAuth.js";
+import { cacheResponse } from "../middlewares/redisCache.js";
+
+const router = express.Router();
+
+router.post("/sync", requireAuth, syncUser);
+router.get("/dashboard", requireAuth, cacheResponse(300), getDashboard);
+router.post("/progress", requireAuth, markProgress);
+router.get("/progress/:courseId", requireAuth, getCourseProgress);
+router.post("/xp", requireAuth, addXp);
+
+export default router;
+</file>
+
+<file path="server/routes/youtubeRoutes.js">
+import express from "express";
+
+const router = express.Router();
+
+// ✅ MUST be /search to match frontend
+router.get("/search", async (req, res) => {
+  try {
+    const query = req.query.q;
+
+    if (!query) {
+      return res.status(400).json({ error: "Missing query" });
+    }
+
+    const url =
+      `https://www.googleapis.com/youtube/v3/search` +
+      `?part=snippet&type=video&maxResults=1` +
+      `&q=${encodeURIComponent(query)}` +
+      `&key=${process.env.YOUTUBE_API_KEY}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!data.items || data.items.length === 0) {
+      return res.json({ videoId: null });
+    }
+
+    res.json({
+      videoId: data.items[0].id.videoId,
+      title: data.items[0].snippet.title,
+    });
+  } catch (err) {
+    console.error("YouTube API error:", err);
+    res.status(500).json({ error: "YouTube fetch failed" });
+  }
+});
+
+export default router;
+</file>
+
+<file path="server/workers/aiWorker.js">
+import { Worker } from "bullmq";
+import { connection } from "../config/queue.js";
+import { analyzeQuizForMemory, generateRemedialWithGemini } from "../services/ai/gemini.service.js";
+import User from "../models/User.js";
+import { clearUserCache } from "../utils/cacheInvalidator.js";
+
+// Ensure mongoose models are loaded before processing
+import "../models/Course.js";
+import "../models/Progress.js";
+
+console.log("[Worker] Starting AI Worker...");
+
+const aiWorker = new Worker(
+  "ai-tasks",
+  async (job) => {
+    console.log(`[Worker] Processing job ${job.id} of type: ${job.name}`);
+
+    try {
+      if (job.name === "memory-analysis") {
+        const { userId, courseTopic, quizQuestions, userAnswers, correctCount } = job.data;
+        console.log(`[Worker] Running memory analysis for user ${userId}...`);
+        
+        // 1. Analyze results using our AI service
+        const memoryUpdate = await analyzeQuizForMemory(courseTopic, quizQuestions, userAnswers);
+        
+        // 2. Fetch user
+        const user = await User.findOne({ auth0Id: userId });
+        if (!user) return;
+
+        // 3. Update arrays (avoiding duplicates)
+        const newStrong = memoryUpdate.newStrongTopics || [];
+        const newWeak = memoryUpdate.newWeakTopics || [];
+        
+        const updatedStrong = new Set([...(user.strongTopics || []), ...newStrong]);
+        const updatedWeak = new Set([...(user.weakTopics || []), ...newWeak]);
+
+        user.quizHistory.push({
+          date: new Date(),
+          score: correctCount,
+          total: quizQuestions.length
+        });
+        
+        user.learningTime = (user.learningTime || 0) + 5; // Simulating 5 minutes per lesson
+        
+        // Ensure a topic isn't in both strong and weak simultaneously (strong overrides weak)
+        newStrong.forEach(topic => updatedWeak.delete(topic));
+
+        user.strongTopics = Array.from(updatedStrong);
+        user.weakTopics = Array.from(updatedWeak);
+        
+        await user.save();
+        
+        // Invalidate the cache so the dashboard reflects the new XP and stats!
+        await clearUserCache(userId);
+
+        console.log(`[Worker] Memory analysis complete. Strong: ${user.strongTopics.length}, Weak: ${user.weakTopics.length}`);
+      }
+
+      if (job.name === "remedial-lesson") {
+        const { userId, courseTopic, failedQuestions } = job.data;
+        console.log(`[Worker] Generating remedial lesson for user ${userId}...`);
+        
+        const remedialContent = await generateRemedialWithGemini(courseTopic, failedQuestions);
+        if (remedialContent) {
+          console.log(`[Worker] Remedial content generated, length: ${remedialContent.length}`);
+          const user = await User.findOne({ auth0Id: userId });
+          if (user) {
+            if (!user.remedials) user.remedials = [];
+            user.remedials.push({
+              topic: courseTopic,
+              content: remedialContent,
+              date: new Date()
+            });
+            user.markModified("remedials");
+            await user.save();
+            await clearUserCache(userId);
+            console.log(`[Worker] Remedial lesson saved successfully for user ${userId}! Total remedials now: ${user.remedials.length}`);
+          } else {
+            console.log(`[Worker] Error: User not found for ID ${userId}`);
+          }
+        } else {
+          console.log(`[Worker] Error: Remedial content was empty!`);
+        }
+      }
+    } catch (error) {
+      console.error(`[Worker] Error processing job ${job.id}:`, error);
+      throw error; // Let BullMQ handle retries if configured
+    }
+  },
+  { connection }
+);
+
+aiWorker.on("completed", (job) => {
+  console.log(`[Worker] Job ${job.id} completed successfully!`);
+});
+
+aiWorker.on("failed", (job, err) => {
+  console.error(`[Worker] Job ${job.id} failed with error:`, err.message);
+});
+
+aiWorker.on("error", (err) => {
+  // BullMQ might emit connection errors here. Catch them to prevent unhandled exceptions.
+  console.error(`[Worker] Connection error:`, err.message);
+});
+
+export default aiWorker;
+</file>
+
+<file path="client/src/components/LessonViewer.jsx">
+import { useState, useEffect } from "react";
+import VideoBlock from "./VideoBlock"; // ✅ ADD THIS
+import TypewriterEffect from "./TypewriterEffect";
+
+export default function LessonViewer({ content }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  // Reset when content changes
+  useEffect(() => {
+    setActiveIdx(0);
+  }, [content]);
+
+  if (!content) return null;
+
+  // Flatten all items that need typing into a single list to manage sequence
+  const blocks = [];
+  
+  if (content.objectives?.length > 0) {
+    blocks.push({
+      type: "objectives_container",
+      items: content.objectives
+    });
+  }
+
+  if (content.content?.length > 0) {
+    blocks.push(...content.content);
+  }
+
+  const handleComplete = (idx) => {
+    if (idx === activeIdx) {
+      setActiveIdx((prev) => prev + 1);
+    }
+  };
+
+  return (
+    <div className="space-y-6 text-base text-gray-200">
+      {blocks.map((block, idx) => {
+        // Only render if it's our turn or we've already been rendered
+        if (idx > activeIdx) return null;
+
+        const isStreaming = idx === activeIdx;
+
+        if (block.type === "objectives_container") {
+          return (
+            <div key={idx}>
+              <h3 className="text-emerald-400 font-semibold mb-2">
+                🎯 Learning Objectives
+              </h3>
+              <ul className="list-disc list-inside space-y-1 text-gray-300">
+                {block.items.map((obj, i) => (
+                  <li key={i}>
+                    {/* For lists, we just render the whole list block text sequentially or all at once. 
+                        To keep it simple, we type out the whole list text as one block, or just render it all. */}
+                    {isStreaming ? (
+                      <TypewriterEffect text={obj} speed={5} onComplete={i === block.items.length - 1 ? () => handleComplete(idx) : undefined} />
+                    ) : (
+                      obj
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        }
+
+        if (block.type === "heading") {
+          return (
+            <h3 key={idx} className="text-xl font-semibold text-white mt-4">
+              {isStreaming ? (
+                <TypewriterEffect text={block.text} speed={10} onComplete={() => handleComplete(idx)} />
+              ) : (
+                block.text
+              )}
+            </h3>
+          );
+        }
+
+        if (block.type === "paragraph") {
+          return (
+            <p key={idx} className="text-gray-300 leading-relaxed text-base">
+              {isStreaming ? (
+                <TypewriterEffect text={block.text} speed={10} onComplete={() => handleComplete(idx)} />
+              ) : (
+                block.text
+              )}
+            </p>
+          );
+        }
+
+        if (block.type === "code") {
+          // No typewriter for code blocks to avoid formatting issues, just instantly appear and advance
+          if (isStreaming) {
+            // Use setTimeout to advance immediately on mount
+            setTimeout(() => handleComplete(idx), 0);
+          }
+          return (
+            <pre
+              key={idx}
+              className="bg-black border border-gray-700 rounded-lg p-4 text-sm overflow-x-auto text-emerald-300"
+            >
+              <code>{block.code}</code>
+            </pre>
+          );
+        }
+
+        if (block.type === "video") {
+          if (isStreaming) {
+            setTimeout(() => handleComplete(idx), 0);
+          }
+          return <VideoBlock key={idx} query={block.query} />;
+        }
+
+        // Advance if unknown block
+        if (isStreaming) setTimeout(() => handleComplete(idx), 0);
+        return null;
+      })}
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/components/MobileMenu.jsx">
+import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+
+export default function MobileMenu({ open, onClose }) {
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+
+  if (!open) return null;
+
+  return (
+    <>
+      {/* Overlay */}
+      <div
+        onClick={onClose}
+        className="fixed inset-0 bg-black/60 z-40"
+      />
+
+      {/* Drawer */}
+      <div
+        className="fixed top-0 left-0 h-full w-64 bg-gray-950
+                   border-r border-gray-800 z-50 p-5 flex flex-col"
+      >
+        <h2 className="text-xl font-bold text-emerald-400 mb-8">
+          Text-to-Learn
+        </h2>
+
+        <nav className="flex flex-col gap-4 text-gray-300 text-sm">
+
+          <Link
+            to="/"
+            onClick={onClose}
+            className="hover:text-white transition"
+          >
+            Home
+          </Link>
+
+          <Link
+            to="/explore"
+            onClick={onClose}
+            className="hover:text-white transition"
+          >
+            Explore
+          </Link>
+
+          {/* -------- LOGGED IN -------- */}
+          {isAuthenticated && (
+            <>
+              <Link
+                to="/courses"
+                onClick={onClose}
+                className="hover:text-white transition"
+              >
+                My Courses
+              </Link>
+
+              <Link
+                to="/profile"
+                onClick={onClose}
+                className="hover:text-white transition"
+              >
+                My Profile
+              </Link>
+
+              <button
+                onClick={() => {
+                  onClose();
+                  logout({
+                    logoutParams: {
+                      returnTo: window.location.origin,
+                    },
+                  });
+                }}
+                className="text-left text-red-400 hover:text-red-300 transition mt-4"
+              >
+                Logout
+              </button>
+            </>
+          )}
+
+          {/* -------- LOGGED OUT -------- */}
+          {!isAuthenticated && (
+            <button
+              onClick={() => {
+                onClose();
+                loginWithRedirect();
+              }}
+              className="text-left text-emerald-400 hover:text-emerald-300 transition mt-4"
+            >
+              Login
+            </button>
+          )}
+        </nav>
+      </div>
+    </>
+  );
+}
+</file>
+
+<file path="client/src/components/ModuleAccordion.jsx">
+import { useState } from "react";
+import { generateLessonAPI } from "../services/api";
+import LessonViewer from "./LessonViewer";
+import QuizViewer from "./QuizViewer";
+import LessonTutor from "./LessonTutor";
+export default function ModuleAccordion({ module, courseId, courseTitle, language, completedLessons = [], onToggleComplete }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [expandedLessonId, setExpandedLessonId] = useState(null);
+  const [lessonContentMap, setLessonContentMap] = useState({});
+  const [loadingLessons, setLoadingLessons] = useState({});
+  const [errorLessons, setErrorLessons] = useState({});
+
+  const toggleModule = () => setIsOpen(prev => !prev);
+
+  const handleLessonClick = async (lesson) => {
+    const lessonId = `${module.moduleIndex}-${lesson.lessonIndex}`;
+
+    // collapse
+    if (expandedLessonId === lessonId) {
+      setExpandedLessonId(null);
+      return;
+    }
+
+    // already cached in frontend
+    if (lessonContentMap[lessonId]) {
+      setExpandedLessonId(lessonId);
+      return;
+    }
+
+    try {
+      setLoadingLessons(prev => ({ ...prev, [lessonId]: true }));
+      setErrorLessons(prev => ({ ...prev, [lessonId]: null }));
+
+      const res = await generateLessonAPI({
+        courseId,
+        courseTitle,
+        moduleIndex: module.moduleIndex,
+        moduleTitle: module.moduleTitle,
+        lessonIndex: lesson.lessonIndex,
+        lessonTitle: lesson.title,
+        language,
+      });
+
+      setLessonContentMap(prev => ({
+        ...prev,
+        [lessonId]: res.data,
+      }));
+
+      setExpandedLessonId(lessonId);
+
+    } catch (err) {
+      console.error("Lesson generation failed", err);
+      setErrorLessons(prev => ({ ...prev, [lessonId]: err.message || "Failed to load lesson" }));
+    } finally {
+      setLoadingLessons(prev => ({ ...prev, [lessonId]: false }));
+    }
+  };
+
+  return (
+    <div className="border border-gray-800 rounded-xl mb-6 overflow-hidden">
+      <button
+        onClick={toggleModule}
+        className="w-full text-left p-5 bg-gradient-to-r from-gray-900 to-black flex justify-between"
+      >
+        <div>
+          <h2 className="text-lg font-semibold text-white">
+            {module.moduleIndex}. {module.moduleTitle}
+          </h2>
+          <p className="text-sm text-gray-400 mt-1">
+            🎯 {module.learningObjective}
+          </p>
+        </div>
+        <span className="text-emerald-400 text-xl">
+          {isOpen ? "−" : "+"}
+        </span>
+      </button>
+
+      {isOpen && (
+        <div className="p-4 space-y-3 bg-black">
+          {module.lessons.map((lesson) => {
+            const lessonId = `${module.moduleIndex}-${lesson.lessonIndex}`;
+            const isExpanded = expandedLessonId === lessonId;
+
+            return (
+              <div key={lessonId} className="border border-gray-700 rounded-lg">
+                <button
+                  onClick={() => handleLessonClick(lesson)}
+                  className="w-full flex justify-between px-4 py-3 text-left hover:bg-gray-900"
+                >
+                  <span className={completedLessons.includes(lessonId) ? "line-through text-gray-500" : ""}>
+                    {lesson.lessonIndex}. {lesson.title} {completedLessons.includes(lessonId) && "✅"}
+                  </span>
+                  <span className="text-blue-400">
+                    {loadingLessons[lessonId]
+                      ? "⏳"
+                      : errorLessons[lessonId]
+                      ? "⚠️"
+                      : isExpanded
+                      ? "▼"
+                      : "▶"}
+                  </span>
+                </button>
+
+                {errorLessons[lessonId] && !loadingLessons[lessonId] && !isExpanded && (
+                  <div className="px-4 py-3 bg-red-900/20 border-t border-red-900/50 text-red-400 text-sm flex justify-between items-center">
+                    <span>⚠️ {errorLessons[lessonId]}</span>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); handleLessonClick(lesson); }}
+                      className="text-xs px-3 py-1 bg-red-900/40 rounded hover:bg-red-900/60"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                )}
+
+                {isExpanded && lessonContentMap[lessonId] && (
+                  <div className="px-4 py-4">
+                    <LessonViewer content={lessonContentMap[lessonId]} />
+                    
+                    <QuizViewer 
+                      courseTopic={courseTitle}
+                      moduleTitle={module.moduleTitle}
+                      lessonTitle={lesson.title}
+                      lessonContent={JSON.stringify(lessonContentMap[lessonId])}
+                    />
+
+                    <LessonTutor lessonContent={lessonContentMap[lessonId]} courseId={courseId} />
+
+                    {onToggleComplete && (
+                      <div className="mt-6 pt-4 border-t border-gray-800 flex justify-end">
+                        <label className="flex items-center space-x-3 cursor-pointer group">
+                          <span className="text-gray-400 group-hover:text-white transition">
+                            {completedLessons.includes(lessonId) ? "Completed!" : "Mark Complete"}
+                          </span>
+                          <input 
+                            type="checkbox" 
+                            checked={completedLessons.includes(lessonId)}
+                            onChange={(e) => onToggleComplete(lessonId, e.target.checked)}
+                            className="w-5 h-5 rounded border-gray-600 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-gray-900 bg-gray-800"
+                          />
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/pages/Profile.jsx">
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect, useState } from "react";
+import { getDashboardAPI } from "../services/api";
+import DashboardCharts from "../components/Analytics/DashboardCharts";
+import ReactMarkdown from "react-markdown";
+
+/* Helpers */
+function getInitials(name = "") {
+  const parts = name.trim().split(" ").filter(Boolean);
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+  return "U";
+}
+
+function getAvatarColor(name = "") {
+  const colors = [
+    "from-emerald-500 to-teal-500",
+    "from-blue-500 to-indigo-500",
+    "from-purple-500 to-pink-500",
+    "from-rose-500 to-red-500",
+    "from-amber-500 to-orange-500",
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+}
+
+export default function Profile() {
+  const { user, isAuthenticated, isLoading } = useAuth0();
+  const [stats, setStats] = useState(null);
+  const [fetchingStats, setFetchingStats] = useState(true);
+  const [expandedRemedial, setExpandedRemedial] = useState(null);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const fetchStats = async () => {
+        try {
+          const res = await getDashboardAPI();
+          if (res.success) {
+            setStats(res.data.stats);
+          }
+        } catch (error) {
+          console.error("Failed to fetch stats", error);
+        } finally {
+          setFetchingStats(false);
+        }
+      };
+      fetchStats();
+    } else {
+      setFetchingStats(false);
+    }
+  }, [isAuthenticated]);
+
+  if (isLoading || fetchingStats) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-400"></div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center text-sm">
+        Please login to view your profile.
+      </div>
+    );
+  }
+
+  const initials = getInitials(user.name);
+  const bgGradient = getAvatarColor(user.name);
+  const currentLevel = Math.floor((stats?.xp || 0) / 100) + 1;
+  const xpToNextLevel = 100 - ((stats?.xp || 0) % 100);
+  const progressPercent = (stats?.xp || 0) % 100;
+
+  return (
+    <div className="min-h-screen bg-black text-white px-4 sm:px-6 py-12">
+      <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
+        
+        <h1 className="text-2xl sm:text-3xl font-light text-gray-200 border-b border-gray-800 pb-4">
+          Learner Profile
+        </h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          {/* Left Column: User Identity */}
+          <div className="md:col-span-1 bg-[#0a0a0a] border border-gray-800 rounded-xl p-8 flex flex-col items-center text-center">
+            
+            <div
+              className={`w-24 h-24 rounded-full flex items-center justify-center bg-gradient-to-br ${bgGradient} text-white font-semibold text-3xl mb-6 shadow-sm`}
+            >
+              {initials}
+            </div>
+
+            <h2 className="text-xl font-medium text-gray-100 mb-1 w-full truncate">
+              {user.name || "Unnamed Learner"}
+            </h2>
+            <p className="text-gray-400 text-sm mb-8 w-full truncate">
+              {user.email}
+            </p>
+
+            <div className="w-full text-left mt-auto pt-6 border-t border-gray-800">
+              <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Auth Provider</p>
+              <p className="capitalize text-gray-300 text-sm font-medium">{user.sub?.split("|")[0]}</p>
+            </div>
+          </div>
+
+          {/* Right Column: Professional Stats */}
+          <div className="md:col-span-2 space-y-6">
+            
+            {/* Level & XP Card */}
+            <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-8">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <p className="text-xs text-gray-500 font-medium uppercase tracking-widest mb-1">Current Level</p>
+                  <h3 className="text-3xl font-light text-gray-100">Level {currentLevel}</h3>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-gray-500 font-medium uppercase tracking-widest mb-1">Total Experience</p>
+                  <p className="text-xl font-medium text-emerald-400">{stats?.xp || 0} XP</p>
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="space-y-3">
+                <div className="flex justify-between text-xs text-gray-400">
+                  <span>Progress to Level {currentLevel + 1}</span>
+                  <span>{xpToNextLevel} XP needed</span>
+                </div>
+                <div className="w-full bg-gray-900 rounded-full h-1.5 overflow-hidden">
+                  <div 
+                    className="bg-emerald-500 h-1.5 rounded-full transition-all duration-1000 ease-out" 
+                    style={{ width: `${progressPercent}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 gap-6">
+              <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-6 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-xl">🔥</span>
+                  <p className="text-xs text-gray-400 font-medium uppercase tracking-widest">Day Streak</p>
+                </div>
+                <p className="text-3xl font-light text-gray-100">{stats?.streak || 0}</p>
+              </div>
+
+              <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-6 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-xl">🎓</span>
+                  <p className="text-xs text-gray-400 font-medium uppercase tracking-widest">Completed</p>
+                </div>
+                <p className="text-3xl font-light text-gray-100">{stats?.totalCoursesCompleted || 0} Courses</p>
+              </div>
+            </div>
+
+            {/* AI Learning Memory */}
+            <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-8">
+              <h3 className="text-xl font-light text-gray-200 mb-6 border-b border-gray-800 pb-3 flex items-center gap-2">
+                <span className="text-emerald-400">🧠</span> AI Learning Profile
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                {/* Strong Topics */}
+                <div>
+                  <h4 className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span className="text-emerald-500">💪</span> Strong Topics
+                  </h4>
+                  {stats?.strongTopics && stats.strongTopics.length > 0 ? (
+                    <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                      {stats.strongTopics.slice().reverse().map((topic, i) => (
+                        <span key={i} className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-sm">
+                          {topic}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500 italic">Take some quizzes to discover your strengths!</p>
+                  )}
+                </div>
+
+                {/* Weak Topics */}
+                <div>
+                  <h4 className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span className="text-rose-500">🎯</span> Needs Review
+                  </h4>
+                  {stats?.weakTopics && stats.weakTopics.length > 0 ? (
+                    <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                      {stats.weakTopics.slice().reverse().map((topic, i) => (
+                        <span key={i} className="px-3 py-1 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-full text-sm">
+                          {topic}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500 italic">You're doing great! Keep it up.</p>
+                  )}
+                </div>
+              </div>
+              <p className="mt-6 text-xs text-gray-500">
+                Your AI Tutor and Course Generator automatically adapt to your learning profile to provide a personalized experience.
+              </p>
+            </div>
+
+            {/* Targeted Review (Remedials) */}
+            <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-8">
+              <h3 className="text-xl font-light text-gray-200 mb-6 border-b border-gray-800 pb-3 flex items-center gap-2">
+                <span className="text-purple-400">🎯</span> Targeted Review
+              </h3>
+              
+              <p className="text-sm text-gray-400 mb-6">
+                These are custom mini-lessons generated by your AI Tutor based on questions you missed in quizzes. Review them to overcome your weaknesses!
+              </p>
+              
+              {stats?.remedials && stats.remedials.length > 0 ? (
+                <div className="space-y-4">
+                  {stats.remedials.slice().reverse().map((remedial, idx) => {
+                    const isExpanded = expandedRemedial === idx;
+                    return (
+                      <div key={idx} className="border border-gray-800 rounded-lg overflow-hidden bg-black transition-all">
+                        <button
+                          onClick={() => setExpandedRemedial(isExpanded ? null : idx)}
+                          className="w-full flex items-center justify-between p-4 bg-gray-900/50 hover:bg-gray-800/80 transition-colors"
+                        >
+                          <div className="flex flex-col text-left">
+                            <span className="text-gray-200 font-medium">{remedial.topic}</span>
+                            <span className="text-xs text-gray-500">{new Date(remedial.date).toLocaleDateString()}</span>
+                          </div>
+                          <span className="text-gray-400 text-xl font-light">{isExpanded ? "−" : "+"}</span>
+                        </button>
+                        
+                        {isExpanded && (
+                          <div className="p-6 text-sm text-gray-300 leading-relaxed border-t border-gray-800">
+                            <ReactMarkdown
+                              components={{
+                                strong: ({node, ...props}) => <strong className="font-bold text-white" {...props} />,
+                                ul: ({node, ...props}) => <ul className="list-disc pl-4 my-2" {...props} />,
+                                ol: ({node, ...props}) => <ol className="list-decimal pl-4 my-2" {...props} />,
+                                li: ({node, ...props}) => <li className="my-1" {...props} />,
+                                p: ({node, ...props}) => <p className="mb-4 last:mb-0" {...props} />,
+                                h1: ({node, ...props}) => <h1 className="text-xl font-bold text-white mb-2 mt-4" {...props} />,
+                                h2: ({node, ...props}) => <h2 className="text-lg font-bold text-gray-200 mb-2 mt-4" {...props} />,
+                                h3: ({node, ...props}) => <h3 className="text-md font-bold text-gray-300 mb-2 mt-3" {...props} />
+                              }}
+                            >
+                              {remedial.content}
+                            </ReactMarkdown>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-8 border border-dashed border-gray-800 rounded-lg bg-gray-900/30">
+                  <span className="text-3xl mb-3 block opacity-50">✨</span>
+                  <p className="text-sm text-gray-400">No targeted reviews yet.</p>
+                  <p className="text-xs text-gray-500 mt-1">Keep taking quizzes to identify areas for improvement!</p>
+                </div>
+              )}
+            </div>
+
+            {/* Dashboard Analytics Charts */}
+            <DashboardCharts quizHistory={stats?.quizHistory} learningTime={stats?.learningTime} />
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/main.jsx">
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./index.css";
+import { Auth0Provider } from "@auth0/auth0-react";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <Auth0Provider
+      domain="dev-1dhhjax6mpux65zz.us.auth0.com"
+      clientId="KfE6EobQBoScvDx92QDFtdZeaVxhscuK"
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+        audience: "https://texttolearn/api",
+        scope: "openid profile email offline_access",
+      }}
+      cacheLocation="localstorage"
+      useRefreshTokens={true}
+    >
+      <App />
+    </Auth0Provider>
+  </React.StrictMode>
+);
+</file>
+
+<file path="server/controllers/lessonController.js">
+import Lesson from "../models/Lesson.js";
+import Course from "../models/Course.js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { extractJson } from "../utils/jsonUtils.js";
+import { generateEmbeddings } from "../services/ai/gemini.service.js";
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+function generateLessonPrompt(courseTitle, moduleTitle, lessonTitle, language) {
+  let languageRules = "";
+
+  if (language === "Marathi") {
+    languageRules = `
+- Use Marathi language ONLY
+- Use Devanagari script
+- Do NOT use English except unavoidable technical terms
+`;
+  } else if (language === "Hindi") {
+    languageRules = `
+- Use Hindi language ONLY
+- Use Devanagari script
+- Do NOT use English except unavoidable technical terms
+`;
+  } else if (language === "Hinglish") {
+    languageRules = `
+- Use Hinglish (Hindi language written in English letters)
+- Do NOT use Devanagari
+- Example: "Iska matlab ye hota hai ki..."
+`;
+  } else {
+    languageRules = `
+- Use clear beginner-friendly English
+`;
+  }
+
+  return `
+You are an API that returns ONLY valid JSON.
+
+Generate a detailed lesson.
+
+Course: "${courseTitle}"
+Module: "${moduleTitle}"
+Lesson: "${lessonTitle}"
+
+LANGUAGE RULES:
+${languageRules}
+
+Return JSON ONLY in this exact structure:
+{
+  "lessonTitle": "",
+  "objectives": [],
+  "content": [
+    { "type": "heading", "text": "" },
+    { "type": "paragraph", "text": "" },
+    { "type": "code", "language": "", "code": "" },
+    { "type": "video", "query": "" }
+  ]
+}
+
+Rules:
+- NO markdown
+- NO explanations outside JSON
+- Include EXACTLY one video block
+- Video query must be specific to lesson
+`;
+}
+
+export async function generateLessonController(req, res) {
+  try {
+    const {
+      courseId,
+      courseTitle,
+      moduleIndex,
+      moduleTitle,
+      lessonIndex,
+      lessonTitle,
+      language = "English",
+    } = req.body;
+
+    // 🔍 CACHE CHECK (language-aware)
+    const cached = await Lesson.findOne({
+      courseId,
+      moduleIndex,
+      lessonIndex,
+      language,
+    });
+
+    if (cached) {
+      return res.json({
+        success: true,
+        data: cached.content,
+        cached: true,
+      });
+    }
+
+    const model = genAI.getGenerativeModel({
+      model: "gemini-3.5-flash-lite",
+      generationConfig: { responseMimeType: "application/json" },
+    });
+
+    const prompt = generateLessonPrompt(
+      courseTitle,
+      moduleTitle,
+      lessonTitle,
+      language
+    );
+
+    const result = await model.generateContent(prompt);
+    const rawText = result.response.text();
+
+    const lessonData = extractJson(rawText);
+
+    // 💾 SAVE WITH LANGUAGE
+    await Lesson.create({
+      courseId,
+      moduleIndex,
+      lessonIndex,
+      lessonTitle,
+      language,
+      content: lessonData,
+    });
+
+    // --- BACKGROUND EMBEDDING FOR RAG ---
+    (async () => {
+      try {
+        console.log(`[RAG] Generating embeddings for lesson ${lessonTitle}`);
+        const chunks = [];
+        // Chunking by blocks
+        for (const block of lessonData.content) {
+          if (block.type === 'paragraph' || block.type === 'heading' || block.type === 'code') {
+            const textToEmbed = block.text || block.code;
+            if (textToEmbed && textToEmbed.trim().length > 10) {
+               const chunkText = `[${moduleTitle} - ${lessonTitle}]: ${textToEmbed}`;
+               const embedding = await generateEmbeddings(chunkText);
+               chunks.push({ text: chunkText, embedding });
+            }
+          }
+        }
+        
+        if (chunks.length > 0) {
+          await Course.findByIdAndUpdate(courseId, {
+            $push: { chunks: { $each: chunks } }
+          });
+          console.log(`[RAG] Added ${chunks.length} chunks for course ${courseId}`);
+        }
+      } catch (embErr) {
+        console.error("[RAG] Failed to generate embeddings:", embErr);
+      }
+    })();
+
+    return res.json({
+      success: true,
+      data: lessonData,
+      cached: false,
+    });
+
+  } catch (err) {
+    console.error("❌ Lesson generation error:", err.message);
+    return res.status(500).json({
+      success: false,
+      message: "Lesson generation failed",
+    });
+  }
+}
+</file>
+
+<file path="server/controllers/userController.js">
+import User from "../models/User.js";
+import Course from "../models/Course.js";
+import Progress from "../models/Progress.js";
+import { clearUserCache } from "../utils/cacheInvalidator.js";
+
+/* =====================================================
+   POST /api/users/sync
+   Called by frontend on login to ensure user exists
+===================================================== */
+export async function syncUser(req, res) {
+  try {
+    const { email, name, picture } = req.body;
+    const auth0Id = req.auth.sub; // From auth0 middleware
+
+    let existingUser = await User.findOne({ auth0Id });
+    let streak = 1;
+
+    if (existingUser && existingUser.lastActive) {
+      const now = new Date();
+      const lastActive = new Date(existingUser.lastActive);
+      
+      const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const lastActiveDate = new Date(lastActive.getFullYear(), lastActive.getMonth(), lastActive.getDate());
+      
+      const diffTime = nowDate.getTime() - lastActiveDate.getTime();
+      const diffDays = diffTime / (1000 * 60 * 60 * 24); 
+      
+      if (diffDays === 1) {
+        streak = (existingUser.streak || 0) + 1;
+      } else if (diffDays === 0) {
+        streak = existingUser.streak || 1;
+      } else {
+        streak = 1;
+      }
+    }
+
+    // Upsert user
+    const user = await User.findOneAndUpdate(
+      { auth0Id },
+      { email, name, picture, lastActive: new Date(), streak },
+      { new: true, upsert: true }
+    );
+
+    return res.json({ success: true, data: user });
+  } catch (error) {
+    console.error("Sync user error:", error);
+    return res.status(500).json({ success: false, message: "Failed to sync user" });
+  }
+}
+
+/* =====================================================
+   GET /api/users/dashboard
+   Returns user stats and their generated courses
+===================================================== */
+export async function getDashboard(req, res) {
+  try {
+    const auth0Id = req.auth.sub;
+
+    // 1. Get courses generated by user
+    const userCourses = await Course.find({ userId: auth0Id }).lean();
+
+    // 2. Get progress records to find enrolled courses
+    const progressRecords = await Progress.find({ userId: auth0Id }).lean();
+    const progressCourseIds = progressRecords.map(p => p.courseId);
+
+    // 3. Get enrolled courses
+    const enrolledCourses = await Course.find({ _id: { $in: progressCourseIds } }).lean();
+
+    // 4. Merge uniquely and sort by latest
+    const allCoursesMap = new Map();
+    userCourses.forEach(c => allCoursesMap.set(c._id.toString(), c));
+    enrolledCourses.forEach(c => allCoursesMap.set(c._id.toString(), c));
+    const courses = Array.from(allCoursesMap.values()).sort((a, b) => b.createdAt - a.createdAt);
+
+    // 2. Map progress by courseId
+    const progressMap = {};
+    progressRecords.forEach(p => {
+      progressMap[p.courseId.toString()] = p.completedLessons;
+    });
+
+    // 3. Calculate total lessons per course to find % complete
+    let totalCoursesCompleted = 0;
+    let totalCoursesInProgress = 0;
+
+    const enrichedCourses = courses.map(course => {
+      let totalLessons = 0;
+      course.content.modules.forEach(m => {
+        totalLessons += m.lessons.length;
+      });
+
+      const completed = progressMap[course._id.toString()] || [];
+      const isCompleted = totalLessons > 0 && completed.length === totalLessons;
+      const isInProgress = completed.length > 0 && !isCompleted;
+
+      if (isCompleted) totalCoursesCompleted++;
+      if (isInProgress) totalCoursesInProgress++;
+      
+      return {
+        _id: course._id,
+        topic: course.topic,
+        level: course.level,
+        createdAt: course.createdAt,
+        totalLessons,
+        completedLessonsCount: completed.length,
+        isCompleted
+      };
+    });
+
+    const user = await User.findOne({ auth0Id }).lean();
+    
+    return res.json({
+      success: true,
+      data: {
+        stats: {
+          totalCourses: courses.length,
+          totalCoursesCompleted,
+          totalCoursesInProgress,
+          xp: user?.xp || 0,
+          streak: user?.streak || 0,
+          strongTopics: user?.strongTopics || [],
+          weakTopics: user?.weakTopics || [],
+          quizHistory: user?.quizHistory || [],
+          learningTime: user?.learningTime || 0,
+          remedials: user?.remedials || []
+        },
+        recentCourses: enrichedCourses
+      }
+    });
+
+  } catch (error) {
+    console.error("Dashboard fetch error:", error);
+    return res.status(500).json({ success: false, message: "Failed to fetch dashboard data" });
+  }
+}
+
+/* =====================================================
+   POST /api/users/progress
+   Mark a lesson as complete or incomplete
+===================================================== */
+export async function markProgress(req, res) {
+  try {
+    const auth0Id = req.auth.sub;
+    const { courseId, lessonId, isCompleted } = req.body; // lessonId is like "1-2" (module-lesson)
+
+    let progress = await Progress.findOne({ userId: auth0Id, courseId });
+
+    if (!progress) {
+      progress = new Progress({ userId: auth0Id, courseId, completedLessons: [] });
+    }
+
+    if (isCompleted) {
+      if (!progress.completedLessons.includes(lessonId)) {
+        progress.completedLessons.push(lessonId);
+        
+        // Award 10 XP
+        await User.findOneAndUpdate(
+          { auth0Id },
+          { $inc: { xp: 10 } }
+        );
+      }
+    } else {
+      progress.completedLessons = progress.completedLessons.filter(id => id !== lessonId);
+    }
+
+    await progress.save();
+
+    await clearUserCache(auth0Id);
+
+    return res.json({ success: true, data: progress.completedLessons });
+  } catch (error) {
+    console.error("Mark progress error:", error);
+    return res.status(500).json({ success: false, message: "Failed to update progress" });
+  }
+}
+
+/* =====================================================
+   GET /api/users/progress/:courseId
+   Get completed lessons for a specific course
+===================================================== */
+export async function getCourseProgress(req, res) {
+  try {
+    const auth0Id = req.auth.sub;
+    const { courseId } = req.params;
+
+    const progress = await Progress.findOne({ userId: auth0Id, courseId });
+
+    return res.json({ success: true, data: progress ? progress.completedLessons : [] });
+  } catch (error) {
+    console.error("Get progress error:", error);
+    return res.status(500).json({ success: false, message: "Failed to fetch progress" });
+  }
+}
+
+/* =====================================================
+   POST /api/users/xp
+   Award XP for specific actions (like Quiz perfect score)
+===================================================== */
+export async function addXp(req, res) {
+  try {
+    const auth0Id = req.auth.sub;
+    const { amount } = req.body;
+
+    if (!amount || typeof amount !== 'number') {
+      return res.status(400).json({ success: false, message: "Valid XP amount is required" });
+    }
+
+    const user = await User.findOneAndUpdate(
+      { auth0Id },
+      { $inc: { xp: amount } },
+      { new: true }
+    );
+
+    await clearUserCache(auth0Id);
+
+    return res.json({ success: true, xp: user.xp });
+  } catch (error) {
+    console.error("Add XP error:", error);
+    return res.status(500).json({ success: false, message: "Failed to add XP" });
+  }
+}
+</file>
+
+<file path="server/package.json">
+{
+  "name": "server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node -r dotenv/config server.js",
+    "dev": "nodemon -r dotenv/config server.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "bullmq": "^6.0.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-jwt": "^8.5.1",
+    "express-oauth2-jwt-bearer": "^1.7.2",
+    "ioredis": "^6.0.0",
+    "jwks-rsa": "^3.2.0",
+    "mongoose": "^8.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
+</file>
+
+<file path="client/src/pages/Courses.jsx">
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import { getDashboardAPI } from "../services/api";
+import CourseGridSkeleton from "../components/CourseGridSkeleton";
+
+export default function Courses() {
+  const navigate = useNavigate();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
+
+  const [dashboardData, setDashboardData] = useState({ stats: null, recentCourses: [] });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchDashboard = async () => {
+      try {
+        const res = await getDashboardAPI();
+        setDashboardData(res.data);
+      } catch (err) {
+        console.error("Dashboard fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center animate-fade-in">
+        <p className="mb-4 text-gray-400">Please login to view your dashboard.</p>
+        <button
+          onClick={() => loginWithRedirect()}
+          className="px-6 py-2 bg-emerald-500 text-black font-semibold rounded-lg hover:bg-emerald-400 transition"
+        >
+          Login
+        </button>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return <CourseGridSkeleton />;
+  }
+
+  const { stats, recentCourses } = dashboardData;
+
+  return (
+    <div className="min-h-screen bg-black text-white px-4 py-12 animate-fade-in">
+      <div className="max-w-6xl mx-auto space-y-10">
+        
+        {/* HEADER & STATS */}
+        <div>
+          <h1 className="text-3xl font-bold mb-6 text-emerald-400">
+            My Learning Dashboard
+          </h1>
+          
+          {/* PLAYER STATS BANNER */}
+          <div className="bg-gradient-to-r from-gray-900 to-black border border-emerald-500/30 p-6 rounded-xl mb-8 animate-slide-up flex flex-col md:flex-row items-center justify-between shadow-lg shadow-emerald-500/10">
+            <div className="flex items-center gap-6 mb-4 md:mb-0">
+              <div className="w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center text-emerald-400 text-2xl font-bold">
+                Lvl {Math.floor((stats?.xp || 0) / 100) + 1}
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white">Your Progress</h3>
+                <div className="text-sm text-gray-400 flex items-center gap-2">
+                  <span>✨ {stats?.xp || 0} Total XP</span>
+                  <span>•</span>
+                  <span>Next level in {100 - ((stats?.xp || 0) % 100)} XP</span>
+                </div>
+                {/* XP Bar */}
+                <div className="w-48 bg-gray-800 rounded-full h-2 mt-2">
+                  <div 
+                    className="bg-emerald-400 h-2 rounded-full transition-all duration-500" 
+                    style={{ width: `${((stats?.xp || 0) % 100)}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-orange-500/10 border border-orange-500/30 px-6 py-3 rounded-xl flex items-center gap-3">
+              <span className="text-3xl">🔥</span>
+              <div>
+                <p className="text-xs text-orange-300 font-semibold uppercase tracking-wider">Daily Streak</p>
+                <p className="text-2xl font-bold text-white">{stats?.streak || 0} {stats?.streak === 1 ? 'Day' : 'Days'}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-slide-up">
+            <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+              <p className="text-gray-400 text-sm">Courses Generated</p>
+              <p className="text-3xl font-bold text-white mt-1">{stats?.totalCourses || 0}</p>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+              <p className="text-gray-400 text-sm">Courses in Progress</p>
+              <p className="text-3xl font-bold text-blue-400 mt-1">{stats?.totalCoursesInProgress || 0}</p>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+              <p className="text-gray-400 text-sm">Courses Completed</p>
+              <p className="text-3xl font-bold text-emerald-400 mt-1">{stats?.totalCoursesCompleted || 0}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* COURSES SECTION */}
+        <div>
+          <h2 className="text-2xl font-semibold mb-6">Saved Courses</h2>
+          
+          {recentCourses.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 bg-gray-900/50 rounded-2xl border border-gray-800 animate-slide-up">
+              <div className="text-6xl mb-4">📚</div>
+              <h2 className="text-2xl font-bold mb-2">No courses yet</h2>
+              <p className="text-gray-400 mb-6 text-center max-w-md">
+                You haven't generated any learning paths yet. Let AI create a personalized course for you!
+              </p>
+              <Link
+                to="/"
+                className="px-6 py-3 bg-emerald-500 text-black font-bold rounded-lg hover:bg-emerald-400 transition"
+              >
+                Generate First Course
+              </Link>
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {recentCourses.map((course, i) => {
+                const percent = course.totalLessons > 0 
+                  ? Math.round((course.completedLessonsCount / course.totalLessons) * 100) 
+                  : 0;
+
+                return (
+                  <div
+                    key={course._id}
+                    style={{ animationDelay: `${i * 100}ms` }}
+                    className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-xl p-5 hover:border-emerald-400 transition transform hover:-translate-y-1 cursor-pointer animate-slide-up flex flex-col"
+                    onClick={() => navigate(`/course/${course._id}`)}
+                  >
+                    <h2 className="text-xl font-semibold mb-2 line-clamp-2">
+                      {course.topic}
+                    </h2>
+                    <p className="text-sm text-gray-400 mb-4">
+                      Level: {course.level}
+                    </p>
+                    
+                    <div className="mt-auto">
+                      <div className="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>Progress</span>
+                        <span>{percent}%</span>
+                      </div>
+                      <div className="w-full bg-gray-800 rounded-full h-2">
+                        <div 
+                          className="bg-emerald-400 h-2 rounded-full transition-all duration-500" 
+                          style={{ width: `${percent}%` }}
+                        ></div>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-3">
+                        Created: {new Date(course.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="client/package.json">
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@auth0/auth0-react": "^2.11.0",
+    "html-to-image": "^1.11.13",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.11.0",
+    "recharts": "^3.10.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "vite": "npm:rolldown-vite@7.2.5"
+  },
+  "overrides": {
+    "vite": "npm:rolldown-vite@7.2.5"
+  }
+}
+</file>
+
+<file path="server/middlewares/requireAuth.js">
+import { expressjwt } from "express-jwt";
+import jwksRsa from "jwks-rsa";
+
+const requireAuth = expressjwt({
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: "https://dev-1dhhjax6mpux65zz.us.auth0.com/.well-known/jwks.json",
+  }),
+  audience: "https://texttolearn/api",
+  issuer: "https://dev-1dhhjax6mpux65zz.us.auth0.com/",
+  algorithms: ["RS256"],
+  requestProperty: "auth", // 👈 IMPORTANT
+});
+
+export default requireAuth;
+</file>
+
+<file path="server/models/Course.js">
+import mongoose from "mongoose";
+
+const lessonSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+  },
+  { _id: false }
+);
+
+const moduleSchema = new mongoose.Schema(
+  {
+    moduleTitle: {
+      type: String,
+      required: true,
+    },
+    lessons: {
+      type: [String],
+      required: true,
+    },
+  },
+  { _id: false }
+);
+
+const courseSchema = new mongoose.Schema(
+  {
+    topic: String,
+
+    level: {
+      type: String,
+      enum: ["Beginner", "Intermediate", "Advanced"],
+    },
+
+    language: {
+      type: String,
+      enum: ["English", "Hindi", "Marathi", "Hinglish"],
+      default: "English",
+    },
+
+    goal: {
+      type: String,
+    },
+
+    timeAvailable: {
+      type: String,
+    },
+
+    content: {
+      type: Object,
+      required: true,
+    },
+
+    // 🔐 Auth0 User ID
+    userId: {
+      type: String,
+      required: true,
+      index: true,
+    },
+    isPublic: {
+      type: Boolean,
+      default: true,
+      index: true,
+    },
+    
+    // RAG Context Chunks
+    chunks: [
+      {
+        text: String,
+        embedding: [Number], // The vector embedding
+      }
+    ],
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("Course", courseSchema);
+</file>
+
+<file path="client/src/components/VideoBlock.jsx">
+import { useEffect, useState } from "react";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+export default function VideoBlock({ query }) {
+  const [video, setVideo] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!query) return;
+
+    async function fetchVideo() {
+      try {
+        const res = await fetch(
+          `${BASE_URL}/youtube/search?q=${encodeURIComponent(query)}`
+        );
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        setVideo(data);
+      } catch (err) {
+        console.error("Failed to load video", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchVideo();
+  }, [query]);
+
+  if (loading) {
+    return <p className="text-gray-400 italic">Loading video...</p>;
+  }
+
+  if (!video?.videoId) {
+    return <p className="text-gray-500 italic">No video found.</p>;
+  }
+
+  return (
+    <div className="mt-6 border border-gray-700 rounded-xl overflow-hidden bg-black max-w-2xl">
+      <p className="text-sm text-gray-400 px-3 pt-3">
+        📺 Recommended Video
+      </p>
+
+      <div className="relative w-full" style={{ paddingTop: "50%" }}>
+        <iframe
+          className="absolute top-0 left-0 w-full h-full"
+          src={`https://www.youtube.com/embed/${video.videoId}`}
+          title={video.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/services/api.js">
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!BASE_URL) {
+  console.error(
+    "❌ VITE_API_BASE_URL is not defined. Check Vercel environment variables."
+  );
+}
+
+// Auth0 token getter (set from App.jsx)
+let getTokenSilentlyFn = null;
+
+export function setGetTokenSilently(fn) {
+  getTokenSilentlyFn = fn;
+}
+
+async function handleApiError(res, defaultMsg) {
+  let errMsg = defaultMsg;
+  try {
+    const text = await res.text();
+    if (text) {
+      try {
+        const data = JSON.parse(text);
+        if (data.message) errMsg = data.message;
+        else errMsg = text;
+      } catch {
+        errMsg = text;
+      }
+    }
+  } catch (err) {
+    console.error("Failed to parse error response:", err);
+  }
+  throw new Error(errMsg);
+}
+
+/* ------------------ USER APIs ------------------ */
+
+export async function syncUserAPI(payload) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/users/sync`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to sync user");
+  }
+
+  return res.json();
+}
+
+// Simple in-memory cache for fast UI navigation
+const apiCache = {
+  dashboard: null,
+  publicCourses: null,
+  lastFetched: {}
+};
+
+export function clearApiCache() {
+  apiCache.dashboard = null;
+  apiCache.publicCourses = null;
+  apiCache.lastFetched = {};
+}
+
+export async function getDashboardAPI(forceRefresh = false) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  // Use cache if available and not explicitly refreshing (cache for 1 min max)
+  if (!forceRefresh && apiCache.dashboard && apiCache.lastFetched.dashboard > Date.now() - 60000) {
+    // Return a clone to avoid mutation issues
+    return JSON.parse(JSON.stringify(apiCache.dashboard));
+  }
+
+  const res = await fetch(`${BASE_URL}/users/dashboard`, {
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to load dashboard data");
+  }
+
+  const data = await res.json();
+  
+  // Save to cache
+  if (data.success) {
+    apiCache.dashboard = data;
+    apiCache.lastFetched.dashboard = Date.now();
+  }
+  
+  return data;
+}
+
+export async function addXpAPI(amount) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/users/xp`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify({ amount }),
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to add XP");
+  }
+
+  return res.json();
+}
+
+export async function getCourseProgressAPI(courseId) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/users/progress/${courseId}`, {
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to fetch progress");
+  }
+
+  return res.json();
+}
+
+export async function markLessonProgressAPI(courseId, lessonId, isCompleted) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/users/progress`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify({ courseId, lessonId, isCompleted }),
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to update progress");
+  }
+
+  const data = await res.json();
+  if (data.success) {
+    clearApiCache();
+  }
+  return data;
+}
+
+/* ------------------ COURSE APIs ------------------ */
+
+export async function generateCourseAPI(payload) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  console.log("generateCourseAPI token:", token ? "PRESENT" : "NULL");
+
+  const res = await fetch(`${BASE_URL}/courses/generate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Course generation failed");
+  }
+
+  const data = await res.json();
+  if (data.success) {
+    clearApiCache();
+  }
+  return data;
+}
+
+export async function getPublicCoursesAPI(forceRefresh = false) {
+  if (!forceRefresh && apiCache.publicCourses && apiCache.lastFetched.publicCourses > Date.now() - 300000) {
+    return JSON.parse(JSON.stringify(apiCache.publicCourses));
+  }
+
+  const res = await fetch(`${BASE_URL}/courses/public`);
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to fetch public courses");
+  }
+
+  const data = await res.json();
+  if (data.success) {
+    apiCache.publicCourses = data;
+    apiCache.lastFetched.publicCourses = Date.now();
+  }
+  
+  return data;
+}
+
+export async function getCourseByIdAPI(id) {
+  const res = await fetch(`${BASE_URL}/courses/${id}`);
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to fetch course");
+  }
+
+  return res.json();
+}
+
+/* ------------------ LESSON APIs ------------------ */
+
+export async function generateLessonAPI(payload) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/lessons/generate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Lesson generation failed");
+  }
+
+  return res.json();
+}
+
+export async function getFullCourseAPI(id) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/courses/${id}/full`, {
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to fetch full course");
+  }
+
+  return res.json();
+}
+
+/* ------------------ QUIZ APIs ------------------ */
+
+export async function generateQuizAPI(payload) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/quizzes/generate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Quiz generation failed");
+  }
+
+  return res.json();
+}
+
+export async function submitQuizAPI(payload) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/quizzes/submit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Quiz submission failed");
+  }
+
+  const data = await res.json();
+  if (data.success) {
+    clearApiCache();
+  }
+  return data;
+}
+
+/* ------------------ TUTOR APIs ------------------ */
+
+export async function chatWithTutorAPI(payload) {
+  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+
+  const res = await fetch(`${BASE_URL}/tutor/chat`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "AI Tutor failed to respond");
+  }
+
+  return res.json();
+}
+</file>
+
+<file path="server/routes/courseRoutes.js">
+import express from "express";
+import {
+  generateCourseController,
+  getMyCourses,
+  getPublicCourses,
+  getCourseById,
+  getFullCourseController,
+} from "../controllers/courseController.js";
+import requireAuth from "../middlewares/requireAuth.js";
+import { cacheResponse } from "../middlewares/redisCache.js";
+
+const router = express.Router();
+
+router.post("/generate", requireAuth, generateCourseController);
+router.get("/my", requireAuth, getMyCourses);
+router.get("/public", cacheResponse(300), getPublicCourses);
+
+// Must be below /my and /public, but above /:id/full
+router.get("/:id", getCourseById);
+router.get("/:id/full", requireAuth, cacheResponse(300), getFullCourseController);
+
+export default router;
+</file>
+
+<file path="client/src/pages/Home.jsx">
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { generateCourseAPI } from "../services/api";
+import { useAuth0 } from "@auth0/auth0-react";
+
+export default function Home() {
+  const navigate = useNavigate();
+
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
+
+  const [topic, setTopic] = useState("");
+  const [level, setLevel] = useState("Beginner");
+  const [language, setLanguage] = useState("English");
+  const [goal, setGoal] = useState("");
+  const [timeAvailable, setTimeAvailable] = useState("2-5 hours/week");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const loadingMessages = [
+    "Analyzing your goals...",
+    "Structuring a personalized learning roadmap...",
+    "Writing detailed lessons...",
+    "Finding the best video resources...",
+    "Finalizing your AI course..."
+  ];
+  const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
+
+  useEffect(() => {
+    let interval;
+    if (loading) {
+      interval = setInterval(() => {
+        setLoadingMsgIdx((prev) => (prev + 1) % loadingMessages.length);
+      }, 2500);
+    } else {
+      setLoadingMsgIdx(0);
+    }
+    return () => clearInterval(interval);
+  }, [loading]);
+
+  const handleGenerate = async () => {
+
+    if (!isAuthenticated) {
+      loginWithRedirect();
+      return;
+    }
+
+    if (!topic.trim()) {
+      setError("Please enter a topic");
+      return;
+    }
+    
+    if (!goal.trim()) {
+      setError("Please tell us your learning goal");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+
+      const res = await generateCourseAPI({
+        topic,
+        level,
+        language,
+        goal,
+        timeAvailable,
+      });
+
+      navigate(`/course/${res.data._id}`);
+    } 
+    catch (err) {
+      console.error("Full Error:", err);
+      
+      // If Auth0 silent token fetch fails (e.g., due to new scopes or expired session)
+      const errorStr = err?.message?.toLowerCase() || err?.error?.toLowerCase() || "";
+      if (errorStr.includes('login required') || errorStr.includes('login_required') || errorStr.includes('consent required') || errorStr.includes('consent_required')) {
+        loginWithRedirect();
+        return;
+      }
+
+      setError("Something went wrong. Please try again.");
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white px-4">
+      <div className="max-w-7xl mx-auto flex items-center min-h-[calc(100vh-4rem)]">
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full my-8">
+
+          {/* ---------------- LEFT HERO ---------------- */}
+          <div className="space-y-6 text-center lg:text-left">
+            <h1 className="text-4xl sm:text-5xl font-bold leading-tight">
+              Learn Anything with{" "}
+              <span className="text-emerald-400">Personalized</span> AI Courses
+            </h1>
+
+            <p className="text-gray-400 max-w-xl mx-auto lg:mx-0">
+              Tell us what you want to learn, your goals, and your time constraints. Our AI builds a customized learning roadmap with lessons, videos, and quizzes just for you.
+            </p>
+
+            <div className="flex flex-wrap justify-center lg:justify-start gap-4 text-sm text-gray-400">
+              <span>🎯 Goal-Oriented</span>
+              <span>⏳ Time-Aware</span>
+              <span>🧠 Smart Quizzes</span>
+              <span>⚡ Fast AI</span>
+            </div>
+          </div>
+
+          {/* ---------------- RIGHT CARD ---------------- */}
+          <div className="w-full flex justify-center lg:justify-end">
+            <div className="w-full max-w-md bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-8 shadow-xl">
+
+              <h2 className="text-2xl font-semibold mb-2">
+                Generate Your Roadmap
+              </h2>
+
+              <p className={`text-xs mb-6 flex items-center gap-2 ${isAuthenticated ? 'text-emerald-400' : 'text-gray-400'}`}>
+                {isAuthenticated 
+                  ? "✅ Ready to generate" 
+                  : "🔐 Login required to generate"}
+              </p>
+
+              {/* TOPIC */}
+              <div className="mb-4">
+                <label className="text-sm text-gray-400">What do you want to learn?</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Next.js, Machine Learning"
+                  value={topic}
+                  onChange={(e) => setTopic(e.target.value)}
+                  className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                />
+              </div>
+
+              {/* GOAL */}
+              <div className="mb-4">
+                <label className="text-sm text-gray-400">What is your goal?</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Build a SaaS, Get a job, Ace my exam"
+                  value={goal}
+                  onChange={(e) => setGoal(e.target.value)}
+                  className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                />
+              </div>
+
+              {/* LEVEL & TIME (ROW) */}
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="text-sm text-gray-400">Experience</label>
+                  <select
+                    value={level}
+                    onChange={(e) => setLevel(e.target.value)}
+                    className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  >
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Advanced</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400">Time Available</label>
+                  <select
+                    value={timeAvailable}
+                    onChange={(e) => setTimeAvailable(e.target.value)}
+                    className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  >
+                    <option>&lt; 2 hours/week</option>
+                    <option>2-5 hours/week</option>
+                    <option>5-10 hours/week</option>
+                    <option>10+ hours/week</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* LANGUAGE */}
+              <div className="mb-6">
+                <label className="text-sm text-gray-400">Language</label>
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                >
+                  <option>English</option>
+                  <option>Hindi</option>
+                  <option>Marathi</option>
+                  <option>Hinglish</option>
+                </select>
+              </div>
+
+              {error && (
+                <p className="text-red-400 text-sm mb-3">{error}</p>
+              )}
+
+              <button
+                onClick={handleGenerate}
+                disabled={loading}
+                className="w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-emerald-400 to-blue-500 hover:opacity-90 transition disabled:opacity-50"
+              >
+                {loading ? "Generating..." : "Generate Course 🚀"}
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ---------------- LOADING OVERLAY ---------------- */}
+      {loading && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white">
+          <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-8"></div>
+          <h2 className="text-2xl font-bold text-emerald-400 animate-pulse text-center px-4">
+            {loadingMessages[loadingMsgIdx]}
+          </h2>
+          <p className="mt-4 text-gray-400 max-w-sm text-center px-4">
+            This might take 10-15 seconds as our AI generates a complete course specifically tailored for you.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/App.jsx">
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+
+import Home from "./pages/Home";
+import Courses from "./pages/Courses";
+import CourseDetails from "./pages/CourseDetails";
+import Profile from "./pages/Profile";
+import Explore from "./pages/Explore";
+import Certificate from "./pages/Certificate";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AuthButtons from "./components/AuthButtons";
+import UserProfile from "./components/UserProfile";
+import MobileMenu from "./components/MobileMenu";
+import Navbar from "./components/Navbar";
+
+import { setGetTokenSilently } from "./services/api";
+
+export default function App() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const { getAccessTokenSilently, isAuthenticated, logout, user } = useAuth0();
+
+  useEffect(() => {
+    setGetTokenSilently(getAccessTokenSilently);
+
+    // If Auth0 thinks we are authenticated, verify we can actually get a token.
+    // If we can't (due to expired session or scope changes), clear the bad state.
+    if (isAuthenticated) {
+      getAccessTokenSilently()
+        .then(() => {
+          // Token is valid, sync user with backend
+          import("./services/api").then(({ syncUserAPI }) => {
+            syncUserAPI({
+              email: user.email,
+              name: user.name,
+              picture: user.picture,
+            }).catch(err => console.error("Failed to sync user:", err));
+          });
+        })
+        .catch((err) => {
+          console.warn("Session invalid, clearing state:", err);
+          logout({ logoutParams: { returnTo: window.location.origin } });
+        });
+    }
+  }, [getAccessTokenSilently, isAuthenticated, logout, user]);
+
+  return (
+    <BrowserRouter>
+      <div className="min-h-screen bg-black text-white">
+
+        <Navbar onMenuClick={() => setMobileOpen(true)} />
+
+        <MobileMenu
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+        />
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/certificate/:id" element={<Certificate />} />
+
+          <Route
+            path="/courses"
+            element={
+              <ProtectedRoute>
+                <Courses />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route path="/course/:id" element={<CourseDetails />} />
+
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+
+      </div>
+    </BrowserRouter>
+  );
+}
+</file>
+
+<file path="server/services/ai/gemini.service.js">
+import { Orchestrator } from "./Orchestrator.js";
+import { QuizAgent } from "./agents/QuizAgent.js";
+import { TutorAgent } from "./agents/TutorAgent.js";
+
+// Initialize Agents
+const orchestrator = new Orchestrator();
+const quizAgent = new QuizAgent();
+const tutorAgent = new TutorAgent();
+
+// Backward compatible wrappers that use the new Multi-Agent architecture
+export async function generateCourseWithGemini(topic, level, language, goal, timeAvailable, userMemory = null) {
+  // Uses Orchestrator which combines LessonAgent + EvaluatorAgent
+  return await orchestrator.createValidatedCourse(topic, level, language, goal, timeAvailable, userMemory);
+}
+
+export async function generateQuizWithGemini(courseTopic, moduleTitle, lessonTitle, lessonContent) {
+  return await quizAgent.generateQuiz(courseTopic, moduleTitle, lessonTitle, lessonContent);
+}
+
+export async function chatWithLesson(courseId, lessonContent, chatHistory, userMessage, userMemory = null) {
+  return await tutorAgent.chat(courseId, lessonContent, chatHistory, userMessage, userMemory);
+}
+
+export async function analyzeQuizForMemory(courseTopic, quizQuestions, userAnswers) {
+  return await orchestrator.analyzeAndExtractMemory(courseTopic, quizQuestions, userAnswers);
+}
+
+// -----------------------------------------------------
+// Vector Search (Phase A)
+// -----------------------------------------------------
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+let genAIInstance = null;
+export function getGenAI() {
+  if (!genAIInstance) {
+    genAIInstance = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  }
+  return genAIInstance;
+}
+
+export async function generateRemedialWithGemini(topic, failedQuestions) {
+  return await orchestrator.generateRemedial(topic, failedQuestions);
+}
+
+export async function generateEmbeddings(text) {
+  const genAI = getGenAI();
+  const embeddingModel = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
+  
+  const result = await embeddingModel.embedContent(text);
+  return result.embedding.values;
+}
+</file>
+
+<file path="server/controllers/courseController.js">
+import Course from "../models/Course.js";
+import Lesson from "../models/Lesson.js";
+import User from "../models/User.js";
+import { generateCourseWithGemini } from "../services/ai/gemini.service.js";
+import { clearUserCache, clearPublicCache } from "../utils/cacheInvalidator.js";
+
+/* =====================================================
+   POST /api/courses/generate
+===================================================== */
+export async function generateCourseController(req, res) {
+  try {
+    const { topic, level, language = "English", goal, timeAvailable } = req.body;
+
+    // 🔐 Auth0 user id
+    const userId = req.auth.sub;
+    
+    // Fetch user memory
+    const user = await User.findOne({ auth0Id: userId });
+
+    const content = await generateCourseWithGemini(topic, level, language, goal, timeAvailable, user);
+
+    const course = await Course.create({
+      topic,
+      level,
+      language,
+      goal,
+      timeAvailable,
+      content,
+      userId, // ✅ saved
+    });
+
+    // Invalidate Redis caches
+    await clearUserCache(userId);
+    await clearPublicCache();
+
+    res.status(201).json({ success: true, data: course });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: "Course generation failed" });
+  }
+}
+
+/* =====================================================
+   GET /api/courses/my
+   (ONLY logged-in user's courses)
+===================================================== */
+export async function getMyCourses(req, res) {
+  try {
+    const userId = req.auth.sub;
+
+    const courses = await Course.find({ userId }).sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      data: courses,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch user courses",
+    });
+  }
+}
+
+/* =====================================================
+   GET /api/courses/public
+   (All public courses generated by community)
+===================================================== */
+export async function getPublicCourses(req, res) {
+  try {
+    const courses = await Course.find({ isPublic: true })
+      .sort({ createdAt: -1 })
+      .limit(30)
+      .lean();
+
+    return res.json({
+      success: true,
+      data: courses,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch public courses",
+    });
+  }
+}
+
+/* =====================================================
+   GET /api/courses/:id
+===================================================== */
+export async function getCourseById(req, res) {
+  try {
+    const course = await Course.findById(req.params.id);
+
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: course,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch course",
+    });
+  }
+}
+
+/* =====================================================
+   GET /api/courses/:id/full
+===================================================== */
+export async function getFullCourseController(req, res) {
+  try {
+    const { id } = req.params;
+
+    const course = await Course.findById(id).lean();
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+
+    // 🔥 Fetch cached lessons
+    const lessons = await Lesson.find({ courseId: id }).lean();
+
+    const lessonMap = {};
+    lessons.forEach((lesson) => {
+      const key = `${lesson.moduleIndex}-${lesson.lessonIndex}`;
+      lessonMap[key] = lesson.content;
+    });
+
+    course.content.modules.forEach((module) => {
+      module.lessons = module.lessons.map((lesson) => {
+        const key = `${module.moduleIndex}-${lesson.lessonIndex}`;
+        return {
+          ...lesson,
+          fullContent: lessonMap[key] || null,
+        };
+      });
+    });
+
+    return res.json({
+      success: true,
+      data: course,
+    });
+
+  } catch (error) {
+    console.error("❌ Full course fetch error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch full course",
+    });
+  }
+}
+</file>
+
+<file path="server/server.js">
+import express from "express";
+import cors from "cors";
+import connectDB from "./config/db.js";
+
+import courseRoutes from "./routes/courseRoutes.js";
+import lessonRoutes from "./routes/lessonRoutes.js";
+import youtubeRoutes from "./routes/youtubeRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import quizRoutes from "./routes/quizRoutes.js";
+import tutorRoutes from "./routes/tutorRoutes.js";
+import requireAuth from "./middlewares/requireAuth.js";
+import "./workers/aiWorker.js"; // 🔥 START BULLMQ WORKER
+
+await connectDB();
+
+const app = express();
+
+/* ===============================
+   ✅ CORS CONFIG (VERY IMPORTANT)
+================================ */
+// Put exact URLs here. No trailing slashes (/) at the end!
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://text-to-learn-psi.vercel.app" 
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like Postman or curl)
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      // Check if the exact origin is in our allowed list, OR if it's any local port
+      if (allowedOrigins.includes(origin) || origin.startsWith("http://localhost")) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  })
+);
+
+// 🔥 Handle preflight requests explicitly
+app.options("*", cors());
+
+/* ===============================
+   MIDDLEWARES
+================================ */
+app.use(express.json());
+
+/* ===============================
+   ROUTES
+================================ */
+app.use("/api/courses", courseRoutes);
+app.use("/api/lessons", lessonRoutes);
+app.use("/api/youtube", youtubeRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/quizzes", quizRoutes);
+app.use("/api/tutor", tutorRoutes);
+
+/* ===============================
+   GLOBAL ERROR HANDLER
+================================ */
+app.use((err, req, res, next) => {
+  if (err.name === "UnauthorizedError") {
+    return res.status(401).json({ message: "Invalid or missing authorization token" });
+  }
+  
+  console.error(err);
+  res.status(500).json({ message: "Internal Server Error" });
+});
+
+/* ===============================
+   HEALTH CHECK
+================================ */
+app.get("/", (req, res) => {
+  res.send("Text-to-Learn API is running");
+});
+
+/* ===============================
+   START SERVER
+================================ */
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
+</file>
+
+</files>
