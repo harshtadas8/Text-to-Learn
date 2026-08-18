@@ -1,15 +1,57 @@
-import { useState } from "react";
-import { generateQuizAPI, addXpAPI, submitQuizAPI } from "../services/api";
+import { useState, useEffect } from "react";
+import { generateQuizAPI, addXpAPI, submitQuizAPI, harvestFlashcardsAPI } from "../services/api";
+import { useSocket } from "../context/SocketContext";
+import { useAuth0 } from "@auth0/auth0-react";
 
-export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, lessonContent }) {
+export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, lessonContent, initialQuizData = null }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [quizData, setQuizData] = useState(null);
+  const [quizData, setQuizData] = useState(initialQuizData);
+  const [quizScores, setQuizScores] = useState(null);
   
   // user answers mapping: index -> selected option string
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+
+  const { socket, roomCode, roomData } = useSocket() || {};
+  const { user } = useAuth0();
+  const isHost = roomData?.hostId === socket?.id;
+  const isMultiplayer = !!roomCode;
+
+  // React to new initialQuizData (like when global overlay passes a new quiz)
+  useEffect(() => {
+    if (initialQuizData) {
+      setQuizData(initialQuizData);
+    }
+  }, [initialQuizData]);
+
+  // Listen for multiplayer quiz events
+  useEffect(() => {
+    if (!socket || !isMultiplayer) return;
+
+    socket.on("receive-quiz", (data) => {
+      // Handle both formats just in case
+      setQuizData(data.quizData || data);
+    });
+
+    socket.on("quiz-battle-started", (scores) => {
+      setAnswers({});
+      setSubmitted(false);
+      setScore(0);
+      setQuizScores(scores);
+    });
+
+    socket.on("quiz-scores-updated", (scores) => {
+      setQuizScores(scores);
+    });
+
+    return () => {
+      socket.off("receive-quiz");
+      socket.off("quiz-battle-started");
+      socket.off("quiz-scores-updated");
+    };
+  }, [socket, isMultiplayer]);
 
   const handleGenerateQuiz = async () => {
     try {
@@ -25,6 +67,30 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
 
       if (res.data && res.data.questions) {
         setQuizData(res.data);
+        
+        if (isMultiplayer && isHost) {
+          socket.emit("sync-quiz", { 
+            roomCode, 
+            quizData: res.data,
+            meta: { courseTopic, moduleTitle, lessonTitle }
+          });
+          socket.emit("start-quiz-battle", { roomCode });
+        }
+
+        // Silently harvest these questions for the Spaced Repetition System!
+        try {
+          // ensure fields match Flashcard model expectations
+          const mcqs = res.data.questions.map(q => ({
+            question: q.question,
+            options: q.options,
+            correctAnswer: q.correctAnswer || q.answer, // Fix the property name here
+            explanation: q.explanation
+          }));
+          await harvestFlashcardsAPI({ courseTopic, mcqs });
+        } catch (harvestErr) {
+          console.error("Silent SRS harvesting failed:", harvestErr);
+        }
+
       } else {
         throw new Error("Invalid quiz data format");
       }
@@ -59,6 +125,17 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
 
     setScore(correctCount);
     setSubmitted(true);
+
+    if (isMultiplayer) {
+      // For each correct answer, we add to score on backend
+      quizData.questions.forEach((q, idx) => {
+        socket.emit("submit-quiz-answer", {
+          roomCode,
+          userId: user.sub,
+          isCorrect: answers[idx] === q.correctAnswer
+        });
+      });
+    }
     
     // Background memory analysis
     try {
@@ -116,13 +193,16 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
   }
 
   return (
-    <div className="mt-8 p-6 bg-gray-900 border border-gray-800 rounded-xl shadow-xl">
-      <h3 className="text-2xl font-bold mb-6 text-emerald-400">Lesson Quiz</h3>
+    <div className="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className={`${isMultiplayer && quizScores ? "lg:col-span-3" : "lg:col-span-4"} p-4 sm:p-6 bg-gray-900 border border-gray-800 rounded-xl shadow-xl`}>
+        <h3 className="text-xl sm:text-2xl font-bold mb-6 text-emerald-400">
+          {isMultiplayer ? "⚔️ Multiplayer Quiz Battle" : "Lesson Quiz"}
+        </h3>
       
-      <div className="space-y-8">
+      <div className="space-y-6">
         {quizData.questions.map((q, idx) => (
-          <div key={idx} className="bg-black p-5 rounded-lg border border-gray-800">
-            <p className="font-semibold text-base mb-4">{idx + 1}. {q.question}</p>
+          <div key={idx} className="pb-6 border-b border-gray-800/50 last:border-0 last:pb-0">
+            <p className="font-semibold text-sm sm:text-base mb-4 leading-relaxed">{idx + 1}. {q.question}</p>
             <div className="space-y-2">
               {q.options.map((opt, i) => {
                 const isSelected = answers[idx] === opt;
@@ -145,7 +225,7 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
                     key={i}
                     onClick={() => handleOptionSelect(idx, opt)}
                     disabled={submitted}
-                    className={`w-full text-left p-3 rounded-lg border transition text-base ${optionStyle}`}
+                    className={`w-full text-left p-3 rounded-lg border transition text-sm sm:text-base ${optionStyle}`}
                   >
                     {opt}
                   </button>
@@ -193,11 +273,33 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
               setAnswers({});
               setSubmitted(false);
               setScore(0);
+              
+              if (isMultiplayer && isHost) {
+                socket.emit("close-global-quiz", { roomCode });
+              }
             }}
             className="px-6 py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg transition"
           >
             Try Another Quiz
           </button>
+        </div>
+      )}
+      </div>
+
+      {isMultiplayer && quizScores && (
+        <div className="lg:col-span-1 p-6 bg-gray-900 border border-gray-800 rounded-xl shadow-xl h-fit">
+          <h3 className="text-xl font-bold mb-4 text-white">🏆 Leaderboard</h3>
+          <div className="space-y-4">
+            {roomData?.users?.sort((a, b) => (quizScores[b.id] || 0) - (quizScores[a.id] || 0)).map((u, i) => (
+              <div key={u.id} className="flex items-center justify-between bg-black p-3 rounded-lg border border-gray-800">
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-500 font-bold w-4">{i + 1}.</span>
+                  <span className="font-semibold text-sm truncate max-w-[100px]">{u.name}</span>
+                </div>
+                <span className="text-emerald-400 font-bold">{quizScores[u.id] || 0} pts</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

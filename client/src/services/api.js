@@ -8,9 +8,36 @@ if (!BASE_URL) {
 
 // Auth0 token getter (set from App.jsx)
 let getTokenSilentlyFn = null;
+let logoutFn = null;
 
 export function setGetTokenSilently(fn) {
   getTokenSilentlyFn = fn;
+}
+
+export function setLogoutFn(fn) {
+  logoutFn = fn;
+}
+
+async function getSafeToken() {
+  if (!getTokenSilentlyFn) return null;
+  try {
+    return await getTokenSilentlyFn();
+  } catch (err) {
+    console.error("Auth0 Token Error:", err);
+    if (
+      err.error === "login_required" ||
+      err.error === "consent_required" ||
+      (err.message && err.message.toLowerCase().includes("login")) ||
+      (err.message && err.message.toLowerCase().includes("missing refresh token"))
+    ) {
+      console.warn("Session expired. Logging out.");
+      if (logoutFn) {
+        logoutFn({ logoutParams: { returnTo: window.location.origin } });
+      }
+    }
+    // Throw anyway so the API call fails properly instead of sending a request without a token
+    throw err;
+  }
 }
 
 async function handleApiError(res, defaultMsg) {
@@ -35,7 +62,7 @@ async function handleApiError(res, defaultMsg) {
 /* ------------------ USER APIs ------------------ */
 
 export async function syncUserAPI(payload) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   const res = await fetch(`${BASE_URL}/users/sync`, {
     method: "POST",
@@ -67,7 +94,7 @@ export function clearApiCache() {
 }
 
 export async function getDashboardAPI(forceRefresh = false) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   // Use cache if available and not explicitly refreshing (cache for 1 min max)
   if (!forceRefresh && apiCache.dashboard && apiCache.lastFetched.dashboard > Date.now() - 60000) {
@@ -97,7 +124,7 @@ export async function getDashboardAPI(forceRefresh = false) {
 }
 
 export async function addXpAPI(amount) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   const res = await fetch(`${BASE_URL}/users/xp`, {
     method: "POST",
@@ -116,7 +143,7 @@ export async function addXpAPI(amount) {
 }
 
 export async function getCourseProgressAPI(courseId) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   const res = await fetch(`${BASE_URL}/users/progress/${courseId}`, {
     headers: {
@@ -132,7 +159,7 @@ export async function getCourseProgressAPI(courseId) {
 }
 
 export async function markLessonProgressAPI(courseId, lessonId, isCompleted) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   const res = await fetch(`${BASE_URL}/users/progress`, {
     method: "POST",
@@ -157,7 +184,7 @@ export async function markLessonProgressAPI(courseId, lessonId, isCompleted) {
 /* ------------------ COURSE APIs ------------------ */
 
 export async function generateCourseAPI(payload) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
   console.log("generateCourseAPI token:", token ? "PRESENT" : "NULL");
 
   const res = await fetch(`${BASE_URL}/courses/generate`, {
@@ -213,7 +240,7 @@ export async function getCourseByIdAPI(id) {
 /* ------------------ LESSON APIs ------------------ */
 
 export async function generateLessonAPI(payload) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   const res = await fetch(`${BASE_URL}/lessons/generate`, {
     method: "POST",
@@ -232,7 +259,7 @@ export async function generateLessonAPI(payload) {
 }
 
 export async function getFullCourseAPI(id) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   const res = await fetch(`${BASE_URL}/courses/${id}/full`, {
     headers: {
@@ -248,7 +275,7 @@ export async function getFullCourseAPI(id) {
 }
 
 export async function downloadCoursePdfAPI(id) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   const res = await fetch(`${BASE_URL}/courses/${id}/pdf`, {
     headers: {
@@ -272,7 +299,7 @@ export async function downloadCoursePdfAPI(id) {
 }
 
 export async function downloadCertificatePdfAPI(id) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   const res = await fetch(`${BASE_URL}/courses/${id}/certificate`, {
     headers: {
@@ -298,7 +325,7 @@ export async function downloadCertificatePdfAPI(id) {
 /* ------------------ QUIZ APIs ------------------ */
 
 export async function generateQuizAPI(payload) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   const res = await fetch(`${BASE_URL}/quizzes/generate`, {
     method: "POST",
@@ -317,7 +344,7 @@ export async function generateQuizAPI(payload) {
 }
 
 export async function submitQuizAPI(payload) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   const res = await fetch(`${BASE_URL}/quizzes/submit`, {
     method: "POST",
@@ -342,7 +369,7 @@ export async function submitQuizAPI(payload) {
 /* ------------------ TUTOR APIs ------------------ */
 
 export async function chatWithTutorAPI(payload) {
-  const token = getTokenSilentlyFn ? await getTokenSilentlyFn() : null;
+  const token = await getSafeToken();
 
   const res = await fetch(`${BASE_URL}/tutor/chat`, {
     method: "POST",
@@ -359,3 +386,60 @@ export async function chatWithTutorAPI(payload) {
 
   return res.json();
 }
+/* ------------------ SRS APIs ------------------ */
+
+export async function harvestFlashcardsAPI(payload) {
+  const token = await getSafeToken();
+
+  const res = await fetch(`${BASE_URL}/srs/harvest`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to harvest flashcards");
+  }
+
+  return res.json();
+}
+
+export async function getDueCardsAPI(userId) {
+  const token = await getSafeToken();
+
+  const res = await fetch(`${BASE_URL}/srs/due?userId=${userId}`, {
+    method: "GET",
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to fetch due flashcards");
+  }
+
+  return res.json();
+}
+
+export async function reviewCardAPI(payload) {
+  const token = await getSafeToken();
+
+  const res = await fetch(`${BASE_URL}/srs/review`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to submit flashcard review");
+  }
+
+  return res.json();
+}
+

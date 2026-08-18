@@ -89,25 +89,42 @@ export default function Profile() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
-          {/* Left Column: User Identity */}
-          <div className="md:col-span-1 bg-[#0a0a0a] border border-gray-800 rounded-xl p-8 flex flex-col items-center text-center">
-            
-            <div
-              className={`w-24 h-24 rounded-full flex items-center justify-center bg-gradient-to-br ${bgGradient} text-white font-semibold text-3xl mb-6 shadow-sm`}
-            >
-              {initials}
+          <div className="md:col-span-1 space-y-6 h-fit">
+            <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-8 flex flex-col items-center text-center">
+              <div
+                className={`w-24 h-24 rounded-full flex items-center justify-center bg-gradient-to-br ${bgGradient} text-white font-semibold text-3xl mb-6 shadow-sm`}
+              >
+                {initials}
+              </div>
+              <h2 className="text-xl font-medium text-gray-100 mb-1 w-full truncate">
+                {user.name || "Unnamed Learner"}
+              </h2>
+              <p className="text-gray-400 text-sm mb-8 w-full truncate">
+                {user.email}
+              </p>
+              <div className="w-full text-left mt-auto pt-6 border-t border-gray-800">
+                <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Auth Provider</p>
+                <p className="capitalize text-gray-300 text-sm font-medium">{user.sub?.split("|")[0]}</p>
+              </div>
             </div>
 
-            <h2 className="text-xl font-medium text-gray-100 mb-1 w-full truncate">
-              {user.name || "Unnamed Learner"}
-            </h2>
-            <p className="text-gray-400 text-sm mb-8 w-full truncate">
-              {user.email}
-            </p>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-1 gap-6">
+              <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-6 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-xl">🔥</span>
+                  <p className="text-xs text-gray-400 font-medium uppercase tracking-widest">Day Streak</p>
+                </div>
+                <p className="text-3xl font-light text-gray-100">{stats?.streak || 0}</p>
+              </div>
 
-            <div className="w-full text-left mt-auto pt-6 border-t border-gray-800">
-              <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Auth Provider</p>
-              <p className="capitalize text-gray-300 text-sm font-medium">{user.sub?.split("|")[0]}</p>
+              <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-6 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-xl">🎓</span>
+                  <p className="text-xs text-gray-400 font-medium uppercase tracking-widest">Completed</p>
+                </div>
+                <p className="text-3xl font-light text-gray-100">{stats?.totalCoursesCompleted || 0} Courses</p>
+              </div>
             </div>
           </div>
 
@@ -142,24 +159,7 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 gap-6">
-              <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-6 flex flex-col justify-center">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-xl">🔥</span>
-                  <p className="text-xs text-gray-400 font-medium uppercase tracking-widest">Day Streak</p>
-                </div>
-                <p className="text-3xl font-light text-gray-100">{stats?.streak || 0}</p>
-              </div>
 
-              <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-6 flex flex-col justify-center">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-xl">🎓</span>
-                  <p className="text-xs text-gray-400 font-medium uppercase tracking-widest">Completed</p>
-                </div>
-                <p className="text-3xl font-light text-gray-100">{stats?.totalCoursesCompleted || 0} Courses</p>
-              </div>
-            </div>
 
             {/* AI Learning Memory */}
             <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-8">
@@ -209,68 +209,73 @@ export default function Profile() {
               </p>
             </div>
 
-            {/* Targeted Review (Remedials) */}
-            <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-8">
-              <h3 className="text-xl font-light text-gray-200 mb-6 border-b border-gray-800 pb-3 flex items-center gap-2">
-                <span className="text-purple-400">🎯</span> Targeted Review
-              </h3>
-              
-              <p className="text-sm text-gray-400 mb-6">
-                These are custom mini-lessons generated by your AI Tutor based on questions you missed in quizzes. Review them to overcome your weaknesses!
-              </p>
-              
-              {stats?.remedials && stats.remedials.length > 0 ? (
-                <div className="space-y-4">
-                  {stats.remedials.slice().reverse().map((remedial, idx) => {
-                    const isExpanded = expandedRemedial === idx;
-                    return (
-                      <div key={idx} className="border border-gray-800 rounded-lg overflow-hidden bg-black transition-all">
-                        <button
-                          onClick={() => setExpandedRemedial(isExpanded ? null : idx)}
-                          className="w-full flex items-center justify-between p-4 bg-gray-900/50 hover:bg-gray-800/80 transition-colors"
-                        >
-                          <div className="flex flex-col text-left">
-                            <span className="text-gray-200 font-medium">{remedial.topic}</span>
-                            <span className="text-xs text-gray-500">{new Date(remedial.date).toLocaleDateString()}</span>
-                          </div>
-                          <span className="text-gray-400 text-xl font-light">{isExpanded ? "−" : "+"}</span>
-                        </button>
-                        
-                        {isExpanded && (
-                          <div className="p-6 text-sm text-gray-300 leading-relaxed border-t border-gray-800">
-                            <ReactMarkdown
-                              components={{
-                                strong: ({node, ...props}) => <strong className="font-bold text-white" {...props} />,
-                                ul: ({node, ...props}) => <ul className="list-disc pl-4 my-2" {...props} />,
-                                ol: ({node, ...props}) => <ol className="list-decimal pl-4 my-2" {...props} />,
-                                li: ({node, ...props}) => <li className="my-1" {...props} />,
-                                p: ({node, ...props}) => <p className="mb-4 last:mb-0" {...props} />,
-                                h1: ({node, ...props}) => <h1 className="text-xl font-bold text-white mb-2 mt-4" {...props} />,
-                                h2: ({node, ...props}) => <h2 className="text-lg font-bold text-gray-200 mb-2 mt-4" {...props} />,
-                                h3: ({node, ...props}) => <h3 className="text-md font-bold text-gray-300 mb-2 mt-3" {...props} />
-                              }}
-                            >
-                              {remedial.content}
-                            </ReactMarkdown>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="text-center py-8 border border-dashed border-gray-800 rounded-lg bg-gray-900/30">
-                  <span className="text-3xl mb-3 block opacity-50">✨</span>
-                  <p className="text-sm text-gray-400">No targeted reviews yet.</p>
-                  <p className="text-xs text-gray-500 mt-1">Keep taking quizzes to identify areas for improvement!</p>
-                </div>
-              )}
-            </div>
-
-            {/* Dashboard Analytics Charts */}
-            <DashboardCharts quizHistory={stats?.quizHistory} learningTime={stats?.learningTime} />
-
           </div>
+        </div>
+
+        {/* Targeted Review (Remedials) */}
+        <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-8 mt-8 shadow-xl">
+          <h3 className="text-xl font-light text-gray-200 mb-6 border-b border-gray-800 pb-3 flex items-center gap-2">
+            <span className="text-purple-400">🎯</span> Targeted Review
+          </h3>
+          
+          <p className="text-sm text-gray-400 mb-6">
+            These are custom mini-lessons generated by your AI Tutor based on questions you missed in quizzes. Review them to overcome your weaknesses!
+          </p>
+          
+          {stats?.remedials && stats.remedials.length > 0 ? (
+            <div className="space-y-4">
+              {stats.remedials.slice().reverse().map((remedial, idx) => {
+                const isExpanded = expandedRemedial === idx;
+                return (
+                  <div key={idx} className="border border-gray-800 rounded-lg overflow-hidden bg-black transition-all">
+                    <button
+                      onClick={() => setExpandedRemedial(isExpanded ? null : idx)}
+                      className="w-full flex items-center justify-between p-4 bg-gray-900/50 hover:bg-gray-800/80 transition-colors"
+                    >
+                      <div className="flex flex-col text-left">
+                        <span className="text-gray-200 font-medium">{remedial.topic}</span>
+                        <span className="text-xs text-gray-500">{new Date(remedial.date).toLocaleDateString()}</span>
+                      </div>
+                      <span className="text-gray-400 text-xl font-light">{isExpanded ? "−" : "+"}</span>
+                    </button>
+                    
+                    {isExpanded && (
+                      <div className="p-6 text-sm text-gray-300 leading-relaxed border-t border-gray-800">
+                        <ReactMarkdown
+                          components={{
+                            strong: ({node, ...props}) => <strong className="font-bold text-white" {...props} />,
+                            ul: ({node, ...props}) => <ul className="list-disc pl-4 my-2" {...props} />,
+                            ol: ({node, ...props}) => <ol className="list-decimal pl-4 my-2" {...props} />,
+                            li: ({node, ...props}) => <li className="my-1" {...props} />,
+                            p: ({node, ...props}) => <p className="mb-4 last:mb-0" {...props} />,
+                            h1: ({node, ...props}) => <h1 className="text-xl font-bold text-white mb-2 mt-4" {...props} />,
+                            h2: ({node, ...props}) => <h2 className="text-lg font-bold text-gray-200 mb-2 mt-4" {...props} />,
+                            h3: ({node, ...props}) => <h3 className="text-md font-bold text-gray-300 mb-2 mt-3" {...props} />
+                          }}
+                        >
+                          {remedial.content}
+                        </ReactMarkdown>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-8 border border-dashed border-gray-800 rounded-lg bg-gray-900/30">
+              <span className="text-3xl mb-3 block opacity-50">✨</span>
+              <p className="text-sm text-gray-400">No targeted reviews yet.</p>
+              <p className="text-xs text-gray-500 mt-1">Keep taking quizzes to identify areas for improvement!</p>
+            </div>
+          )}
+        </div>
+
+        {/* Dashboard Analytics Charts */}
+        <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-8 overflow-hidden shadow-xl mt-8">
+          <h3 className="text-xl font-light text-gray-200 mb-6 border-b border-gray-800 pb-3 flex items-center gap-2">
+            <span className="text-blue-400">📈</span> Activity Analytics
+          </h3>
+          <DashboardCharts quizHistory={stats?.quizHistory} learningTime={stats?.learningTime} />
         </div>
       </div>
     </div>

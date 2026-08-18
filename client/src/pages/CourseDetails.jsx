@@ -23,18 +23,25 @@ export default function CourseDetails() {
       try {
         const res = await getCourseByIdAPI(id);
         setCourse(res.data);
+      } catch (err) {
+        console.error("Failed to fetch course:", err);
+        setError("Failed to load course");
+        setLoading(false);
+        return;
+      }
 
-        // Fetch progress if authenticated
-        if (isAuthenticated) {
+      // Fetch progress if authenticated (non-fatal if it fails)
+      if (isAuthenticated) {
+        try {
           const progRes = await getCourseProgressAPI(id);
           setCompletedLessons(progRes.data || []);
+        } catch (progErr) {
+          console.warn("Failed to fetch progress (auth might have expired):", progErr);
+          // Do NOT set error here, let the course load anyway
         }
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load course");
-      } finally {
-        setLoading(false);
       }
+
+      setLoading(false);
     }
 
     fetchCourseData();
@@ -162,12 +169,12 @@ export default function CourseDetails() {
         </div>
 
         {/* ACTIONS */}
-        <div className="flex flex-wrap gap-4 pt-6">
+        <div className="flex flex-wrap justify-center sm:justify-start gap-4 pt-6">
           <button
             onClick={() => navigate("/")}
             className="px-6 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition"
           >
-            ← Generate Another Course
+            Generate Another Course
           </button>
 
           <button

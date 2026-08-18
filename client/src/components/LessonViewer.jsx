@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import VideoBlock from "./VideoBlock"; // ✅ ADD THIS
 import TypewriterEffect from "./TypewriterEffect";
+import TextToSpeechButton from "./TextToSpeechButton";
 
-export default function LessonViewer({ content }) {
+export default function LessonViewer({ content, language, reelButton }) {
   const [activeIdx, setActiveIdx] = useState(0);
 
   // Reset when content changes
@@ -32,8 +33,22 @@ export default function LessonViewer({ content }) {
     }
   };
 
+  const fullText = blocks
+    .filter(b => b.type === "objectives_container" || b.type === "heading" || b.type === "paragraph" || b.type === "list")
+    .map(b => {
+      if (b.type === "objectives_container") return "Learning Objectives: " + b.items.join(". ");
+      if (b.type === "list") return b.items.join(". ");
+      return b.text;
+    })
+    .join(". ");
+
   return (
-    <div className="space-y-6 text-base text-gray-200">
+    <div className="text-base text-gray-200">
+      <div className="flex flex-wrap justify-end gap-3 mb-6">
+        {reelButton}
+        <TextToSpeechButton text={fullText} language={language} />
+      </div>
+      <div className="space-y-6">
       {blocks.map((block, idx) => {
         // Only render if it's our turn or we've already been rendered
         if (idx > activeIdx) return null;
@@ -67,7 +82,7 @@ export default function LessonViewer({ content }) {
           return (
             <h3 key={idx} className="text-xl font-semibold text-white mt-4">
               {isStreaming ? (
-                <TypewriterEffect text={block.text} speed={10} onComplete={() => handleComplete(idx)} />
+                <TypewriterEffect text={block.text} speed={2} onComplete={() => handleComplete(idx)} />
               ) : (
                 block.text
               )}
@@ -79,11 +94,31 @@ export default function LessonViewer({ content }) {
           return (
             <p key={idx} className="text-gray-300 leading-relaxed text-base">
               {isStreaming ? (
-                <TypewriterEffect text={block.text} speed={10} onComplete={() => handleComplete(idx)} />
+                <TypewriterEffect text={block.text} speed={2} onComplete={() => handleComplete(idx)} />
               ) : (
                 block.text
               )}
             </p>
+          );
+        }
+
+        if (block.type === "list") {
+          return (
+            <ul key={idx} className="list-disc list-inside space-y-2 text-gray-300 pl-2">
+              {block.items.map((item, i) => (
+                <li key={i}>
+                  {isStreaming ? (
+                    <TypewriterEffect 
+                      text={item} 
+                      speed={2} 
+                      onComplete={i === block.items.length - 1 ? () => handleComplete(idx) : undefined} 
+                    />
+                  ) : (
+                    item
+                  )}
+                </li>
+              ))}
+            </ul>
           );
         }
 
@@ -114,6 +149,7 @@ export default function LessonViewer({ content }) {
         if (isStreaming) setTimeout(() => handleComplete(idx), 0);
         return null;
       })}
+      </div>
     </div>
   );
 }

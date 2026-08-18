@@ -107,7 +107,7 @@ export async function getDashboard(req, res) {
     });
 
     const user = await User.findOne({ auth0Id }).lean();
-    
+
     return res.json({
       success: true,
       data: {

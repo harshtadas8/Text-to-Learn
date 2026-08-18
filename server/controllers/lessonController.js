@@ -4,6 +4,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { extractJson } from "../utils/jsonUtils.js";
 import { generateEmbeddings } from "../services/ai/gemini.service.js";
 
+import User from "../models/User.js";
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 import { LESSON_DETAIL_PROMPT } from "../config/prompts.js";
@@ -41,11 +43,27 @@ export async function generateLessonController(req, res) {
       generationConfig: { responseMimeType: "application/json" },
     });
 
+    // Extract User Memory
+    const userId = req.auth?.sub;
+    let memoryConstraint = "";
+    if (userId) {
+      const user = await User.findOne({ auth0Id: userId });
+      if (user && (user.weakTopics?.length > 0 || user.strongTopics?.length > 0)) {
+        memoryConstraint = `
+USER ADAPTIVE PROFILE (Cross-Course Context):
+- The user is STRONG at: ${user.strongTopics?.join(', ') || 'N/A'} (Skip the absolute basics for these topics if they appear).
+- The user is WEAK at: ${user.weakTopics?.join(', ') || 'N/A'} (Explain these topics in much simpler terms if they appear, providing more analogies and simple examples).
+Make sure to adapt the lesson content to match this profile!
+`;
+      }
+    }
+
     const prompt = LESSON_DETAIL_PROMPT(
       courseTitle,
       moduleTitle,
       lessonTitle,
-      language
+      language,
+      memoryConstraint
     );
 
     const result = await model.generateContent(prompt);

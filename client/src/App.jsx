@@ -1,53 +1,52 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-
 import Home from "./pages/Home";
 import Courses from "./pages/Courses";
-import CourseDetails from "./pages/CourseDetails";
 import Profile from "./pages/Profile";
+import CourseDetails from "./pages/CourseDetails";
 import Explore from "./pages/Explore";
 import Certificate from "./pages/Certificate";
+import Review from "./pages/Review";
+import StudyRoom from "./pages/StudyRoom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthButtons from "./components/AuthButtons";
 import UserProfile from "./components/UserProfile";
+import MultiplayerOverlay from "./components/MultiplayerOverlay";
 import MobileMenu from "./components/MobileMenu";
 import Navbar from "./components/Navbar";
-
-import { setGetTokenSilently } from "./services/api";
+import RoomStatusWidget from "./components/RoomStatusWidget";
+import { setGetTokenSilently, setLogoutFn, syncUserAPI } from "./services/api";
 
 export default function App() {
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently, logout } = useAuth0();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { getAccessTokenSilently, isAuthenticated, logout, user } = useAuth0();
+  // Set the token function immediately during render so children can use it in their effects
+  if (getAccessTokenSilently) {
+    setGetTokenSilently(getAccessTokenSilently);
+    setLogoutFn(logout);
+  }
 
   useEffect(() => {
-    setGetTokenSilently(getAccessTokenSilently);
+    if (!isAuthenticated || !user) return;
 
-    // If Auth0 thinks we are authenticated, verify we can actually get a token.
-    // If we can't (due to expired session or scope changes), clear the bad state.
-    if (isAuthenticated) {
-      getAccessTokenSilently()
-        .then(() => {
-          // Token is valid, sync user with backend
-          import("./services/api").then(({ syncUserAPI }) => {
-            syncUserAPI({
-              email: user.email,
-              name: user.name,
-              picture: user.picture,
-            }).catch(err => console.error("Failed to sync user:", err));
-          });
-        })
-        .catch((err) => {
-          console.warn("Session invalid, clearing state:", err);
-          logout({ logoutParams: { returnTo: window.location.origin } });
-        });
-    }
-  }, [getAccessTokenSilently, isAuthenticated, logout, user]);
+    syncUserAPI({
+      email: user.email,
+      name: user.name,
+      picture: user.picture,
+    }).catch(err => {
+      console.warn("Failed to sync user:", err);
+      // Optional: Handle token expiration if it fails with 401
+      if (err.message && err.message.toLowerCase().includes('unauthorized')) {
+        logout({ logoutParams: { returnTo: window.location.origin } });
+      }
+    });
+  }, [isAuthenticated, user?.sub, logout]);
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-black text-white">
+      <div className="min-h-screen bg-black text-white flex flex-col">
 
         <Navbar onMenuClick={() => setMobileOpen(true)} />
 
@@ -55,33 +54,50 @@ export default function App() {
           open={mobileOpen}
           onClose={() => setMobileOpen(false)}
         />
+        
+        <MultiplayerOverlay />
+        <RoomStatusWidget />
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/certificate/:id" element={<Certificate />} />
+        <div className="flex-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/certificate/:id" element={<Certificate />} />
 
-          <Route
-            path="/courses"
-            element={
-              <ProtectedRoute>
-                <Courses />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/courses"
+              element={
+                <ProtectedRoute>
+                  <Courses />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route path="/course/:id" element={<CourseDetails />} />
+            <Route path="/course/:id" element={<CourseDetails />} />
 
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/review"
+              element={
+                <ProtectedRoute>
+                  <Review />
+                </ProtectedRoute>
+              }
+            />
+            
+            <Route path="/room" element={<StudyRoom />} />
+            <Route path="/room/:roomCode" element={<StudyRoom />} />
+          </Routes>
+        </div>
 
       </div>
     </BrowserRouter>

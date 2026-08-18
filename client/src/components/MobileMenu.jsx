@@ -1,10 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export default function MobileMenu({ open, onClose }) {
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const location = useLocation();
 
   if (!open) return null;
+
+  const isActive = (path) => location.pathname === path;
+  const linkClass = (path) => 
+    `transition ${isActive(path) ? 'text-emerald-400 font-semibold' : 'hover:text-white'}`;
 
   return (
     <>
@@ -28,7 +33,7 @@ export default function MobileMenu({ open, onClose }) {
           <Link
             to="/"
             onClick={onClose}
-            className="hover:text-white transition"
+            className={linkClass("/")}
           >
             Home
           </Link>
@@ -36,7 +41,7 @@ export default function MobileMenu({ open, onClose }) {
           <Link
             to="/explore"
             onClick={onClose}
-            className="hover:text-white transition"
+            className={linkClass("/explore")}
           >
             Explore
           </Link>
@@ -47,15 +52,31 @@ export default function MobileMenu({ open, onClose }) {
               <Link
                 to="/courses"
                 onClick={onClose}
-                className="hover:text-white transition"
+                className={linkClass("/courses")}
               >
                 My Courses
               </Link>
 
               <Link
+                to="/room"
+                onClick={onClose}
+                className={linkClass("/room")}
+              >
+                Study Rooms
+              </Link>
+
+              <Link
+                to="/review"
+                onClick={onClose}
+                className={linkClass("/review")}
+              >
+                Daily Review
+              </Link>
+
+              <Link
                 to="/profile"
                 onClick={onClose}
-                className="hover:text-white transition"
+                className={linkClass("/profile")}
               >
                 My Profile
               </Link>

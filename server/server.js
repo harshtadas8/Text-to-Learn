@@ -1,4 +1,6 @@
 import express from "express";
+import http from "http";
+import { Server } from "socket.io";
 import cors from "cors";
 import connectDB from "./config/db.js";
 
@@ -8,8 +10,10 @@ import youtubeRoutes from "./routes/youtubeRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
 import tutorRoutes from "./routes/tutorRoutes.js";
+import srsRoutes from "./routes/srsRoutes.js";
 import requireAuth from "./middlewares/requireAuth.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
+import roomHandler from "./sockets/roomHandler.js";
 import "./workers/aiWorker.js"; // 🔥 START BULLMQ WORKER
 
 await connectDB();
@@ -46,6 +50,17 @@ app.use(
   })
 );
 
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ["GET", "POST"]
+  }
+});
+
+// Initialize Socket.io Handlers
+roomHandler(io);
+
 // 🔥 Handle preflight requests explicitly
 app.options("*", cors());
 
@@ -63,6 +78,7 @@ app.use("/api/youtube", youtubeRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/quizzes", quizRoutes);
 app.use("/api/tutor", tutorRoutes);
+app.use("/api/srs", srsRoutes);
 
 /* ===============================
    GLOBAL ERROR HANDLER
@@ -81,6 +97,6 @@ app.get("/", (req, res) => {
 ================================ */
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+server.listen(PORT, () => {
+  console.log(`✅ Server & WebSockets running on port ${PORT}`);
 });

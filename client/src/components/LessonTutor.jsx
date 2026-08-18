@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { chatWithTutorAPI } from "../services/api";
 import ReactMarkdown from "react-markdown";
+import SpeechToTextButton from "./SpeechToTextButton";
 
 export default function LessonTutor({ lessonContent, courseId }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,6 +73,10 @@ export default function LessonTutor({ lessonContent, courseId }) {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleTranscript = (transcript) => {
+    setInput((prev) => (prev ? prev + " " + transcript : transcript));
   };
 
   if (!isOpen) {
@@ -152,21 +157,24 @@ export default function LessonTutor({ lessonContent, courseId }) {
       </div>
 
       {/* Input Area */}
-      <form onSubmit={handleSend} className="p-4 bg-gray-800 border-t border-gray-700 flex gap-2">
+      <form onSubmit={handleSend} className="p-4 bg-gray-800 border-t border-gray-700 flex gap-2 items-center">
+        <SpeechToTextButton onTranscript={handleTranscript} />
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask a question about this lesson..."
           disabled={isLoading}
-          className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500 transition disabled:opacity-50"
+          className="flex-1 min-w-0 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500 transition disabled:opacity-50"
         />
         <button
           type="submit"
           disabled={isLoading || !input.trim()}
-          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition disabled:opacity-50"
+          className="flex-shrink-0 p-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition disabled:opacity-50"
         >
-          Send
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clipRule="evenodd" />
+          </svg>
         </button>
       </form>
     </div>

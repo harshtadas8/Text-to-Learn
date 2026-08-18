@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { generateLessonAPI } from "../services/api";
+import LessonReelModal from "./LessonReelModal";
 import LessonViewer from "./LessonViewer";
 import QuizViewer from "./QuizViewer";
 import LessonTutor from "./LessonTutor";
+import { useSocket } from "../context/SocketContext";
 export default function ModuleAccordion({ module, courseId, courseTitle, language, completedLessons = [], onToggleComplete }) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedLessonId, setExpandedLessonId] = useState(null);
+  const [activeReelLessonId, setActiveReelLessonId] = useState(null);
   const [lessonContentMap, setLessonContentMap] = useState({});
   const [loadingLessons, setLoadingLessons] = useState({});
   const [errorLessons, setErrorLessons] = useState({});
+
+  const { socket, roomData, roomCode } = useSocket() || {};
+  const isHost = roomData?.hostId === socket?.id;
 
   const toggleModule = () => setIsOpen(prev => !prev);
 
@@ -114,8 +120,33 @@ export default function ModuleAccordion({ module, courseId, courseTitle, languag
                 )}
 
                 {isExpanded && lessonContentMap[lessonId] && (
-                  <div className="px-4 py-4">
-                    <LessonViewer content={lessonContentMap[lessonId]} />
+                  <div className="px-4 pt-3 pb-4">
+                    <LessonViewer 
+                      content={lessonContentMap[lessonId]} 
+                      language={language} 
+                      reelButton={
+                        <button 
+                          onClick={() => {
+                            setActiveReelLessonId(lessonId);
+                            if (isHost && roomCode) {
+                              socket.emit("host-opened-reel", { 
+                                roomCode, 
+                                content: lessonContentMap[lessonId], 
+                                lessonTitle: lesson.title, 
+                                language 
+                              });
+                            }
+                          }}
+                          className="py-2 px-6 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-black font-bold rounded-full transition-all shadow-lg flex items-center gap-2 transform hover:scale-105"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          Watch as Reel
+                        </button>
+                      }
+                    />
                     
                     <QuizViewer 
                       courseTopic={courseTitle}
@@ -148,6 +179,22 @@ export default function ModuleAccordion({ module, courseId, courseTitle, languag
           })}
         </div>
       )}
+
+      {/* RENDER THE ACTIVE REEL MODAL */}
+      {activeReelLessonId && (
+        <LessonReelModal 
+          content={lessonContentMap[activeReelLessonId]} 
+          lessonTitle={module.lessons.find(l => `${module.moduleIndex}-${l.lessonIndex}` === activeReelLessonId)?.title}
+          language={language}
+          onClose={() => {
+            setActiveReelLessonId(null);
+            if (isHost && roomCode) {
+              socket.emit("host-closed-reel", { roomCode });
+            }
+          }} 
+        />
+      )}
+
     </div>
   );
 }

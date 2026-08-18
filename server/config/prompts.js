@@ -76,8 +76,8 @@ Return ONLY raw JSON in this structure:
 }
 
 Rules:
-- Max 5 modules
-- Max 5 lessons per module
+- Generate 5 to 8 modules depending on the complexity of the topic (use fewer only if the topic is extremely narrow)
+- Generate 5 to 6 lessons per module
 - Resources MUST be present for every module
 - Videos must be SEARCH QUERIES, not URLs
 - Blogs must be site or documentation names, not links
@@ -128,7 +128,7 @@ Return ONLY raw JSON in this exact structure:
 }
 `;
 
-export const LESSON_DETAIL_PROMPT = (courseTitle, moduleTitle, lessonTitle, language) => {
+export const LESSON_DETAIL_PROMPT = (courseTitle, moduleTitle, lessonTitle, language, memoryConstraint = "") => {
   let languageRules = "";
 
   if (language === "Marathi") {
@@ -158,7 +158,11 @@ export const LESSON_DETAIL_PROMPT = (courseTitle, moduleTitle, lessonTitle, lang
   return `
 You are an API that returns ONLY valid JSON.
 
-Generate a detailed lesson.
+Generate a HIGHLY COMPREHENSIVE, in-depth lesson. 
+The user is relying on this content to fully understand the topic. 
+Do NOT generate a short summary. Your output must be exhaustive, rich, and detailed.
+Provide deep conceptual explanations, step-by-step breakdowns, real-world analogies, and practical examples.
+Aim for at least 6-8 detailed paragraphs, 2-3 code blocks (if applicable), and multiple logical sub-headings to break down the topic.
 
 Course: "${courseTitle}"
 Module: "${moduleTitle}"
@@ -167,6 +171,8 @@ Lesson: "${lessonTitle}"
 LANGUAGE RULES:
 ${languageRules}
 
+${memoryConstraint}
+
 Return JSON ONLY in this exact structure:
 {
   "lessonTitle": "",
@@ -174,6 +180,7 @@ Return JSON ONLY in this exact structure:
   "content": [
     { "type": "heading", "text": "" },
     { "type": "paragraph", "text": "" },
+    { "type": "list", "items": ["point 1", "point 2"] },
     { "type": "code", "language": "", "code": "" },
     { "type": "video", "query": "" }
   ]
@@ -182,6 +189,7 @@ Return JSON ONLY in this exact structure:
 Rules:
 - NO markdown
 - NO explanations outside JSON
+- Balance long paragraphs with bulleted lists to keep the reader engaged.
 - Include EXACTLY one video block
 - Video query must be specific to lesson
 `;

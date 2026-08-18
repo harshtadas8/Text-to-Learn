@@ -62,35 +62,37 @@ export default function Courses() {
           </h1>
           
           {/* PLAYER STATS BANNER */}
-          <div className="bg-gradient-to-r from-gray-900 to-black border border-emerald-500/30 p-6 rounded-xl mb-8 animate-slide-up flex flex-col md:flex-row items-center justify-between shadow-lg shadow-emerald-500/10">
-            <div className="flex items-center gap-6 mb-4 md:mb-0">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center text-emerald-400 text-2xl font-bold">
-                Lvl {Math.floor((stats?.xp || 0) / 100) + 1}
+          <div className="bg-gray-900/50 border border-gray-800 p-6 rounded-2xl mb-8 animate-slide-up flex flex-col md:flex-row items-center md:items-start justify-between gap-6 backdrop-blur-sm">
+            
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 text-center md:text-left w-full md:w-auto">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-900/40 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl font-bold shadow-inner shrink-0">
+                Lv.{Math.floor((stats?.xp || 0) / 100) + 1}
               </div>
-              <div>
-                <h3 className="text-xl font-bold text-white">Your Progress</h3>
-                <div className="text-sm text-gray-400 flex items-center gap-2">
-                  <span>✨ {stats?.xp || 0} Total XP</span>
-                  <span>•</span>
-                  <span>Next level in {100 - ((stats?.xp || 0) % 100)} XP</span>
+              <div className="w-full max-w-[250px] md:max-w-none mx-auto md:mx-0">
+                <h3 className="text-lg font-semibold text-white tracking-wide">Your Progress</h3>
+                <div className="text-sm text-gray-400 mt-1 flex items-center justify-center md:justify-start gap-2">
+                  <span className="font-medium text-emerald-400">{stats?.xp || 0} XP</span>
+                  <span className="opacity-50">•</span>
+                  <span>{100 - ((stats?.xp || 0) % 100)} XP to next level</span>
                 </div>
                 {/* XP Bar */}
-                <div className="w-48 bg-gray-800 rounded-full h-2 mt-2">
+                <div className="w-full bg-gray-950 rounded-full h-1.5 mt-3 overflow-hidden border border-gray-800">
                   <div 
-                    className="bg-emerald-400 h-2 rounded-full transition-all duration-500" 
+                    className="bg-emerald-500 h-1.5 rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(16,185,129,0.5)]" 
                     style={{ width: `${((stats?.xp || 0) % 100)}%` }}
                   ></div>
                 </div>
               </div>
             </div>
             
-            <div className="bg-orange-500/10 border border-orange-500/30 px-6 py-3 rounded-xl flex items-center gap-3">
-              <span className="text-3xl">🔥</span>
-              <div>
-                <p className="text-xs text-orange-300 font-semibold uppercase tracking-wider">Daily Streak</p>
-                <p className="text-2xl font-bold text-white">{stats?.streak || 0} {stats?.streak === 1 ? 'Day' : 'Days'}</p>
+            <div className="w-full md:w-auto bg-gray-950/50 border border-gray-800 px-5 py-3 rounded-xl flex items-center justify-center gap-3 transition hover:border-orange-500/30 group">
+              <span className="text-2xl opacity-80 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0">🔥</span>
+              <div className="text-left">
+                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Daily Streak</p>
+                <p className="text-lg font-semibold text-gray-200">{stats?.streak || 0} {stats?.streak === 1 ? 'Day' : 'Days'}</p>
               </div>
             </div>
+            
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-slide-up">

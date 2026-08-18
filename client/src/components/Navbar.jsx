@@ -14,6 +14,8 @@ export default function Navbar({ onMenuClick }) {
   
   if (isAuthenticated) {
     navLinks.push({ name: "My Courses", path: "/courses" });
+    navLinks.push({ name: "Study Rooms", path: "/room" });
+    navLinks.push({ name: "Daily Review", path: "/review" });
     navLinks.push({ name: "Profile", path: "/profile" });
   }
 
@@ -56,8 +58,10 @@ export default function Navbar({ onMenuClick }) {
       </div>
 
       <div className="sm:hidden">
-        <UserProfile />
+        <AuthButtons />
       </div>
+
+
     </header>
   );
 }
