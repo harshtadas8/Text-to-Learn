@@ -38,7 +38,7 @@ app.use(
       }
 
       // Check if the exact origin is in our allowed list, OR if it's any local port
-      if (allowedOrigins.includes(origin) || origin.startsWith("http://localhost")) {
+      if (allowedOrigins.includes(origin) || origin.startsWith("http://localhost") || origin.endsWith("vercel.app")) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
@@ -53,7 +53,7 @@ app.use(
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: "*",
     methods: ["GET", "POST"]
   }
 });

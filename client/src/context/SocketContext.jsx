@@ -24,7 +24,7 @@ export const SocketProvider = ({ children }) => {
 
     const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     const newSocket = io(backendUrl, {
-      transports: ['websocket'],
+      transports: ['polling', 'websocket'],
       // Auto-reconnect is on by default; we handle the reconnect event ourselves
     });
 
