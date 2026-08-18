@@ -22,7 +22,8 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (!isAuthenticated || !user) return;
 
-    const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+    const backendUrl = apiBase.replace('/api', '');
     const newSocket = io(backendUrl, {
       transports: ['polling', 'websocket'],
       // Auto-reconnect is on by default; we handle the reconnect event ourselves
