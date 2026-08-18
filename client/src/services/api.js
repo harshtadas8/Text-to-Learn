@@ -237,6 +237,27 @@ export async function getCourseByIdAPI(id) {
   return res.json();
 }
 
+export async function deleteCourseAPI(id) {
+  const token = await getSafeToken();
+
+  const res = await fetch(`${BASE_URL}/courses/${id}`, {
+    method: "DELETE",
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+
+  if (!res.ok) {
+    await handleApiError(res, "Failed to delete course");
+  }
+
+  const data = await res.json();
+  if (data.success) {
+    clearApiCache();
+  }
+  return data;
+}
+
 /* ------------------ LESSON APIs ------------------ */
 
 export async function generateLessonAPI(payload) {

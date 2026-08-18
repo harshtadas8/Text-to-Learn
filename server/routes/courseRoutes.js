@@ -5,6 +5,7 @@ import {
   getPublicCourses,
   getCourseById,
   getFullCourseController,
+  deleteCourseController,
 } from "../controllers/courseController.js";
 import requireAuth from "../middlewares/requireAuth.js";
 import { cacheResponse } from "../middlewares/redisCache.js";
@@ -21,5 +22,6 @@ router.get("/:id", cacheResponse(300), getCourseById);
 router.get("/:id/full", requireAuth, cacheResponse(300), getFullCourseController);
 router.get("/:id/pdf", requireAuth, generateCoursePDF);
 router.get("/:id/certificate", requireAuth, generateCertificatePDF);
+router.delete("/:id", requireAuth, deleteCourseController);
 
 export default router;

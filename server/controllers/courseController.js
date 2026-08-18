@@ -155,4 +155,51 @@ export async function getFullCourseController(req, res) {
       message: "Failed to fetch full course",
     });
   }
+}
+
+/* =====================================================
+   DELETE /api/courses/:id
+===================================================== */
+export async function deleteCourseController(req, res) {
+  try {
+    const { id } = req.params;
+    const userId = req.auth.sub;
+
+    const course = await Course.findById(id);
+
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+
+    // Check if the user is the owner of the course
+    if (course.userId !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to delete this course",
+      });
+    }
+
+    await Course.findByIdAndDelete(id);
+    
+    // Delete associated lessons
+    await Lesson.deleteMany({ courseId: id });
+
+    // Invalidate Redis caches
+    await clearUserCache(userId);
+    await clearPublicCache();
+
+    return res.json({
+      success: true,
+      message: "Course deleted successfully",
+    });
+  } catch (error) {
+    console.error("❌ Course deletion error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete course",
+    });
+  }
 }

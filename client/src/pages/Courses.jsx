@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { getDashboardAPI } from "../services/api";
+import { getDashboardAPI, deleteCourseAPI } from "../services/api";
 import CourseGridSkeleton from "../components/CourseGridSkeleton";
 
 export default function Courses() {
@@ -10,6 +10,7 @@ export default function Courses() {
 
   const [dashboardData, setDashboardData] = useState({ stats: null, recentCourses: [] });
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -17,19 +18,43 @@ export default function Courses() {
       return;
     }
 
-    const fetchDashboard = async () => {
-      try {
-        const res = await getDashboardAPI();
-        setDashboardData(res.data);
-      } catch (err) {
-        console.error("Dashboard fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDashboard();
   }, [isAuthenticated]);
+
+  const fetchDashboard = async () => {
+    try {
+      const res = await getDashboardAPI(true); // force refresh
+      setDashboardData(res.data);
+    } catch (err) {
+      console.error("Dashboard fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteClick = (e, courseId) => {
+    e.stopPropagation(); // Prevent navigating to the course
+    setDeletingId(courseId);
+  };
+
+  const confirmDelete = async (e, courseId) => {
+    e.stopPropagation();
+    try {
+      await deleteCourseAPI(courseId);
+      // Refresh dashboard data after deletion
+      await fetchDashboard();
+    } catch (error) {
+      console.error("Failed to delete course:", error);
+      alert("Failed to delete course. Please try again.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const cancelDelete = (e) => {
+    e.stopPropagation();
+    setDeletingId(null);
+  };
 
   if (!isAuthenticated) {
     return (
@@ -136,14 +161,16 @@ export default function Courses() {
                   ? Math.round((course.completedLessonsCount / course.totalLessons) * 100) 
                   : 0;
 
+                const isDeleting = deletingId === course._id;
+
                 return (
                   <div
                     key={course._id}
                     style={{ animationDelay: `${i * 100}ms` }}
-                    className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-xl p-5 hover:border-emerald-400 transition transform hover:-translate-y-1 cursor-pointer animate-slide-up flex flex-col"
-                    onClick={() => navigate(`/course/${course._id}`)}
+                    className="relative bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-xl p-5 hover:border-emerald-400 transition transform hover:-translate-y-1 cursor-pointer animate-slide-up flex flex-col group overflow-hidden"
+                    onClick={() => !isDeleting && navigate(`/course/${course._id}`)}
                   >
-                    <h2 className="text-xl font-semibold mb-2 line-clamp-2">
+                    <h2 className="text-xl font-semibold mb-2 line-clamp-2 pr-8">
                       {course.topic}
                     </h2>
                     <p className="text-sm text-gray-400 mb-4">
@@ -165,6 +192,40 @@ export default function Courses() {
                         Created: {new Date(course.createdAt).toLocaleDateString()}
                       </p>
                     </div>
+
+                    {/* Delete Button */}
+                    {!isDeleting && (
+                      <button
+                        onClick={(e) => handleDeleteClick(e, course._id)}
+                        className="absolute top-3 right-3 text-gray-500 hover:text-red-500 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 bg-gray-900/80 rounded-full z-10"
+                        title="Delete Course"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    )}
+
+                    {/* Delete Confirmation Overlay */}
+                    {isDeleting && (
+                      <div className="absolute inset-0 bg-red-950/95 backdrop-blur-sm flex flex-col items-center justify-center p-4 z-20 animate-fade-in">
+                        <p className="text-white font-bold text-center mb-4">Delete this course?</p>
+                        <div className="flex gap-3 w-full">
+                          <button
+                            onClick={(e) => cancelDelete(e)}
+                            className="flex-1 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white font-medium rounded-lg transition"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={(e) => confirmDelete(e, course._id)}
+                            className="flex-1 px-3 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
