@@ -62,7 +62,7 @@ export default function LessonViewer({ content, language, reelButton }) {
                 🎯 Learning Objectives
               </h3>
               <ul className="list-disc list-inside space-y-1 text-gray-300">
-                {block.items.map((obj, i) => (
+                {Array.isArray(block.items) && block.items.map((obj, i) => (
                   <li key={i}>
                     {/* For lists, we just render the whole list block text sequentially or all at once. 
                         To keep it simple, we type out the whole list text as one block, or just render it all. */}
@@ -105,7 +105,7 @@ export default function LessonViewer({ content, language, reelButton }) {
         if (block.type === "list") {
           return (
             <ul key={idx} className="list-disc list-inside space-y-2 text-gray-300 pl-2">
-              {block.items.map((item, i) => (
+              {Array.isArray(block.items) && block.items.map((item, i) => (
                 <li key={i}>
                   {isStreaming ? (
                     <TypewriterEffect 

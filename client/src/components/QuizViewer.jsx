@@ -200,11 +200,11 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
         </h3>
       
       <div className="space-y-6">
-        {quizData.questions.map((q, idx) => (
+        {Array.isArray(quizData?.questions) && quizData.questions.map((q, idx) => (
           <div key={idx} className="pb-6 border-b border-gray-800/50 last:border-0 last:pb-0">
             <p className="font-semibold text-sm sm:text-base mb-4 leading-relaxed">{idx + 1}. {q.question}</p>
             <div className="space-y-2">
-              {q.options.map((opt, i) => {
+              {Array.isArray(q.options) && q.options.map((opt, i) => {
                 const isSelected = answers[idx] === opt;
                 let optionStyle = "border-gray-700 hover:border-gray-500 bg-gray-900 text-gray-300";
                 
