@@ -13,11 +13,11 @@ import { generateCertificatePDF, generateCoursePDF } from "../controllers/pdfCon
 const router = express.Router();
 
 router.post("/generate", requireAuth, generateCourseController);
-router.get("/my", requireAuth, getMyCourses);
+router.get("/my", requireAuth, cacheResponse(300), getMyCourses);
 router.get("/public", cacheResponse(300), getPublicCourses);
 
 // Must be below /my and /public, but above /:id/full
-router.get("/:id", getCourseById);
+router.get("/:id", cacheResponse(300), getCourseById);
 router.get("/:id/full", requireAuth, cacheResponse(300), getFullCourseController);
 router.get("/:id/pdf", requireAuth, generateCoursePDF);
 router.get("/:id/certificate", requireAuth, generateCertificatePDF);

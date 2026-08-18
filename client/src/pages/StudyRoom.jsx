@@ -75,12 +75,12 @@ export default function StudyRoom() {
   // ----- NOT IN A ROOM (LOBBY) -----
   if (!roomData) {
     return (
-      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4">
-        <h1 className="text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
+      <div className="min-h-[calc(100vh-80px)] bg-black text-white flex flex-col items-center pt-10 sm:justify-center sm:pt-0 p-4">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500 text-center">
           Multiplayer Study Rooms
         </h1>
 
-        <div className="bg-gray-900 border border-gray-800 p-8 rounded-2xl w-full max-w-md space-y-6">
+        <div className="bg-gray-900 border border-gray-800 p-6 sm:p-8 rounded-2xl w-full max-w-md space-y-6 shadow-xl">
           <button
             onClick={handleCreateRoom}
             disabled={joining}
@@ -91,23 +91,23 @@ export default function StudyRoom() {
 
           <div className="flex items-center text-gray-500">
             <div className="flex-1 border-t border-gray-700"></div>
-            <span className="px-3 text-sm">OR</span>
+            <span className="px-3 text-sm font-semibold tracking-wider">OR</span>
             <div className="flex-1 border-t border-gray-700"></div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               placeholder="Enter Room Code"
               value={inputCode}
               onChange={(e) => setInputCode(e.target.value.toUpperCase())}
               onKeyDown={(e) => e.key === "Enter" && handleJoinRoom()}
-              className="flex-1 bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded-xl focus:outline-none focus:border-emerald-500"
+              className="flex-1 bg-gray-800 border border-gray-700 text-white px-4 py-3 sm:py-2 rounded-xl focus:outline-none focus:border-emerald-500 text-center sm:text-left tracking-widest sm:tracking-normal font-bold sm:font-normal"
             />
             <button
               onClick={() => handleJoinRoom()}
               disabled={joining || !inputCode.trim()}
-              className="px-6 bg-gray-700 hover:bg-gray-600 rounded-xl font-bold transition disabled:opacity-50"
+              className="w-full sm:w-auto px-6 py-3 sm:py-2 bg-gray-700 hover:bg-gray-600 rounded-xl font-bold transition disabled:opacity-50"
             >
               {joining ? "..." : "Join"}
             </button>
