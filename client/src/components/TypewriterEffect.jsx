@@ -9,17 +9,19 @@ export default function TypewriterEffect({ text, speed = 10, onComplete }) {
     setDisplayedText('');
     setIsTyping(true);
     
-    if (!text) {
+    const safeText = String(text || '');
+    
+    if (!safeText) {
       setIsTyping(false);
       if (onComplete) onComplete();
       return;
     }
 
     const intervalId = setInterval(() => {
-      setDisplayedText((prev) => prev + text.charAt(i));
+      setDisplayedText((prev) => prev + safeText.charAt(i));
       i++;
       
-      if (i >= text.length) {
+      if (i >= safeText.length) {
         clearInterval(intervalId);
         setIsTyping(false);
         if (onComplete) onComplete();

@@ -70,8 +70,9 @@ export const getPublicCourses = async (req, res) => {
   console.log("[API] /api/courses/public hit");
   const startTime = Date.now();
   try {
-    const courses = await Course.find({ isPublic: true })
+    const courses = await Course.find()
       .select("topic level language _id")
+      .sort({ createdAt: -1 })
       .limit(20)
       .lean();
       

@@ -36,9 +36,9 @@ export default function LessonViewer({ content, language, reelButton }) {
   const fullText = blocks
     .filter(b => b.type === "objectives_container" || b.type === "heading" || b.type === "paragraph" || b.type === "list")
     .map(b => {
-      if (b.type === "objectives_container") return "Learning Objectives: " + b.items.join(". ");
-      if (b.type === "list") return b.items.join(". ");
-      return b.text;
+      if (b.type === "objectives_container") return "Learning Objectives: " + (Array.isArray(b.items) ? b.items.join(". ") : String(b.items || ""));
+      if (b.type === "list") return Array.isArray(b.items) ? b.items.join(". ") : String(b.items || "");
+      return String(b.text || "");
     })
     .join(". ");
 
@@ -56,20 +56,25 @@ export default function LessonViewer({ content, language, reelButton }) {
         const isStreaming = idx === activeIdx;
 
         if (block.type === "objectives_container") {
+          const items = Array.isArray(block.items) ? block.items : (block.items ? [String(block.items)] : []);
+          
+          if (items.length === 0 && isStreaming) {
+            setTimeout(() => handleComplete(idx), 0);
+            return null;
+          }
+
           return (
             <div key={idx}>
               <h3 className="text-emerald-400 font-semibold mb-2">
                 🎯 Learning Objectives
               </h3>
               <ul className="list-disc list-inside space-y-1 text-gray-300">
-                {Array.isArray(block.items) && block.items.map((obj, i) => (
+                {items.map((obj, i) => (
                   <li key={i}>
-                    {/* For lists, we just render the whole list block text sequentially or all at once. 
-                        To keep it simple, we type out the whole list text as one block, or just render it all. */}
                     {isStreaming ? (
-                      <TypewriterEffect text={obj} speed={5} onComplete={i === block.items.length - 1 ? () => handleComplete(idx) : undefined} />
+                      <TypewriterEffect text={String(obj)} speed={5} onComplete={i === items.length - 1 ? () => handleComplete(idx) : undefined} />
                     ) : (
-                      obj
+                      String(obj)
                     )}
                   </li>
                 ))}
@@ -103,18 +108,25 @@ export default function LessonViewer({ content, language, reelButton }) {
         }
 
         if (block.type === "list") {
+          const items = Array.isArray(block.items) ? block.items : (block.items ? [String(block.items)] : []);
+          
+          if (items.length === 0 && isStreaming) {
+            setTimeout(() => handleComplete(idx), 0);
+            return null;
+          }
+
           return (
             <ul key={idx} className="list-disc list-inside space-y-2 text-gray-300 pl-2">
-              {Array.isArray(block.items) && block.items.map((item, i) => (
+              {items.map((item, i) => (
                 <li key={i}>
                   {isStreaming ? (
                     <TypewriterEffect 
-                      text={item} 
+                      text={String(item)} 
                       speed={2} 
-                      onComplete={i === block.items.length - 1 ? () => handleComplete(idx) : undefined} 
+                      onComplete={i === items.length - 1 ? () => handleComplete(idx) : undefined} 
                     />
                   ) : (
-                    item
+                    String(item)
                   )}
                 </li>
               ))}

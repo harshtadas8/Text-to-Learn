@@ -1,18 +1,32 @@
-const roomHandler = (io) => {
-  // Store room state in memory
-  // { 'roomCode': { users: [{ id, name }], hostId: socket.id, courseId: '...', score: {} } }
-  const rooms = {};
+import { cacheConnection as redisClient } from "../config/queue.js";
 
+const getRoom = async (roomCode) => {
+  const data = await redisClient.get(`room:${roomCode}`);
+  return data ? JSON.parse(data) : null;
+};
+
+const saveRoom = async (roomCode, data) => {
+  await redisClient.set(`room:${roomCode}`, JSON.stringify(data), "EX", 24 * 60 * 60);
+};
+
+const deleteRoom = async (roomCode) => {
+  await redisClient.del(`room:${roomCode}`);
+};
+
+const roomHandler = (io) => {
   io.on("connection", (socket) => {
     console.log(`🔌 New WebSocket Connection: ${socket.id}`);
 
     // JOIN ROOM
-    socket.on("join-room", ({ roomCode, user }) => {
+    socket.on("join-room", async ({ roomCode, user }) => {
       socket.join(roomCode);
       
-      if (!rooms[roomCode]) {
-        rooms[roomCode] = {
-          hostId: socket.id, // first person is the host
+      const authUserId = socket.user.sub;
+      
+      let room = await getRoom(roomCode);
+      if (!room) {
+        room = {
+          hostId: socket.id,
           users: [],
           quizScores: {},
           activeReel: null,
@@ -20,97 +34,106 @@ const roomHandler = (io) => {
         };
       }
 
-      // Add user if not already there
-      const existingUser = rooms[roomCode].users.find((u) => u.id === user.sub);
+      const existingUser = room.users.find((u) => u.id === authUserId);
       if (!existingUser) {
-        rooms[roomCode].users.push({
+        room.users.push({
           socketId: socket.id,
-          id: user.sub,
-          name: user.name || "Anonymous Learner",
-          picture: user.picture,
+          id: authUserId,
+          name: user?.name || "Anonymous Learner",
+          picture: user?.picture,
         });
       } else {
-        // Update socket ID for existing user
         existingUser.socketId = socket.id;
+        // Also update name/picture just in case
+        if (user?.name) existingUser.name = user.name;
+        if (user?.picture) existingUser.picture = user.picture;
       }
 
-      console.log(`👤 ${user.name} joined room ${roomCode}`);
-
-      // Broadcast updated room data to everyone in the room
-      io.to(roomCode).emit("room-updated", { roomCode, ...rooms[roomCode] });
+      await saveRoom(roomCode, room);
+      console.log(`👤 ${user?.name || 'User'} joined room ${roomCode}`);
+      io.to(roomCode).emit("room-updated", { roomCode, ...room });
     });
 
     // SYNC LESSON REEL STATE
-    socket.on("sync-reel-slide", ({ roomCode, slideIndex, isPlaying }) => {
-      const room = rooms[roomCode];
+    socket.on("sync-reel-slide", async ({ roomCode, slideIndex, isPlaying }) => {
+      const room = await getRoom(roomCode);
       if (room && room.hostId === socket.id) {
-        // Only the host can dictate the slide for now
         socket.to(roomCode).emit("force-sync-slide", { slideIndex, isPlaying });
       }
     });
 
     // REACTION (Mind Blown / Confused)
     socket.on("send-reaction", ({ roomCode, emoji, userName }) => {
-      // Send to everyone EXCEPT the sender
       socket.to(roomCode).emit("receive-reaction", { emoji, userName });
     });
 
     // SYNC QUIZ
-    socket.on("sync-quiz", ({ roomCode, quizData, meta }) => {
-      if (rooms[roomCode]) {
-        rooms[roomCode].activeQuiz = { quizData, meta };
+    socket.on("sync-quiz", async ({ roomCode, quizData, meta }) => {
+      const room = await getRoom(roomCode);
+      if (room) {
+        room.activeQuiz = { quizData, meta };
+        await saveRoom(roomCode, room);
       }
       socket.to(roomCode).emit("receive-quiz", { quizData, meta });
     });
 
-    socket.on("close-global-quiz", ({ roomCode }) => {
-      if (rooms[roomCode]) {
-        rooms[roomCode].activeQuiz = null;
+    socket.on("close-global-quiz", async ({ roomCode }) => {
+      const room = await getRoom(roomCode);
+      if (room) {
+        room.activeQuiz = null;
+        await saveRoom(roomCode, room);
       }
       socket.to(roomCode).emit("receive-close-global-quiz");
     });
 
     // SYNC REEL OPEN/CLOSE
-    socket.on("host-opened-reel", ({ roomCode, content, lessonTitle, language }) => {
-      if (rooms[roomCode]) {
-        rooms[roomCode].activeReel = { content, lessonTitle, language };
+    socket.on("host-opened-reel", async ({ roomCode, content, lessonTitle, language }) => {
+      const room = await getRoom(roomCode);
+      if (room) {
+        room.activeReel = { content, lessonTitle, language };
+        await saveRoom(roomCode, room);
       }
       socket.to(roomCode).emit("receive-opened-reel", { content, lessonTitle, language });
     });
 
-    socket.on("host-closed-reel", ({ roomCode }) => {
-      if (rooms[roomCode]) {
-        rooms[roomCode].activeReel = null;
+    socket.on("host-closed-reel", async ({ roomCode }) => {
+      const room = await getRoom(roomCode);
+      if (room) {
+        room.activeReel = null;
+        await saveRoom(roomCode, room);
       }
       socket.to(roomCode).emit("receive-closed-reel");
     });
 
     // QUIZ BATTLE START
-    socket.on("start-quiz-battle", ({ roomCode }) => {
-      // Reset scores
-      if (rooms[roomCode]) {
-        rooms[roomCode].quizScores = {};
-        rooms[roomCode].users.forEach(u => {
-          rooms[roomCode].quizScores[u.id] = 0;
+    socket.on("start-quiz-battle", async ({ roomCode }) => {
+      const room = await getRoom(roomCode);
+      if (room) {
+        room.quizScores = {};
+        room.users.forEach(u => {
+          room.quizScores[u.id] = 0;
         });
-        io.to(roomCode).emit("quiz-battle-started", rooms[roomCode].quizScores);
+        await saveRoom(roomCode, room);
+        io.to(roomCode).emit("quiz-battle-started", room.quizScores);
       }
     });
 
     // QUIZ ANSWER SUBMITTED
-    socket.on("submit-quiz-answer", ({ roomCode, userId, isCorrect }) => {
-      if (rooms[roomCode] && rooms[roomCode].quizScores) {
+    socket.on("submit-quiz-answer", async ({ roomCode, userId, isCorrect }) => {
+      const room = await getRoom(roomCode);
+      if (room && room.quizScores) {
         if (isCorrect) {
-          rooms[roomCode].quizScores[userId] = (rooms[roomCode].quizScores[userId] || 0) + 10;
+          room.quizScores[userId] = (room.quizScores[userId] || 0) + 10;
         }
-        io.to(roomCode).emit("quiz-scores-updated", rooms[roomCode].quizScores);
+        await saveRoom(roomCode, room);
+        io.to(roomCode).emit("quiz-scores-updated", room.quizScores);
       }
     });
 
     // LEAVE SPECIFIC ROOM
-    socket.on("leave-room", ({ roomCode }) => {
+    socket.on("leave-room", async ({ roomCode }) => {
       socket.leave(roomCode);
-      const room = rooms[roomCode];
+      const room = await getRoom(roomCode);
       if (room) {
         const userIndex = room.users.findIndex((u) => u.socketId === socket.id);
         if (userIndex !== -1) {
@@ -119,42 +142,47 @@ const roomHandler = (io) => {
           console.log(`👤 ${user.name} left room ${roomCode}`);
           
           if (room.users.length === 0) {
-            delete rooms[roomCode];
+            await deleteRoom(roomCode);
           } else {
             if (room.hostId === socket.id) {
               room.hostId = room.users[0].socketId;
             }
+            await saveRoom(roomCode, room);
             io.to(roomCode).emit("room-updated", { roomCode, ...room });
           }
         }
       }
     });
 
-    // DISCONNECT
-    socket.on("disconnect", () => {
-      console.log(`🔌 Disconnected: ${socket.id}`);
-      
-      // Remove user from any rooms they were in
-      for (const roomCode in rooms) {
-        const room = rooms[roomCode];
-        const userIndex = room.users.findIndex((u) => u.socketId === socket.id);
+    // DISCONNECTING (socket.rooms is still available here)
+    socket.on("disconnecting", async () => {
+      for (const roomCode of socket.rooms) {
+        if (roomCode === socket.id) continue;
         
-        if (userIndex !== -1) {
-          const user = room.users[userIndex];
-          room.users.splice(userIndex, 1);
-          
-          if (room.users.length === 0) {
-            // Delete room if empty
-            delete rooms[roomCode];
-          } else {
-            // Re-assign host if the host left
-            if (room.hostId === socket.id) {
-              room.hostId = room.users[0].socketId;
+        const room = await getRoom(roomCode);
+        if (room) {
+          const userIndex = room.users.findIndex((u) => u.socketId === socket.id);
+          if (userIndex !== -1) {
+            const user = room.users[userIndex];
+            room.users.splice(userIndex, 1);
+            console.log(`🔌 ${user.name} disconnected from room ${roomCode}`);
+            
+            if (room.users.length === 0) {
+              await deleteRoom(roomCode);
+            } else {
+              if (room.hostId === socket.id) {
+                room.hostId = room.users[0].socketId;
+              }
+              await saveRoom(roomCode, room);
+              io.to(roomCode).emit("room-updated", { roomCode, ...room });
             }
-            io.to(roomCode).emit("room-updated", { roomCode, ...room });
           }
         }
       }
+    });
+
+    socket.on("disconnect", () => {
+      console.log(`🔌 Disconnected: ${socket.id}`);
     });
   });
 };

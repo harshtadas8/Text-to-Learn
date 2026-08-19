@@ -162,7 +162,7 @@ Generate a HIGHLY COMPREHENSIVE, in-depth lesson.
 The user is relying on this content to fully understand the topic. 
 Do NOT generate a short summary. Your output must be exhaustive, rich, and detailed.
 Provide deep conceptual explanations, step-by-step breakdowns, real-world analogies, and practical examples.
-Aim for at least 6-8 detailed paragraphs, 2-3 code blocks (if applicable), and multiple logical sub-headings to break down the topic.
+Aim for at least 6-8 detailed paragraphs and multiple logical sub-headings to break down the topic. Only include code blocks if the topic is specifically related to programming or IT; do NOT use code blocks for general bullet points or non-technical subjects.
 
 Course: "${courseTitle}"
 Module: "${moduleTitle}"

@@ -58,12 +58,6 @@ const courseSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
-    isPublic: {
-      type: Boolean,
-      default: true,
-      index: true,
-    },
-    
     // RAG Context Chunks
     chunks: [
       {

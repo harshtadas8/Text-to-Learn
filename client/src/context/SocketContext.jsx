@@ -11,7 +11,7 @@ export const useSocket = () => {
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [roomData, setRoomData] = useState(null);
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   // Keep a ref to the current user and roomData so reconnect handler can access them
   const userRef = useRef(user);
@@ -22,40 +22,56 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (!isAuthenticated || !user) return;
 
-    const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-    const backendUrl = apiBase.replace('/api', '');
-    const newSocket = io(backendUrl, {
-      transports: ['polling', 'websocket'],
-      // Auto-reconnect is on by default; we handle the reconnect event ourselves
-    });
+    let newSocket;
 
-    // Global room state listeners
-    newSocket.on('room-updated', (data) => {
-      setRoomData(data);
-    });
-
-    // When the socket reconnects after a brief disconnect (tab switch, network blip),
-    // automatically rejoin the room so the user stays connected.
-    newSocket.on('connect', () => {
-      const currentRoomData = roomDataRef.current;
-      const currentUser = userRef.current;
-      if (currentRoomData?.roomCode && currentUser) {
-        console.log('[Socket] Reconnected — rejoining room', currentRoomData.roomCode);
-        newSocket.emit('join-room', {
-          roomCode: currentRoomData.roomCode,
-          user: currentUser,
+    const initSocket = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+        const backendUrl = apiBase.replace('/api', '');
+        
+        newSocket = io(backendUrl, {
+          transports: ['polling', 'websocket'],
+          auth: {
+            token
+          }
         });
-      }
-    });
 
-    setSocket(newSocket);
+        // Global room state listeners
+        newSocket.on('room-updated', (data) => {
+          setRoomData(data);
+        });
+
+        // When the socket reconnects after a brief disconnect (tab switch, network blip),
+        // automatically rejoin the room so the user stays connected.
+        newSocket.on('connect', () => {
+          const currentRoomData = roomDataRef.current;
+          const currentUser = userRef.current;
+          if (currentRoomData?.roomCode && currentUser) {
+            console.log('[Socket] Reconnected — rejoining room', currentRoomData.roomCode);
+            newSocket.emit('join-room', {
+              roomCode: currentRoomData.roomCode,
+              user: currentUser,
+            });
+          }
+        });
+
+        setSocket(newSocket);
+      } catch (error) {
+        console.error("Error initializing socket:", error);
+      }
+    };
+
+    initSocket();
 
     return () => {
-      newSocket.off('room-updated');
-      newSocket.off('connect');
-      newSocket.disconnect();
+      if (newSocket) {
+        newSocket.off('room-updated');
+        newSocket.off('connect');
+        newSocket.disconnect();
+      }
     };
-  }, [isAuthenticated, user?.sub]);
+  }, [isAuthenticated, user?.sub, getAccessTokenSilently]);
 
   const leaveRoom = () => {
     if (socket && roomData?.roomCode) {

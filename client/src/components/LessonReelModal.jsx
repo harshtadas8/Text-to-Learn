@@ -186,7 +186,7 @@ export default function LessonReelModal({ content, lessonTitle, language, onClos
                     </div>
                     <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 text-center sm:text-left">Learning Objectives</h2>
                     <ul className="space-y-3 sm:space-y-4">
-                      {Array.isArray(slide.data) && slide.data.map((obj, i) => (
+                      {(Array.isArray(slide.data) ? slide.data : (slide.data ? [String(slide.data)] : [])).map((obj, i) => (
                         <li key={i} className="flex items-start text-gray-300 text-base sm:text-lg">
                           <span className="text-emerald-400 mr-3 mt-1">✓</span>
                           <span>{obj}</span>
@@ -211,7 +211,7 @@ export default function LessonReelModal({ content, lessonTitle, language, onClos
                 {slide.type === 'list' && (
                   <div className="px-4 w-full max-h-[60vh] overflow-y-auto hide-scrollbar max-w-lg mx-auto pb-4">
                     <ul className="space-y-4 list-disc list-inside text-gray-300 text-base sm:text-lg text-left">
-                      {Array.isArray(slide.data) && slide.data.map((item, i) => (
+                      {(Array.isArray(slide.data) ? slide.data : (slide.data ? [String(slide.data)] : [])).map((item, i) => (
                         <li key={i}>{item}</li>
                       ))}
                     </ul>

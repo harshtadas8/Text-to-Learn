@@ -37,8 +37,7 @@ app.use(
         return callback(null, true);
       }
 
-      // Check if the exact origin is in our allowed list, OR if it's any local port
-      if (allowedOrigins.includes(origin) || origin.startsWith("http://localhost") || origin.endsWith("vercel.app")) {
+      if (allowedOrigins.includes(origin) || origin.startsWith("http://localhost:")) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
@@ -50,13 +49,21 @@ app.use(
   })
 );
 
+import { createAdapter } from "@socket.io/redis-adapter";
+import { connection as pubClient, connection as subClient } from "./config/queue.js";
+import { socketAuthMiddleware } from "./sockets/socketAuth.js";
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"]
-  }
+  },
+  adapter: createAdapter(pubClient, subClient.duplicate())
 });
+
+// Use authentication for WebSockets
+io.use(socketAuthMiddleware);
 
 // Initialize Socket.io Handlers
 roomHandler(io);
