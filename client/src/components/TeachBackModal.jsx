@@ -49,15 +49,16 @@ export default function TeachBackModal({ isOpen, onClose, courseId, moduleIndex,
     };
 
     recognition.onresult = (event) => {
+      let finalTranscript = "";
       let interimTranscript = "";
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
+      for (let i = 0; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
-          finalTextRef.current += event.results[i][0].transcript;
+          finalTranscript += event.results[i][0].transcript;
         } else {
           interimTranscript += event.results[i][0].transcript;
         }
       }
-      setTranscript(finalTextRef.current + interimTranscript);
+      setTranscript(finalTranscript + interimTranscript);
     };
 
     recognition.onerror = (event) => {
