@@ -59,13 +59,56 @@ export default function LessonTutor({ lessonContent, courseId }) {
         message: userMessage,
       });
 
-      if (res.success && res.data?.reply) {
-        setMessages((prev) => [
-          ...prev,
-          { role: "model", text: res.data.reply },
-        ]);
-      } else {
-        throw new Error("Invalid response from tutor");
+      if (!res.ok) {
+        throw new Error("Tutor API failed to respond");
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        { role: "model", text: "" }, // Placeholder for streaming response
+      ]);
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      
+      setIsLoading(false); // Stop bounce animation
+
+      let done = false;
+      let buffer = '';
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        if (value) {
+          const chunkValue = decoder.decode(value, { stream: true });
+          buffer += chunkValue;
+          
+          const lines = buffer.split('\n\n');
+          buffer = lines.pop(); // keep last incomplete chunk
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const dataStr = line.substring(6);
+              if (dataStr === '[DONE]') {
+                done = true;
+                break;
+              }
+              try {
+                const parsed = JSON.parse(dataStr);
+                if (parsed.error) throw new Error(parsed.error);
+                if (parsed.text) {
+                  setMessages(prev => {
+                    const newMsgs = [...prev];
+                    const lastIdx = newMsgs.length - 1; newMsgs[lastIdx] = { ...newMsgs[lastIdx], text: newMsgs[lastIdx].text + parsed.text };
+                    return newMsgs;
+                  });
+                }
+              } catch (e) {
+                // incomplete JSON or parse error, ignored
+              }
+            }
+          }
+        }
       }
     } catch (err) {
       console.error(err);

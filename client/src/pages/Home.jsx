@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { generateCourseAPI } from "../services/api";
+import { generateCourseAPI, generateDiagnosticQuizAPI, uploadMaterialAPI } from "../services/api";
 import { useAuth0 } from "@auth0/auth0-react";
+import DiagnosticQuizModal from "../components/DiagnosticQuizModal";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -9,12 +10,22 @@ export default function Home() {
   const { isAuthenticated, loginWithRedirect } = useAuth0();
 
   const [topic, setTopic] = useState("");
-  const [level, setLevel] = useState("Beginner");
-  const [language, setLanguage] = useState("English");
+  const [language, setLanguage] = useState(() => {
+    const lang = navigator.language.toLowerCase();
+    if (lang.startsWith("hi")) return "Hindi";
+    if (lang.startsWith("mr")) return "Marathi";
+    return "English"; // Default fallback
+  });
   const [goal, setGoal] = useState("");
+  const [file, setFile] = useState(null);
+  const [sourceMaterial, setSourceMaterial] = useState("");
   const [timeAvailable, setTimeAvailable] = useState("2-5 hours/week");
   const [loading, setLoading] = useState(false);
+  const [isGeneratingQuiz, setIsGeneratingQuiz] = useState(false);
   const [error, setError] = useState("");
+  
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [quizQuestions, setQuizQuestions] = useState([]);
 
   const loadingMessages = [
     "Analyzing your goals...",
@@ -27,7 +38,7 @@ export default function Home() {
 
   useEffect(() => {
     let interval;
-    if (loading) {
+    if (loading || isGeneratingQuiz) {
       interval = setInterval(() => {
         setLoadingMsgIdx((prev) => (prev + 1) % loadingMessages.length);
       }, 2500);
@@ -35,7 +46,7 @@ export default function Home() {
       setLoadingMsgIdx(0);
     }
     return () => clearInterval(interval);
-  }, [loading]);
+  }, [loading, isGeneratingQuiz]);
 
   const handleGenerate = async () => {
 
@@ -55,6 +66,38 @@ export default function Home() {
     }
 
     try {
+      setIsGeneratingQuiz(true);
+      setError("");
+
+      let extractedText = "";
+      if (file) {
+        const uploadRes = await uploadMaterialAPI(file);
+        extractedText = uploadRes.text;
+        setSourceMaterial(extractedText);
+      }
+
+      const res = await generateDiagnosticQuizAPI({ topic, language, sourceMaterial: extractedText });
+      if (res && res.questions) {
+        setQuizQuestions(res.questions);
+        setShowQuiz(true);
+      } else {
+        // Fallback
+        handleQuizSubmit("Beginner", extractedText);
+      }
+    } 
+    catch (err) {
+      console.error("Quiz Error:", err);
+      // Skip quiz on error and default to Beginner
+      handleQuizSubmit("Beginner", sourceMaterial);
+    }
+    finally {
+      setIsGeneratingQuiz(false);
+    }
+  };
+
+  const handleQuizSubmit = async (level, text = sourceMaterial) => {
+    setShowQuiz(false);
+    try {
       setLoading(true);
       setError("");
 
@@ -64,6 +107,7 @@ export default function Home() {
         language,
         goal,
         timeAvailable,
+        sourceMaterial: text
       });
 
       navigate(`/course/${res.data._id}`);
@@ -78,7 +122,9 @@ export default function Home() {
         return;
       }
 
-      setError("Something went wrong. Please try again.");
+      // Check if the backend sent a specific error message (like a 429 rate limit)
+      const backendMessage = err?.response?.data?.message;
+      setError(backendMessage || "Something went wrong. Please try again.");
     }
     finally {
       setLoading(false);
@@ -148,48 +194,54 @@ export default function Home() {
                 />
               </div>
 
-              {/* LEVEL & TIME (ROW) */}
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="text-sm text-gray-400">Experience</label>
-                  <select
-                    value={level}
-                    onChange={(e) => setLevel(e.target.value)}
-                    className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
-                  >
-                    <option>Beginner</option>
-                    <option>Intermediate</option>
-                    <option>Advanced</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-sm text-gray-400">Time Available</label>
-                  <select
-                    value={timeAvailable}
-                    onChange={(e) => setTimeAvailable(e.target.value)}
-                    className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
-                  >
-                    <option>&lt; 2 hours/week</option>
-                    <option>2-5 hours/week</option>
-                    <option>5-10 hours/week</option>
-                    <option>10+ hours/week</option>
-                  </select>
-                </div>
+              {/* UPLOAD MATERIAL (OPTIONAL) */}
+              <div className="mb-4">
+                <label className="text-sm text-gray-400">Source Material (Optional PDF/TXT)</label>
+                <input
+                  type="file"
+                  accept=".pdf,.txt"
+                  onChange={(e) => setFile(e.target.files[0])}
+                  className="w-full mt-1 bg-black border border-gray-700 text-gray-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-900/30 file:text-emerald-400 hover:file:bg-emerald-900/50"
+                />
+                {file && <p className="text-xs text-emerald-400 mt-2">Attached: {file.name}</p>}
               </div>
 
-              {/* LANGUAGE */}
-              <div className="mb-6">
-                <label className="text-sm text-gray-400">Language</label>
+              {/* TIME AVAILABLE */}
+              <div className="mb-4">
+                <label className="text-sm text-gray-400">Time Available</label>
                 <select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
+                  value={timeAvailable}
+                  onChange={(e) => setTimeAvailable(e.target.value)}
                   className="w-full mt-1 bg-black border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 >
-                  <option>English</option>
-                  <option>Hindi</option>
-                  <option>Marathi</option>
-                  <option>Hinglish</option>
+                  <option>&lt; 2 hours/week</option>
+                  <option>2-5 hours/week</option>
+                  <option>5-10 hours/week</option>
+                  <option>10+ hours/week</option>
                 </select>
+              </div>
+
+              {/* LANGUAGE TOGGLES */}
+              <div className="mb-6">
+                <label className="text-sm font-semibold text-gray-300 flex items-center gap-2 mb-3">
+                  🌐 Choose Your Learning Language
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {["English", "Hindi", "Marathi", "Hinglish"].map((lang) => (
+                    <button
+                      key={lang}
+                      type="button"
+                      onClick={() => setLanguage(lang)}
+                      className={`py-2 px-3 rounded-lg text-sm font-medium transition ${
+                        language === lang 
+                          ? "bg-emerald-500 text-black border border-emerald-500" 
+                          : "bg-gray-800 text-gray-400 border border-gray-700 hover:bg-gray-700 hover:text-gray-200"
+                      }`}
+                    >
+                      {lang}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {error && (
@@ -210,8 +262,15 @@ export default function Home() {
         </div>
       </div>
 
+      <DiagnosticQuizModal 
+        isOpen={showQuiz}
+        questions={quizQuestions}
+        onSubmit={handleQuizSubmit}
+        onCancel={() => handleQuizSubmit("Beginner")}
+      />
+
       {/* ---------------- LOADING OVERLAY ---------------- */}
-      {loading && (
+      {(loading || isGeneratingQuiz) && (
         <div className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white">
           <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-8"></div>
           <h2 className="text-2xl font-bold text-emerald-400 animate-pulse text-center px-4">

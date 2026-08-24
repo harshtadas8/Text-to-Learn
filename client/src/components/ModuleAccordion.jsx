@@ -4,11 +4,15 @@ import LessonReelModal from "./LessonReelModal";
 import LessonViewer from "./LessonViewer";
 import QuizViewer from "./QuizViewer";
 import LessonTutor from "./LessonTutor";
+import TeachBackModal from "./TeachBackModal";
+import PodcastModal from "./PodcastModal";
 import { useSocket } from "../context/SocketContext";
 export default function ModuleAccordion({ module, courseId, courseTitle, language, completedLessons = [], onToggleComplete }) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedLessonId, setExpandedLessonId] = useState(null);
   const [activeReelLessonId, setActiveReelLessonId] = useState(null);
+  const [activePodcastLessonId, setActivePodcastLessonId] = useState(null);
+  const [teachBackLesson, setTeachBackLesson] = useState(null); // stores { moduleIndex, lessonIndex }
   const [lessonContentMap, setLessonContentMap] = useState({});
   const [loadingLessons, setLoadingLessons] = useState({});
   const [errorLessons, setErrorLessons] = useState({});
@@ -157,8 +161,24 @@ export default function ModuleAccordion({ module, courseId, courseTitle, languag
 
                     <LessonTutor lessonContent={lessonContentMap[lessonId]} courseId={courseId} />
 
-                    {onToggleComplete && (
-                      <div className="mt-6 pt-4 border-t border-gray-800 flex justify-end">
+                    <div className="mt-4 pt-4 border-t border-gray-800 flex flex-col sm:flex-row gap-4 items-center justify-between flex-wrap">
+                      <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                        <button
+                          onClick={() => setTeachBackLesson({ moduleIndex: module.moduleIndex, lessonIndex: lesson.lessonIndex })}
+                          className="w-full sm:w-auto py-2 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 transform hover:scale-105"
+                        >
+                          🎙️ Explain this to AI
+                        </button>
+                        
+                        <button
+                          onClick={() => setActivePodcastLessonId(lessonId)}
+                          className="w-full sm:w-auto py-2 px-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 transform hover:scale-105"
+                        >
+                          🎧 Podcast Mode
+                        </button>
+                      </div>
+
+                      {onToggleComplete && (
                         <label className="flex items-center space-x-3 cursor-pointer group">
                           <span className="text-gray-400 group-hover:text-white transition">
                             {completedLessons.includes(lessonId) ? "Completed!" : "Mark Complete"}
@@ -170,8 +190,8 @@ export default function ModuleAccordion({ module, courseId, courseTitle, languag
                             className="w-5 h-5 rounded border-gray-600 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-gray-900 bg-gray-800"
                           />
                         </label>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -195,6 +215,25 @@ export default function ModuleAccordion({ module, courseId, courseTitle, languag
         />
       )}
 
+      {/* RENDER THE TEACH-BACK MODAL */}
+      <TeachBackModal
+        isOpen={!!teachBackLesson}
+        onClose={() => setTeachBackLesson(null)}
+        courseId={courseId}
+        moduleIndex={teachBackLesson?.moduleIndex}
+        lessonIndex={teachBackLesson?.lessonIndex}
+        language={language}
+      />
+
+      {/* RENDER THE PODCAST MODAL */}
+      <PodcastModal
+        isOpen={!!activePodcastLessonId}
+        onClose={() => setActivePodcastLessonId(null)}
+        lessonTitle={module.lessons.find(l => `${module.moduleIndex}-${l.lessonIndex}` === activePodcastLessonId)?.title}
+        courseTitle={courseTitle}
+        content={lessonContentMap[activePodcastLessonId]}
+        language={language}
+      />
     </div>
   );
 }

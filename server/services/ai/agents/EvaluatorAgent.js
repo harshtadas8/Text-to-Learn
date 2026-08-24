@@ -1,5 +1,6 @@
 import { BaseAgent } from "./BaseAgent.js";
 import { EVALUATOR_PROMPT } from "../../../config/prompts.js";
+import { EvaluatorSchema } from "../../../validators/aiSchemas.js";
 
 export class EvaluatorAgent extends BaseAgent {
   constructor() {
@@ -9,8 +10,7 @@ export class EvaluatorAgent extends BaseAgent {
 
   async evaluateCourse(courseJson) {
     const prompt = EVALUATOR_PROMPT(courseJson);
-    const result = await this.model.generateContent(prompt);
-    const rawText = result.response.text();
-    return this.extractJson(rawText);
+    const { text } = await this.generate(prompt, "system", "course-evaluation");
+    return this.extractJson(text, EvaluatorSchema);
   }
 }

@@ -1,5 +1,5 @@
 import express from "express";
-import { syncUser, getDashboard, markProgress, getCourseProgress, addXp } from "../controllers/userController.js";
+import { syncUser, getDashboard, markProgress, getCourseProgress, addXp, generateRefresher } from "../controllers/userController.js";
 import requireAuth from "../middlewares/requireAuth.js";
 import { cacheResponse } from "../middlewares/redisCache.js";
 
@@ -10,5 +10,6 @@ router.get("/dashboard", requireAuth, cacheResponse(300), getDashboard);
 router.post("/progress", requireAuth, markProgress);
 router.get("/progress/:courseId", requireAuth, getCourseProgress);
 router.post("/xp", requireAuth, addXp);
+router.post("/generate-refresher", requireAuth, generateRefresher);
 
 export default router;

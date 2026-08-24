@@ -1,8 +1,9 @@
+import { logger } from "../config/logger.js";
 export function errorHandler(err, req, res, next) {
   let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   let message = err.message || "Internal Server Error";
 
-  console.error(`[Error] ${req.method} ${req.originalUrl}:`, err);
+  logger.error(`[Error] ${req.method} ${req.originalUrl}:`, err);
 
   // Mongoose Validation Error
   if (err.name === 'ValidationError') {

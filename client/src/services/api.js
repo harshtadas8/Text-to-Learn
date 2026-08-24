@@ -401,11 +401,7 @@ export async function chatWithTutorAPI(payload) {
     body: JSON.stringify(payload),
   });
 
-  if (!res.ok) {
-    await handleApiError(res, "AI Tutor failed to respond");
-  }
-
-  return res.json();
+  return res;
 }
 /* ------------------ SRS APIs ------------------ */
 
@@ -464,3 +460,110 @@ export async function reviewCardAPI(payload) {
   return res.json();
 }
 
+
+// --- Reconstructed P0 APIs ---
+
+export async function generateDiagnosticQuizAPI(payload) {
+  const token = await getSafeToken();
+  const res = await fetch(`${BASE_URL}/courses/diagnostic-quiz`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) await handleApiError(res, "Failed to generate diagnostic quiz");
+  return res.json();
+}
+
+export async function uploadMaterialAPI(file) {
+  const token = await getSafeToken();
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  const res = await fetch(`${BASE_URL}/courses/extract-text`, {
+    method: 'POST',
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: formData,
+  });
+  if (!res.ok) await handleApiError(res, "Failed to upload material");
+  return res.json();
+}
+
+export async function generateRefresherAPI(payload) {
+  const token = await getSafeToken();
+  const res = await fetch(`${BASE_URL}/users/generate-refresher`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) await handleApiError(res, "Failed to generate refresher");
+  return res.json();
+}
+
+export async function getNotificationsAPI() {
+  const token = await getSafeToken();
+  const res = await fetch(`${BASE_URL}/notifications`, {
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+  if (!res.ok) await handleApiError(res, "Failed to fetch notifications");
+  return res.json();
+}
+
+export async function markNotificationReadAPI(id) {
+  const token = await getSafeToken();
+  const res = await fetch(`${BASE_URL}/notifications/${id}/read`, {
+    method: "POST",
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+  if (!res.ok) await handleApiError(res, "Failed to mark notification read");
+  return res.json();
+}
+
+export async function markAllNotificationsReadAPI() {
+  const token = await getSafeToken();
+  const res = await fetch(`${BASE_URL}/notifications/read-all`, {
+    method: "POST",
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+  if (!res.ok) await handleApiError(res, "Failed to mark all notifications read");
+  return res.json();
+}
+
+export async function triggerTestDigestAPI() {
+  const token = await getSafeToken();
+  const res = await fetch(`${BASE_URL}/notifications/trigger-digest`, {
+    method: "POST",
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+  if (!res.ok) await handleApiError(res, "Failed to trigger test digest");
+  return res.json();
+}
+
+export async function evaluateTeachBackAPI(payload) {
+  const token = await getSafeToken();
+  const res = await fetch(`${BASE_URL}/teachback/evaluate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) await handleApiError(res, "Failed to evaluate teach-back");
+  return res.json();
+}

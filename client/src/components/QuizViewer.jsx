@@ -8,6 +8,9 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
   const [error, setError] = useState("");
   const [quizData, setQuizData] = useState(initialQuizData);
   const [quizScores, setQuizScores] = useState(null);
+  const [teams, setTeams] = useState(null);
+  const [quizStreaks, setQuizStreaks] = useState(null);
+  const [battleRecap, setBattleRecap] = useState(null);
   
   // user answers mapping: index -> selected option string
   const [answers, setAnswers] = useState({});
@@ -35,21 +38,30 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
       setQuizData(data.quizData || data);
     });
 
-    socket.on("quiz-battle-started", (scores) => {
+    socket.on("quiz-battle-started", ({ quizScores, teams }) => {
       setAnswers({});
       setSubmitted(false);
       setScore(0);
-      setQuizScores(scores);
+      setBattleRecap(null);
+      setQuizScores(quizScores);
+      setTeams(teams);
+      setQuizStreaks({});
     });
 
-    socket.on("quiz-scores-updated", (scores) => {
-      setQuizScores(scores);
+    socket.on("quiz-scores-updated", ({ quizScores, quizStreaks }) => {
+      setQuizScores(quizScores);
+      if (quizStreaks) setQuizStreaks(quizStreaks);
+    });
+
+    socket.on("quiz-battle-finished", (recap) => {
+      setBattleRecap(recap);
     });
 
     return () => {
       socket.off("receive-quiz");
       socket.off("quiz-battle-started");
       socket.off("quiz-scores-updated");
+      socket.off("quiz-battle-finished");
     };
   }, [socket, isMultiplayer]);
 
@@ -74,7 +86,7 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
             quizData: res.data,
             meta: { courseTopic, moduleTitle, lessonTitle }
           });
-          socket.emit("start-quiz-battle", { roomCode });
+          socket.emit("start-quiz-battle", { roomCode, totalQuestions: res.data.questions.length });
         }
 
         // Silently harvest these questions for the Spaced Repetition System!
@@ -118,7 +130,8 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
 
     let correctCount = 0;
     quizData.questions.forEach((q, idx) => {
-      if (answers[idx] === q.correctAnswer) {
+      const correctOpt = q.correctAnswer || q.answer;
+      if (answers[idx] === correctOpt) {
         correctCount++;
       }
     });
@@ -127,25 +140,30 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
     setSubmitted(true);
 
     if (isMultiplayer) {
-      // For each correct answer, we add to score on backend
-      quizData.questions.forEach((q, idx) => {
-        socket.emit("submit-quiz-answer", {
-          roomCode,
-          userId: user.sub,
-          isCorrect: answers[idx] === q.correctAnswer
-        });
+      // Send all results to backend in one batch
+      const results = quizData.questions.map((q, idx) => {
+        const correctOpt = q.correctAnswer || q.answer;
+        return { isCorrect: answers[idx] === correctOpt };
+      });
+
+      socket.emit("submit-quiz-answers", {
+        roomCode,
+        userId: user.sub,
+        results
       });
     }
     
     // Background memory analysis
     try {
-      // Map user answers cleanly
-      const mappedAnswers = quizData.questions.map((q, idx) => ({
-        question: q.question,
-        userAnswer: answers[idx],
-        correctAnswer: q.correctAnswer,
-        isCorrect: answers[idx] === q.correctAnswer
-      }));
+      const mappedAnswers = quizData.questions.map((q, idx) => {
+        const correctOpt = q.correctAnswer || q.answer;
+        return {
+          question: q.question,
+          userAnswer: answers[idx],
+          correctAnswer: correctOpt,
+          isCorrect: answers[idx] === correctOpt
+        };
+      });
 
       submitQuizAPI({
         courseTopic,
@@ -200,7 +218,9 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
         </h3>
       
       <div className="space-y-6">
-        {Array.isArray(quizData?.questions) && quizData.questions.map((q, idx) => (
+        {Array.isArray(quizData?.questions) && quizData.questions.map((q, idx) => {
+          const correctOpt = q.correctAnswer || q.answer;
+          return (
           <div key={idx} className="pb-6 border-b border-gray-800/50 last:border-0 last:pb-0">
             <p className="font-semibold text-sm sm:text-base mb-4 leading-relaxed">{idx + 1}. {q.question}</p>
             <div className="space-y-2">
@@ -209,9 +229,9 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
                 let optionStyle = "border-gray-700 hover:border-gray-500 bg-gray-900 text-gray-300";
                 
                 if (submitted) {
-                  if (opt === q.correctAnswer) {
+                  if (opt === correctOpt) {
                     optionStyle = "border-emerald-500 bg-emerald-500/10 text-emerald-400";
-                  } else if (isSelected && opt !== q.correctAnswer) {
+                  } else if (isSelected && opt !== correctOpt) {
                     optionStyle = "border-red-500 bg-red-500/10 text-red-400";
                   } else {
                     optionStyle = "border-gray-800 bg-gray-900/50 opacity-50";
@@ -234,18 +254,18 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
             </div>
             
             {submitted && (
-              <div className={`mt-4 p-4 rounded-lg text-base ${answers[idx] === q.correctAnswer ? 'bg-emerald-500/10 text-emerald-300' : 'bg-red-500/10 text-red-300'}`}>
+              <div className={`mt-4 p-4 rounded-lg text-base ${answers[idx] === correctOpt ? 'bg-emerald-500/10 text-emerald-300' : 'bg-red-500/10 text-red-300'}`}>
                 <p className="font-semibold mb-1">
-                  {answers[idx] === q.correctAnswer ? '✅ Correct!' : '❌ Incorrect'}
+                  {answers[idx] === correctOpt ? '✅ Correct!' : '❌ Incorrect'}
                 </p>
                 <p>{q.explanation}</p>
               </div>
             )}
           </div>
-        ))}
+        )})}
       </div>
 
-      {!submitted ? (
+      {!submitted && !battleRecap ? (
         <button
           onClick={handleSubmit}
           className="mt-8 w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-black font-bold rounded-lg transition shadow-lg shadow-emerald-500/20"
@@ -254,25 +274,59 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
         </button>
       ) : (
         <div className="mt-8 text-center p-6 bg-black border border-gray-800 rounded-lg">
-          <h4 className="text-2xl font-bold mb-2">
-            You scored {score} out of {quizData.questions.length}!
-          </h4>
-          <p className="text-gray-400 mb-4">
-            {score === quizData.questions.length 
-              ? "Perfect! You've mastered this lesson." 
-              : "Review the explanations above to learn from your mistakes."}
-          </p>
-          {score === quizData.questions.length && (
-            <div className="mb-6 inline-block bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 px-4 py-2 rounded-full font-bold animate-bounce">
-              🌟 +50 XP Awarded!
+          {battleRecap ? (
+            <div className="animate-in zoom-in duration-300">
+              <h4 className="text-3xl font-black mb-4 uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-500">
+                {battleRecap.winningTeam === "Tie" ? "It's a Tie!" : `${battleRecap.winningTeam} Wins!`}
+              </h4>
+              <p className="text-gray-300 text-lg mb-6">
+                Team A: <span className="font-bold text-blue-400">{battleRecap.teamAScore}</span> | 
+                Team B: <span className="font-bold text-red-400">{battleRecap.teamBScore}</span>
+              </p>
+              {battleRecap.mvp && (
+                <div className="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl max-w-sm mx-auto">
+                  <p className="text-yellow-400 font-bold uppercase text-sm mb-1">MVP</p>
+                  <p className="text-xl font-bold text-white">{battleRecap.mvp.name}</p>
+                </div>
+              )}
+              {battleRecap.questionStats && (
+                <div className="mb-6 max-w-md mx-auto text-left space-y-2">
+                  <h5 className="font-bold text-gray-300 text-sm uppercase tracking-wide border-b border-gray-700 pb-1 mb-2">Question Breakdown</h5>
+                  {Object.entries(battleRecap.questionStats).map(([qIdx, stats]) => (
+                    <div key={qIdx} className="flex justify-between items-center text-sm">
+                      <span className="text-gray-400">Q{parseInt(qIdx) + 1}</span>
+                      <div className="flex gap-4">
+                        <span className="text-emerald-400 flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-400"></span> {stats.correct}</span>
+                        <span className="text-red-400 flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400"></span> {stats.wrong}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
+          ) : (
+            <>
+              <h4 className="text-2xl font-bold mb-2">
+                You scored {score} out of {quizData.questions.length}!
+              </h4>
+              <p className="text-gray-400 mb-4">
+                {isMultiplayer ? "Waiting for other players to finish..." : "Review the explanations above to learn from your mistakes."}
+              </p>
+              {score === quizData.questions.length && (
+                <div className="mb-6 inline-block bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 px-4 py-2 rounded-full font-bold animate-bounce">
+                  🌟 +50 XP Awarded!
+                </div>
+              )}
+            </>
           )}
+
           <button
             onClick={() => {
               setQuizData(null);
               setAnswers({});
               setSubmitted(false);
               setScore(0);
+              setBattleRecap(null);
               
               if (isMultiplayer && isHost) {
                 socket.emit("close-global-quiz", { roomCode });
@@ -288,17 +342,34 @@ export default function QuizViewer({ courseTopic, moduleTitle, lessonTitle, less
 
       {isMultiplayer && quizScores && (
         <div className="lg:col-span-1 p-6 bg-gray-900 border border-gray-800 rounded-xl shadow-xl h-fit">
-          <h3 className="text-xl font-bold mb-4 text-white">🏆 Leaderboard</h3>
-          <div className="space-y-4">
-            {roomData?.users?.sort((a, b) => (quizScores[b.id] || 0) - (quizScores[a.id] || 0)).map((u, i) => (
-              <div key={u.id} className="flex items-center justify-between bg-black p-3 rounded-lg border border-gray-800">
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-500 font-bold w-4">{i + 1}.</span>
-                  <span className="font-semibold text-sm truncate max-w-[100px]">{u.name}</span>
+          <h3 className="text-xl font-bold mb-4 text-white">🏆 Teams</h3>
+          
+          <div className="space-y-6">
+            {["Team A", "Team B"].map(teamName => {
+              const teamMembers = roomData?.users?.filter(u => teams?.[u.id] === teamName) || [];
+              if (teamMembers.length === 0) return null;
+              
+              return (
+                <div key={teamName} className="space-y-2">
+                  <h4 className={`text-sm font-bold uppercase tracking-wider ${teamName === "Team A" ? "text-blue-400" : "text-red-400"}`}>
+                    {teamName}
+                  </h4>
+                  {teamMembers.sort((a, b) => (quizScores[b.id] || 0) - (quizScores[a.id] || 0)).map((u, i) => (
+                    <div key={u.id} className="flex items-center justify-between bg-black p-3 rounded-lg border border-gray-800">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-sm truncate max-w-[100px] text-gray-200">{u.name}</span>
+                        {quizStreaks?.[u.id] > 1 && (
+                          <span className="text-xs bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-full font-bold flex items-center gap-1" title="Streak!">
+                            🔥 {quizStreaks[u.id]}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-emerald-400 font-bold">{quizScores[u.id] || 0}</span>
+                    </div>
+                  ))}
                 </div>
-                <span className="text-emerald-400 font-bold">{quizScores[u.id] || 0} pts</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

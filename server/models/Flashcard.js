@@ -51,4 +51,5 @@ const flashcardSchema = new mongoose.Schema(
 // Ensure a user doesn't get duplicate questions for the same topic
 flashcardSchema.index({ userId: 1, question: 1 }, { unique: true });
 
+flashcardSchema.index({ userId: 1, nextReviewDate: 1 });
 export default mongoose.model("Flashcard", flashcardSchema);

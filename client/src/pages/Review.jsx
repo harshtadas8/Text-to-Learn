@@ -63,6 +63,7 @@ export default function Review() {
 
     try {
       await reviewCardAPI({ cardId: currentCard._id, quality });
+      window.dispatchEvent(new Event("card-reviewed"));
     } catch (err) {
       console.error("Failed to submit review:", err);
     } finally {

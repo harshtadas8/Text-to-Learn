@@ -1,27 +1,16 @@
+import { logger } from "../../../config/logger.js";
 import { BaseAgent } from "./BaseAgent.js";
 import Course from "../../../models/Course.js";
 import { generateEmbeddings } from "../gemini.service.js";
 import { TUTOR_SYSTEM_PROMPT } from "../../../config/prompts.js";
-
-function cosineSimilarity(vecA, vecB) {
-  let dotProduct = 0;
-  let normA = 0;
-  let normB = 0;
-  for (let i = 0; i < vecA.length; i++) {
-    dotProduct += vecA[i] * vecB[i];
-    normA += vecA[i] * vecA[i];
-    normB += vecB[i] * vecB[i];
-  }
-  if (normA === 0 || normB === 0) return 0;
-  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-}
+import AIUsage from "../../../models/AIUsage.js";
 
 export class TutorAgent extends BaseAgent {
   constructor() {
     super("gemini-3.5-flash-lite", false);
   }
 
-  async chat(courseId, lessonContent, chatHistory, userMessage, userMemory = null) {
+  async chat(courseId, lessonContent, chatHistory, userMessage, userMemory = null, userId = null) {
     let memoryConstraint = '';
     if (userMemory && (userMemory.weakTopics?.length > 0 || userMemory.strongTopics?.length > 0)) {
       memoryConstraint = `
@@ -39,7 +28,7 @@ Adjust your explanation style accordingly (more patient and analogous for weak t
         const CourseChunk = (await import("../../../models/CourseChunk.js")).default;
         const mongoose = (await import("mongoose")).default;
         
-        console.log(`[RAG] Searching chunks for: "${userMessage}"`);
+        logger.info(`[RAG] Searching chunks for: "${userMessage}"`);
         const queryEmbedding = await generateEmbeddings(userMessage);
         
         const topChunks = await CourseChunk.aggregate([
@@ -61,38 +50,67 @@ Adjust your explanation style accordingly (more patient and analogous for weak t
           }
         ]);
         
-        if (topChunks.length > 0 && topChunks[0].score > 0.5) { // Threshold
+        if (topChunks.length > 0 && topChunks[0].score > 0.5) {
           extraContext = `\n\nRELEVANT COURSE CONTEXT (from other lessons):\n` + topChunks.map(c => `- ${c.text}`).join('\n');
-          console.log(`[RAG] Found context with top score: ${topChunks[0].score.toFixed(3)}`);
+          logger.info(`[RAG] Found context with top score: ${topChunks[0].score.toFixed(3)}`);
         }
       } catch (err) {
-        console.error("[RAG] Vector search failed:", err);
+        logger.error("[RAG] Vector search failed:", err);
       }
     }
 
-    const chat = this.model.startChat({
-      history: [
-        {
-          role: "user",
-          parts: [
-            {
-              text: TUTOR_SYSTEM_PROMPT(lessonContent, extraContext, memoryConstraint)
-            }
-          ]
-        },
-        {
-          role: "model",
-          parts: [
-            {
-              text: "Understood! I will act as a helpful AI tutor for this lesson. What is your question?"
-            }
-          ]
-        },
-        ...chatHistory
-      ],
-    });
+    const systemPrompt = TUTOR_SYSTEM_PROMPT(lessonContent, extraContext, memoryConstraint);
+    
+    const geminiHistory = [
+      { role: "user", parts: [{ text: systemPrompt }] },
+      { role: "model", parts: [{ text: "Understood! I will act as a helpful AI tutor for this lesson. What is your question?" }] },
+      ...chatHistory
+    ];
 
-    const result = await chat.sendMessage(userMessage);
-    return result.response.text();
+    try {
+      const chat = this.model.startChat({ history: geminiHistory });
+      const result = await chat.sendMessageStream(userMessage);
+      return result.stream;
+    } catch (err) {
+      logger.error(`[TutorAgent] Gemini streaming failed (${err.message}). Attempting Groq fallback...`);
+      
+      if (!this.groqClient) {
+        throw new Error("Gemini API failed and GROQ_API_KEY is not configured for fallback.");
+      }
+
+      // Convert Gemini history to Groq (OpenAI-like) history format
+      const groqMessages = [
+        { role: "system", content: systemPrompt },
+        { role: "assistant", content: "Understood! I will act as a helpful AI tutor for this lesson. What is your question?" },
+      ];
+      
+      for (const msg of chatHistory) {
+        const groqRole = msg.role === "model" ? "assistant" : "user";
+        const content = msg.parts?.[0]?.text || "";
+        groqMessages.push({ role: groqRole, content });
+      }
+      
+      groqMessages.push({ role: "user", content: userMessage });
+
+      const stream = await this.groqClient.chat.completions.create({
+        messages: groqMessages,
+        model: "llama-3.1-8b-instant",
+        stream: true,
+      });
+      
+      logger.info(`[TutorAgent] Groq streaming fallback initiated.`);
+
+      // Create an async generator that mocks the expected Gemini stream interface
+      async function* convertGroqStream() {
+        for await (const chunk of stream) {
+          const content = chunk.choices[0]?.delta?.content || "";
+          if (content) {
+            yield { text: () => content };
+          }
+        }
+      }
+
+      return convertGroqStream();
+    }
   }
 }

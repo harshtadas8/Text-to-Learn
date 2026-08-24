@@ -1,30 +1,51 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { getDashboardAPI, deleteCourseAPI } from "../services/api";
+import { getDashboardAPI, deleteCourseAPI, getDueCardsAPI, generateRefresherAPI } from "../services/api";
+import { useSocket } from "../context/SocketContext";
 import CourseGridSkeleton from "../components/CourseGridSkeleton";
+import ReactMarkdown from "react-markdown";
 
 export default function Courses() {
   const navigate = useNavigate();
-  const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const { user, isAuthenticated, loginWithRedirect } = useAuth0();
 
   const [dashboardData, setDashboardData] = useState({ stats: null, recentCourses: [] });
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
+  const [dueCount, setDueCount] = useState(0);
+  const [generatingRefresher, setGeneratingRefresher] = useState(false);
+  const [viewingRefresher, setViewingRefresher] = useState(null);
+
+  const { socket } = useSocket();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (socket) {
+      const handleNotif = () => fetchDashboard();
+      socket.on("new_notification", handleNotif);
+      return () => socket.off("new_notification", handleNotif);
+    }
+  }, [socket]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !user?.sub) {
       setLoading(false);
       return;
     }
 
     fetchDashboard();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
 
   const fetchDashboard = async () => {
     try {
-      const res = await getDashboardAPI(true); // force refresh
+      const [res, dueRes] = await Promise.all([
+        getDashboardAPI(true),
+        getDueCardsAPI(user.sub)
+      ]);
       setDashboardData(res.data);
+      if (dueRes.success && dueRes.data) {
+        setDueCount(dueRes.data.length);
+      }
     } catch (err) {
       console.error("Dashboard fetch error:", err);
     } finally {
@@ -54,6 +75,18 @@ export default function Courses() {
   const cancelDelete = (e) => {
     e.stopPropagation();
     setDeletingId(null);
+  };
+
+  const handleGenerateRefresher = async (topic) => {
+    try {
+      setGeneratingRefresher(true);
+      await generateRefresherAPI(topic);
+      // Wait for socket to trigger fetchDashboard and change the UI.
+    } catch (err) {
+      console.error(err);
+      alert("Failed to start generation.");
+      setGeneratingRefresher(false);
+    }
   };
 
   if (!isAuthenticated) {
@@ -119,8 +152,47 @@ export default function Courses() {
             </div>
             
           </div>
+
+          {/* TODAY'S FOCUS WIDGET */}
+          {stats?.weakTopics?.length > 0 && (
+            <div className="bg-gradient-to-r from-blue-900/40 to-indigo-900/40 border border-blue-500/30 p-6 rounded-2xl mb-8 animate-slide-up flex flex-col md:flex-row items-center justify-between gap-6 backdrop-blur-sm shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">🎯</span>
+                  <h3 className="text-xl font-bold text-white tracking-wide">Today's Focus</h3>
+                </div>
+                <p className="text-gray-300 text-sm max-w-md">
+                  Our AI noticed you struggled a bit with <span className="font-bold text-blue-400">"{stats.weakTopics[0]}"</span>. 
+                  Want a quick 5-minute refresher to solidify your understanding?
+                </p>
+              </div>
+              
+              <div className="flex flex-col gap-2 min-w-[200px]">
+                {stats.remedials?.find(r => r.topic.includes(stats.weakTopics[0])) ? (
+                  <button 
+                    onClick={() => setViewingRefresher(stats.remedials.find(r => r.topic.includes(stats.weakTopics[0])))}
+                    className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition shadow-lg shadow-blue-500/20"
+                  >
+                    Read Refresher
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => handleGenerateRefresher(stats.weakTopics[0])}
+                    disabled={generatingRefresher}
+                    className="w-full px-6 py-3 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 font-bold rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {generatingRefresher ? (
+                      <><div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" /> Generating...</>
+                    ) : (
+                      "Generate 5-min Refresher"
+                    )}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-slide-up">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 animate-slide-up">
             <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl">
               <p className="text-gray-400 text-sm">Courses Generated</p>
               <p className="text-3xl font-bold text-white mt-1">{stats?.totalCourses || 0}</p>
@@ -132,6 +204,13 @@ export default function Courses() {
             <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl">
               <p className="text-gray-400 text-sm">Courses Completed</p>
               <p className="text-3xl font-bold text-emerald-400 mt-1">{stats?.totalCoursesCompleted || 0}</p>
+            </div>
+            <div className="bg-emerald-900/20 border border-emerald-900/50 p-6 rounded-xl md:col-span-2 cursor-pointer hover:bg-emerald-900/30 transition flex items-center justify-between" onClick={() => navigate("/review")}>
+              <div>
+                <p className="text-emerald-400 text-sm font-semibold uppercase tracking-wider">Spaced Repetition</p>
+                <p className="text-2xl font-bold text-white mt-1">Cards Due: {dueCount}</p>
+              </div>
+              <div className="text-4xl">{dueCount > 0 ? "🧠" : "🎉"}</div>
             </div>
           </div>
         </div>
@@ -232,8 +311,42 @@ export default function Courses() {
             </div>
           )}
         </div>
-
       </div>
+
+      {/* REFRESHER MODAL */}
+      {viewingRefresher && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl max-w-2xl w-full max-h-[80vh] flex flex-col shadow-2xl">
+            <div className="p-6 border-b border-gray-800 flex justify-between items-center bg-gray-900/50 rounded-t-2xl">
+              <div>
+                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                  <span>🎯</span> {viewingRefresher.topic}
+                </h3>
+                <p className="text-sm text-blue-400 mt-1">Today's Focus Refresher</p>
+              </div>
+              <button 
+                onClick={() => setViewingRefresher(null)}
+                className="text-gray-400 hover:text-white transition"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto prose prose-invert prose-emerald max-w-none text-gray-300">
+              <ReactMarkdown>{viewingRefresher.content}</ReactMarkdown>
+            </div>
+            
+            <div className="p-4 border-t border-gray-800 bg-gray-900/50 rounded-b-2xl flex justify-end">
+              <button 
+                onClick={() => setViewingRefresher(null)}
+                className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,10 +1,11 @@
 import express from "express";
-import requireAuth from "../middlewares/requireAuth.js"; 
+import requireAuth from "../middlewares/requireAuth.js";
+import { sanitizePrompt } from "../middlewares/sanitize.js"; 
 import { handleTutorChat } from "../controllers/tutorController.js";
 
 const router = express.Router();
 
 // POST /api/tutor/chat
-router.post("/chat", requireAuth, handleTutorChat);
+router.post("/chat", requireAuth, sanitizePrompt, handleTutorChat);
 
 export default router;

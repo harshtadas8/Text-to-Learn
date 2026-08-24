@@ -1,3 +1,4 @@
+import { logger } from "../config/logger.js";
 import Flashcard from "../models/Flashcard.js";
 
 // Helper to safely get userId
@@ -47,7 +48,7 @@ export async function harvestFlashcards(req, res) {
     return res.status(200).json({ success: true, message: `Harvested ${addedCount} new flashcards.` });
 
   } catch (error) {
-    console.error("Harvesting error:", error);
+    logger.error("Harvesting error:", error);
     return res.status(500).json({ success: false, message: "Internal server error" });
   }
 }
@@ -71,7 +72,7 @@ export async function getDueCards(req, res) {
     return res.status(200).json({ success: true, data: dueCards });
 
   } catch (error) {
-    console.error("Error fetching due cards:", error);
+    logger.error("Error fetching due cards:", error);
     return res.status(500).json({ success: false, message: "Internal server error" });
   }
 }
@@ -129,7 +130,7 @@ export async function reviewCard(req, res) {
     return res.status(200).json({ success: true, data: card });
 
   } catch (error) {
-    console.error("Error reviewing card:", error);
+    logger.error("Error reviewing card:", error);
     return res.status(500).json({ success: false, message: "Internal server error" });
   }
 }

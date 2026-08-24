@@ -47,6 +47,14 @@ export async function generateEmbeddings(text) {
   const embeddingModel = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
   
   const result = await embeddingModel.embedContent(text);
-  return result.embedding.values;
+  return result.embedding.values.slice(0, 768);
 }
 
+
+export async function generateDiagnosticQuizWithGemini(topic, language, sourceMaterial = '') {
+  return await quizAgent.generateDiagnosticQuiz(topic, language, sourceMaterial);
+}
+
+export async function generateRefresherWithGemini(topic) {
+  return await orchestrator.generateRefresher(topic);
+}

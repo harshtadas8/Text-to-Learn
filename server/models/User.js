@@ -53,7 +53,12 @@ const userSchema = new mongoose.Schema(
         content: String,
         date: { type: Date, default: Date.now }
       }
-    ]
+    ],
+    aiUsage: {
+      inputTokens: { type: Number, default: 0 },
+      outputTokens: { type: Number, default: 0 },
+      estimatedCost: { type: Number, default: 0 } // in USD
+    }
   },
   { timestamps: true }
 );

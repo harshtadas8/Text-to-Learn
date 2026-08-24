@@ -1,3 +1,4 @@
+import { logger } from "./logger.js";
 import { Queue } from "bullmq";
 import Redis from "ioredis";
 import dotenv from "dotenv";
@@ -14,7 +15,7 @@ export const connection = new Redis(process.env.REDIS_URL, {
 // Create a separate connection for caching so it doesn't inherit maxRetriesPerRequest: null
 // This allows caching commands to fail fast and not hang the Express routes.
 export const cacheConnection = new Redis(process.env.REDIS_URL, {
-  commandTimeout: 2000,
+  commandTimeout: 5000,
   enableOfflineQueue: false, // Fail immediately if Redis is not connected
   retryStrategy: (times) => {
     // Only retry a few times before giving up, max 3 seconds delay
@@ -24,16 +25,21 @@ export const cacheConnection = new Redis(process.env.REDIS_URL, {
 });
 
 connection.on("error", (err) => {
-  console.error("[Redis] Connection error:", err.message);
+  logger.error("[Redis] Connection error:", err.message);
 });
 
 connection.on("connect", () => {
-  console.log("[Redis] Connected to Upstash Redis");
+  logger.info("[Redis] Connected to Upstash Redis");
 });
 
 // Create queues
 export const aiQueue = new Queue("ai-tasks", { connection });
+export const cronQueue = new Queue("cron-tasks", { connection });
+
+cronQueue.on("error", (err) => {
+  logger.error("[Queue] Cron Queue error:", err.message);
+});
 
 aiQueue.on("error", (err) => {
-  console.error("[Queue] Queue error:", err.message);
+  logger.error("[Queue] Queue error:", err.message);
 });

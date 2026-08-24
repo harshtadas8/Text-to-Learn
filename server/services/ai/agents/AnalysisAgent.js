@@ -1,5 +1,6 @@
 import { BaseAgent } from "./BaseAgent.js";
 import { ANALYSIS_PROMPT } from "../../../config/prompts.js";
+import { AnalysisSchema } from "../../../validators/aiSchemas.js";
 
 export class AnalysisAgent extends BaseAgent {
   constructor() {
@@ -8,8 +9,7 @@ export class AnalysisAgent extends BaseAgent {
 
   async analyzeQuizResults(courseTopic, quizQuestions, userAnswers) {
     const prompt = ANALYSIS_PROMPT(courseTopic, quizQuestions, userAnswers);
-    const result = await this.model.generateContent(prompt);
-    const rawText = result.response.text();
-    return this.extractJson(rawText);
+    const { text } = await this.generate(prompt, "system", "quiz-analysis");
+    return this.extractJson(text, AnalysisSchema);
   }
 }

@@ -1,3 +1,4 @@
+import { logger } from "../config/logger.js";
 import { cacheConnection as redisClient } from "../config/queue.js";
 
 /**
@@ -17,11 +18,11 @@ export const cacheResponse = (durationInSeconds = 300) => {
       const cachedData = await redisClient.get(key);
 
       if (cachedData) {
-        console.log(`[Redis] Cache HIT for ${key}`);
+        logger.info(`[Redis] Cache HIT for ${key}`);
         return res.json(JSON.parse(cachedData));
       }
 
-      console.log(`[Redis] Cache MISS for ${key}`);
+      logger.info(`[Redis] Cache MISS for ${key}`);
 
       // Override res.json to capture the response data before it gets sent
       const originalJson = res.json.bind(res);
@@ -30,7 +31,7 @@ export const cacheResponse = (durationInSeconds = 300) => {
         // Only cache successful responses
         if (res.statusCode >= 200 && res.statusCode < 300 && body.success !== false) {
           redisClient.setex(key, durationInSeconds, JSON.stringify(body))
-            .catch(err => console.error("[Redis] Cache Set Error:", err));
+            .catch(err => logger.error("[Redis] Cache Set Error:", err));
         }
         
         // Send the actual response
@@ -39,7 +40,7 @@ export const cacheResponse = (durationInSeconds = 300) => {
 
       next();
     } catch (error) {
-      console.error("[Redis] Cache Middleware Error:", error);
+      logger.error("[Redis] Cache Middleware Error:", error);
       // If Redis fails, gracefully fall back to executing the route normally
       next();
     }

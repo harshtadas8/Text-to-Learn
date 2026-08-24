@@ -1,3 +1,4 @@
+import { logger } from "../config/logger.js";
 import puppeteer from 'puppeteer';
 import Course from '../models/Course.js';
 import User from '../models/User.js';
@@ -121,7 +122,7 @@ export async function generateCertificatePDF(req, res) {
 
     return res.send(pdfBuffer);
   } catch (error) {
-    console.error("Certificate PDF generation error:", error);
+    logger.error("Certificate PDF generation error:", error);
     return res.status(500).json({ success: false, message: "Failed to generate certificate PDF" });
   } finally {
     if (browser) {
@@ -287,7 +288,7 @@ export async function generateCoursePDF(req, res) {
 
     return res.send(pdfBuffer);
   } catch (error) {
-    console.error("Course PDF generation error:", error);
+    logger.error("Course PDF generation error:", error);
     return res.status(500).json({ success: false, message: "Failed to generate course PDF" });
   } finally {
     if (browser) {

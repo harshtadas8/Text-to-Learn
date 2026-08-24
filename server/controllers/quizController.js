@@ -1,3 +1,4 @@
+import { logger } from "../config/logger.js";
 import { generateQuizWithGemini } from "../services/ai/gemini.service.js";
 import { aiQueue } from "../config/queue.js";
 import User from "../models/User.js";
@@ -25,7 +26,7 @@ export async function generateQuizController(req, res) {
     });
 
   } catch (error) {
-    console.error("Quiz generation error:", error);
+    logger.error("Quiz generation error:", error);
     return res.status(500).json({
       success: false,
       message: "Quiz generation failed"
@@ -62,7 +63,8 @@ export async function submitQuizController(req, res) {
     });
 
     // Trigger Remedial Agent if there are any missed questions (score < 100%)
-    const scorePercentage = (correctCount / quizQuestions.length) * 100;
+    const scorePercentage = (correctCount / (quizQuestions ? quizQuestions.length : 1)) * 100;
+    logger.info(`[Quiz] Score calculated: ${correctCount}/${quizQuestions?.length} (${scorePercentage}%)`);
     if (scorePercentage < 100) {
       const failedQuestions = userAnswers.filter(ans => !ans.isCorrect).map(ans => ({
         question: ans.question,
@@ -71,15 +73,16 @@ export async function submitQuizController(req, res) {
       }));
       
       // Dispatch remedial-lesson job
-      await aiQueue.add("remedial-lesson", {
+      const addedJob = await aiQueue.add("remedial-lesson", {
         userId,
         courseTopic,
         failedQuestions
       });
+      logger.info(`[Quiz] Remedial lesson job added! Job ID: ${addedJob.id}`);
     }
 
   } catch (error) {
-    console.error("Quiz submission error:", error);
+    logger.error("Quiz submission error:", error);
     // Even if it fails to start, we don't want to crash the frontend quiz flow
     if (!res.headersSent) {
       return res.status(500).json({ success: false, message: "Failed to submit quiz" });

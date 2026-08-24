@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import VideoBlock from "./VideoBlock";
 import TextToSpeechButton from "./TextToSpeechButton";
-import { useSocket } from "../context/SocketContext";
-
 export default function LessonReelModal({ content, lessonTitle, language, onClose }) {
   const [slides, setSlides] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const containerRef = useRef(null);
-  
-  const { socket, roomCode, roomData } = useSocket();
-  const isHost = roomData?.hostId === socket?.id;
 
   useEffect(() => {
     if (!content) return;
@@ -73,30 +68,12 @@ export default function LessonReelModal({ content, lessonTitle, language, onClos
     setSlides(newSlides);
   }, [content]);
 
-  useEffect(() => {
-    if (!socket) return;
-    socket.on("force-sync-slide", ({ slideIndex }) => {
-      if (containerRef.current) {
-        containerRef.current.scrollTo({
-          top: slideIndex * window.innerHeight,
-          behavior: 'smooth'
-        });
-      }
-    });
-    return () => socket.off("force-sync-slide");
-  }, [socket]);
-
   // Track scroll position to update active indicator
   const handleScroll = () => {
     if (!containerRef.current) return;
     const scrollPosition = containerRef.current.scrollTop;
     const windowHeight = window.innerHeight;
     const index = Math.round(scrollPosition / windowHeight);
-
-    // Broadcast if host
-    if (isHost && roomCode) {
-      socket.emit("sync-reel-slide", { roomCode, slideIndex: index });
-    }
 
     if (index !== currentSlideIndex) {
       setCurrentSlideIndex(index);
@@ -254,7 +231,8 @@ export default function LessonReelModal({ content, lessonTitle, language, onClos
                     <div className="space-y-3 sm:space-y-4">
                       {slide.data.options.map((opt, i) => {
                         const isSelected = selectedAnswers[slide.id] === opt;
-                        const isCorrect = opt === slide.data.correctAnswer;
+                        const correctOpt = slide.data.correctAnswer || slide.data.answer;
+                        const isCorrect = opt === correctOpt;
                         const hasAnswered = !!selectedAnswers[slide.id];
                         
                         let btnClass = "w-full text-left p-4 rounded-xl border-2 transition-all font-medium ";

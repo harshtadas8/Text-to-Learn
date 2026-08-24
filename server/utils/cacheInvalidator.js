@@ -1,3 +1,4 @@
+import { logger } from "../config/logger.js";
 import { cacheConnection as redisClient } from "../config/queue.js";
 
 /**
@@ -15,10 +16,10 @@ export async function clearUserCache(userId) {
     
     if (keys.length > 0) {
       await redisClient.del(...keys);
-      console.log(`[Redis] Cleared ${keys.length} cached routes for user ${userId}`);
+      logger.info(`[Redis] Cleared ${keys.length} cached routes for user ${userId}`);
     }
   } catch (error) {
-    console.error("[Redis] Failed to clear user cache:", error.message);
+    logger.error("[Redis] Failed to clear user cache:", error.message);
   }
 }
 
@@ -32,9 +33,9 @@ export async function clearPublicCache() {
     
     if (keys.length > 0) {
       await redisClient.del(...keys);
-      console.log(`[Redis] Cleared ${keys.length} public cached routes`);
+      logger.info(`[Redis] Cleared ${keys.length} public cached routes`);
     }
   } catch (error) {
-    console.error("[Redis] Failed to clear public cache:", error.message);
+    logger.error("[Redis] Failed to clear public cache:", error.message);
   }
 }

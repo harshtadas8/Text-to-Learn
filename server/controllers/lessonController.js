@@ -1,3 +1,4 @@
+import { logger } from "../config/logger.js";
 import Lesson from "../models/Lesson.js";
 import Course from "../models/Course.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -84,7 +85,7 @@ Make sure to adapt the lesson content to match this profile!
     // --- BACKGROUND EMBEDDING FOR RAG ---
     (async () => {
       try {
-        console.log(`[RAG] Generating embeddings for lesson ${lessonTitle}`);
+        logger.info(`[RAG] Generating embeddings for lesson ${lessonTitle}`);
         const chunks = [];
         // Chunking by blocks
         for (const block of lessonData.content) {
@@ -109,10 +110,10 @@ Make sure to adapt the lesson content to match this profile!
           }));
           
           await CourseChunk.insertMany(chunkDocs);
-          console.log(`[RAG] Added ${chunks.length} chunks for course ${courseId}`);
+          logger.info(`[RAG] Added ${chunks.length} chunks for course ${courseId}`);
         }
       } catch (embErr) {
-        console.error("[RAG] Failed to generate embeddings:", embErr);
+        logger.error("[RAG] Failed to generate embeddings:", embErr);
       }
     })();
 
@@ -123,7 +124,7 @@ Make sure to adapt the lesson content to match this profile!
     });
 
   } catch (err) {
-    console.error("❌ Lesson generation error:", err.message);
+    logger.error("❌ Lesson generation error:", err.message);
     return res.status(500).json({
       success: false,
       message: "Lesson generation failed",

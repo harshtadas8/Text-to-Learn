@@ -1,0 +1,37 @@
+[
+  {
+    "topic": "Photosynthesis",
+    "level": "Beginner",
+    "language": "English",
+    "goal": "Understand how plants make food",
+    "timeAvailable": "10 minutes"
+  },
+  {
+    "topic": "Quantum Computing",
+    "level": "Advanced",
+    "language": "English",
+    "goal": "Explain superposition and entanglement",
+    "timeAvailable": "30 minutes"
+  },
+  {
+    "topic": "Bhagavad Gita basics",
+    "level": "Intermediate",
+    "language": "Hindi",
+    "goal": "Understand the core philosophy of karma",
+    "timeAvailable": "15 minutes"
+  },
+  {
+    "topic": "Stock Market Options Trading",
+    "level": "Advanced",
+    "language": "Hinglish",
+    "goal": "Learn how call and put options work with examples",
+    "timeAvailable": "20 minutes"
+  },
+  {
+    "topic": "Shivaji Maharaj History",
+    "level": "Beginner",
+    "language": "Marathi",
+    "goal": "Learn about the Maratha empire origins",
+    "timeAvailable": "15 minutes"
+  }
+]

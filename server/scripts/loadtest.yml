@@ -1,0 +1,23 @@
+config:
+  target: "http://localhost:5000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 120
+      arrivalRate: 10
+      name: "Sustained load"
+scenarios:
+  - name: "Browse public courses"
+    flow:
+      - get:
+          url: "/api/courses/public"
+  - name: "Check tutor health"
+    flow:
+      - post:
+          url: "/api/tutor/chat"
+          json:
+            courseId: "mock_id"
+            lessonContent: "mock"
+            history: []
+            message: "hello"

@@ -1,12 +1,13 @@
 import { BaseAgent } from "./BaseAgent.js";
 import { LESSON_GENERATION_PROMPT } from "../../../config/prompts.js";
+import { CourseSchema } from "../../../validators/aiSchemas.js";
 
 export class LessonAgent extends BaseAgent {
   constructor() {
     super("gemini-3.5-flash-lite", true);
   }
 
-  async generateCourse(topic, level, language, goal, timeAvailable, userMemory = null) {
+  async generateCourse(topic, level, language, goal, timeAvailable, userMemory = null, sourceMaterial = '') {
     const timeConstraint = timeAvailable ? `and they have ${timeAvailable} available to study.` : '';
     const goalConstraint = goal ? `Their primary goal is: "${goal}". Tailor the modules heavily towards achieving this goal.` : '';
     
@@ -19,9 +20,12 @@ User Adaptive Profile:
 `;
     }
 
-    const prompt = LESSON_GENERATION_PROMPT(topic, level, language, goalConstraint, timeConstraint, memoryConstraint);
-    const result = await this.model.generateContent(prompt);
-    const rawText = result.response.text();
-    return this.extractJson(rawText);
+    const userId = userMemory ? userMemory.auth0Id : "system";
+    const prompt = LESSON_GENERATION_PROMPT(topic, level, language, goalConstraint, timeConstraint, memoryConstraint, sourceMaterial);
+    
+    const { text } = await this.generate(prompt, userId, "course-generation");
+    
+    // Validates JSON structurally before returning
+    return this.extractJson(text, CourseSchema);
   }
 }

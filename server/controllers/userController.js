@@ -1,3 +1,4 @@
+import { logger } from "../config/logger.js";
 import User from "../models/User.js";
 import Course from "../models/Course.js";
 import Progress from "../models/Progress.js";
@@ -43,7 +44,7 @@ export async function syncUser(req, res) {
 
     return res.json({ success: true, data: user });
   } catch (error) {
-    console.error("Sync user error:", error);
+    logger.error("Sync user error:", error);
     return res.status(500).json({ success: false, message: "Failed to sync user" });
   }
 }
@@ -128,8 +129,32 @@ export async function getDashboard(req, res) {
     });
 
   } catch (error) {
-    console.error("Dashboard fetch error:", error);
+    logger.error("Dashboard fetch error:", error);
     return res.status(500).json({ success: false, message: "Failed to fetch dashboard data" });
+  }
+}
+
+export async function generateRefresher(req, res) {
+  try {
+    const auth0Id = req.auth.sub;
+    const { topic } = req.body;
+
+    if (!topic) {
+      return res.status(400).json({ success: false, message: "Topic is required" });
+    }
+
+    const { aiQueue } = await import("../config/queue.js");
+    
+    // Add job to BullMQ
+    await aiQueue.add("topic-refresher", {
+      userId: auth0Id,
+      topic
+    });
+
+    return res.json({ success: true, message: "Refresher generation started" });
+  } catch (error) {
+    logger.error("Generate refresher error:", error);
+    return res.status(500).json({ success: false, message: "Failed to start refresher generation" });
   }
 }
 
@@ -168,7 +193,7 @@ export async function markProgress(req, res) {
 
     return res.json({ success: true, data: progress.completedLessons });
   } catch (error) {
-    console.error("Mark progress error:", error);
+    logger.error("Mark progress error:", error);
     return res.status(500).json({ success: false, message: "Failed to update progress" });
   }
 }
@@ -186,7 +211,7 @@ export async function getCourseProgress(req, res) {
 
     return res.json({ success: true, data: progress ? progress.completedLessons : [] });
   } catch (error) {
-    console.error("Get progress error:", error);
+    logger.error("Get progress error:", error);
     return res.status(500).json({ success: false, message: "Failed to fetch progress" });
   }
 }
@@ -214,7 +239,7 @@ export async function addXp(req, res) {
 
     return res.json({ success: true, xp: user.xp });
   } catch (error) {
-    console.error("Add XP error:", error);
+    logger.error("Add XP error:", error);
     return res.status(500).json({ success: false, message: "Failed to add XP" });
   }
 }

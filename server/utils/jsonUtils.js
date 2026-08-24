@@ -1,3 +1,4 @@
+import { logger } from "../config/logger.js";
 export function extractJson(rawText) {
   try {
     // 1. If it's already perfectly valid JSON, just parse and return it.
@@ -15,7 +16,7 @@ export function extractJson(rawText) {
     try {
       return JSON.parse(rawText.slice(first, last + 1));
     } catch (parseErr) {
-      console.error("AI JSON Parse Error on extracted string:", parseErr);
+      logger.error("AI JSON Parse Error on extracted string:", parseErr);
       throw new Error("Invalid JSON from AI: Extracted JSON is malformed");
     }
   }

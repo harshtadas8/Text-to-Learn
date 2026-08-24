@@ -1,11 +1,32 @@
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import NotificationDropdown from "./NotificationDropdown";
 import { useAuth0 } from "@auth0/auth0-react";
 import UserProfile from "./UserProfile";
 import AuthButtons from "./AuthButtons";
+import { getDueCardsAPI } from "../services/api";
 
 export default function Navbar({ onMenuClick }) {
-  const { isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const location = useLocation();
+  const [dueCount, setDueCount] = useState(0);
+
+  useEffect(() => {
+    const fetchDueCards = () => {
+      if (isAuthenticated && user?.sub) {
+        getDueCardsAPI(user.sub).then(res => {
+          if (res.success && res.data) {
+            setDueCount(res.data.length);
+          }
+        }).catch(err => console.error("Failed to fetch due cards", err));
+      }
+    };
+
+    fetchDueCards();
+
+    window.addEventListener("card-reviewed", fetchDueCards);
+    return () => window.removeEventListener("card-reviewed", fetchDueCards);
+  }, [isAuthenticated, user]);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -40,19 +61,25 @@ export default function Navbar({ onMenuClick }) {
             <Link
               key={link.name}
               to={link.path}
-              className={`text-base font-medium transition ${
+              className={`flex items-center gap-2 text-base font-medium transition ${
                 location.pathname === link.path
                   ? "text-emerald-400"
                   : "text-gray-400 hover:text-white"
               }`}
             >
               {link.name}
+              {link.name === "Daily Review" && dueCount > 0 && (
+                <span className="bg-emerald-500 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">
+                  {dueCount}
+                </span>
+              )}
             </Link>
           ))}
         </nav>
       </div>
 
       <div className="hidden sm:flex items-center gap-4">
+        {isAuthenticated && <NotificationDropdown />}
         <UserProfile />
         <AuthButtons />
       </div>

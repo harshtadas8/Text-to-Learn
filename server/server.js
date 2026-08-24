@@ -1,3 +1,15 @@
+import './config/env.js';
+import * as Sentry from '@sentry/node';
+import { nodeProfilingIntegration } from '@sentry/profiling-node';
+
+if (process.env.SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    integrations: [nodeProfilingIntegration()],
+    tracesSampleRate: 1.0,
+    profilesSampleRate: 1.0,
+  });
+}
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
@@ -5,6 +17,7 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 
 import courseRoutes from "./routes/courseRoutes.js";
+import healthRoutes from "./routes/healthRoutes.js";
 import lessonRoutes from "./routes/lessonRoutes.js";
 import youtubeRoutes from "./routes/youtubeRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -15,6 +28,9 @@ import requireAuth from "./middlewares/requireAuth.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import roomHandler from "./sockets/roomHandler.js";
 import "./workers/aiWorker.js"; // 🔥 START BULLMQ WORKER
+import { swaggerSpec, swaggerUiOptions } from "./config/swagger.js";
+import swaggerUi from "swagger-ui-express";
+import { requestLogger, logger } from "./config/logger.js";
 
 await connectDB();
 
@@ -82,10 +98,17 @@ app.options("*", cors());
    MIDDLEWARES
 ================================ */
 app.use(express.json());
+app.use(requestLogger);
+
+/* ===============================
+   API DOCS
+================================ */
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
 
 /* ===============================
    ROUTES
 ================================ */
+app.use("/api/health", healthRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/lessons", lessonRoutes);
 app.use("/api/youtube", youtubeRoutes);
@@ -97,6 +120,7 @@ app.use("/api/srs", srsRoutes);
 /* ===============================
    GLOBAL ERROR HANDLER
 ================================ */
+Sentry.setupExpressErrorHandler(app);
 app.use(errorHandler);
 
 /* ===============================
@@ -112,5 +136,5 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => {
-  console.log(`✅ Server & WebSockets running on port ${PORT}`);
+  logger.info(`🔌 Server & WebSockets running on port ${PORT}`);
 });

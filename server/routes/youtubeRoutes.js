@@ -1,3 +1,4 @@
+import { logger } from "../config/logger.js";
 import express from "express";
 
 const router = express.Router();
@@ -29,7 +30,7 @@ router.get("/search", async (req, res) => {
       title: data.items[0].snippet.title,
     });
   } catch (err) {
-    console.error("YouTube API error:", err);
+    logger.error("YouTube API error:", err);
     res.status(500).json({ error: "YouTube fetch failed" });
   }
 });
