@@ -24,6 +24,7 @@ import userRoutes from "./routes/userRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
 import tutorRoutes from "./routes/tutorRoutes.js";
 import srsRoutes from "./routes/srsRoutes.js";
+import teachbackRoutes from "./routes/teachbackRoutes.js";
 import requireAuth from "./middlewares/requireAuth.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import roomHandler from "./sockets/roomHandler.js";
@@ -68,6 +69,7 @@ app.use(
 import { createAdapter } from "@socket.io/redis-adapter";
 import { connection as pubClient, connection as subClient } from "./config/queue.js";
 import { socketAuthMiddleware } from "./sockets/socketAuth.js";
+import { setIo } from "./sockets/socketStore.js";
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -85,6 +87,8 @@ const io = new Server(server, {
   adapter: createAdapter(pubClient, subClient.duplicate())
 });
 
+// Use authentication for WebSockets
+setIo(io);
 // Use authentication for WebSockets
 io.use(socketAuthMiddleware);
 
@@ -116,6 +120,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/quizzes", quizRoutes);
 app.use("/api/tutor", tutorRoutes);
 app.use("/api/srs", srsRoutes);
+app.use("/api/teachback", teachbackRoutes);
 
 /* ===============================
    GLOBAL ERROR HANDLER

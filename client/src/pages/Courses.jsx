@@ -80,7 +80,7 @@ export default function Courses() {
   const handleGenerateRefresher = async (topic) => {
     try {
       setGeneratingRefresher(true);
-      await generateRefresherAPI(topic);
+      await generateRefresherAPI({ topic });
       // Wait for socket to trigger fetchDashboard and change the UI.
     } catch (err) {
       console.error(err);

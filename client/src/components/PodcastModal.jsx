@@ -201,8 +201,11 @@ export default function PodcastModal({ isOpen, onClose, lessonTitle, courseTitle
         </div>
 
         <div className="flex items-center justify-center gap-8">
-          <button 
-            onClick={() => { stopAudio(); startAudio(); }}
+                    <button 
+            onClick={() => { 
+              stopAudio(); 
+              setTimeout(() => startAudio(), 100); 
+            }}
             disabled={!isPlaying}
             className="p-3 text-gray-400 hover:text-white disabled:opacity-30 transition"
           >

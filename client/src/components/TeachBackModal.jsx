@@ -10,11 +10,13 @@ export default function TeachBackModal({ isOpen, onClose, courseId, moduleIndex,
   const [error, setError] = useState(null);
   
   const recognitionRef = useRef(null);
+  const finalTextRef = useRef("");
 
   useEffect(() => {
     if (!isOpen) {
       stopRecording();
       setTranscript("");
+    finalTextRef.current = "";
       setFeedback(null);
       setError(null);
       setIsEvaluating(false);
@@ -47,11 +49,15 @@ export default function TeachBackModal({ isOpen, onClose, courseId, moduleIndex,
     };
 
     recognition.onresult = (event) => {
-      let currentTranscript = "";
-      for (let i = 0; i < event.results.length; i++) {
-        currentTranscript += event.results[i][0].transcript;
+      let interimTranscript = "";
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          finalTextRef.current += event.results[i][0].transcript;
+        } else {
+          interimTranscript += event.results[i][0].transcript;
+        }
       }
-      setTranscript(currentTranscript);
+      setTranscript(finalTextRef.current + interimTranscript);
     };
 
     recognition.onerror = (event) => {

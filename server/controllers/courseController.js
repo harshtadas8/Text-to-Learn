@@ -205,7 +205,9 @@ export async function deleteCourseController(req, res) {
     });
   }
 }
-import { PDFParse } from 'pdf-parse';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pdfParse = require('pdf-parse');
 import { generateDiagnosticQuizWithGemini } from '../services/ai/gemini.service.js';
 
 /* =====================================================
