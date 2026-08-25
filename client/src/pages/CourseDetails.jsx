@@ -198,7 +198,6 @@ export default function CourseDetails() {
           </button>
           
           {isAuthenticated && modules.length > 0 && completedLessons.length === modules.reduce((acc, m) => acc + m.lessons.length, 0) && (
-            {isAuthenticated && modules.length > 0 && completedLessons.length === modules.reduce((acc, m) => acc + m.lessons.length, 0) && (
             <button
               onClick={async () => {
                 try {
@@ -215,7 +214,6 @@ export default function CourseDetails() {
             >
               View Certificate dY?+
             </button>
-          )}
           )}
         </div>
 

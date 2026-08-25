@@ -1,5 +1,5 @@
 import express from "express";
-import { syncUser, getDashboard, markProgress, getCourseProgress, addXp, generateRefresher } from "../controllers/userController.js";
+import { syncUser, getDashboard, markProgress, getCourseProgress, addXp, generateRefresher, enrollCourse } from "../controllers/userController.js";
 import requireAuth from "../middlewares/requireAuth.js";
 import { cacheResponse } from "../middlewares/redisCache.js";
 

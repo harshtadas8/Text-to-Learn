@@ -52,7 +52,7 @@ export async function issueCertificate(req, res) {
         courseLevel: course.level,
         courseLanguage: course.language
       });
-      logger.info(\`[Cert] Issued new certificate \${cert.certId} for user \${auth0Id}\`);
+      logger.info(`[Cert] Issued new certificate ${cert.certId} for user ${auth0Id}`);
     }
 
     return res.json({ success: true, certId: cert.certId });
