@@ -11,7 +11,7 @@
 
 - **Multi-Agent Orchestration**: Abstracted `LessonAgent`, `EvaluatorAgent`, `TutorAgent`, and `QuizAgent` orchestrated via a central `Orchestrator` to ensure high-quality output using Self-Reflection loops.
 - **Vector Search (RAG)**: Integrated MongoDB Atlas Vector Search and Gemini Embeddings for the AI Tutor to answer questions strictly bound to the generated course context, preventing hallucinations.
-- **Distributed State & Background Processing**: Utilized **Redis** for distributed caching (rate limits, session states) and **BullMQ** for asynchronous queue processing (background quiz generation, nightly diagnostic emails, spaced repetition updates).
+- **Distributed State & Background Processing**: Utilized **Redis** for distributed caching (rate limits, session states) and **BullMQ** for asynchronous queue processing (background quiz generation, nightly diagnostic notifications, spaced repetition updates).
 - **Spaced Repetition System (SM-2)**: Implemented the SuperMemo-2 algorithm in the backend for automated flashcard generation and optimal recall intervals based on user accuracy.
 - **Real-Time Multiplayer (WebSockets)**: Features a collaborative whiteboard and synchronized "Quiz Battles" using `socket.io` backed by Redis pub-sub for horizontal scaling.
 - **AI Observability**: Full token usage and cost estimation tracking per user and operation type persisted to an `AIUsage` collection.
@@ -48,7 +48,7 @@ graph TD
         %% Queue Workers
         subgraph Workers [BullMQ Workers]
             QuizWorker[Background Quiz Worker]
-            CronWorker[Nightly Email/SRS Worker]
+            CronWorker[Nightly Notification/SRS Worker]
         end
     end
 
@@ -111,7 +111,7 @@ When a user finishes a quiz, missed concepts are fed into the `QuizAgent` to gen
 Each course generates vector embeddings for its chunks stored in MongoDB Atlas. When the user asks a question, the `TutorAgent` performs a cosine similarity vector search to inject relevant context into the LLM prompt. This grounds the AI in the specific course material and provides personalized tutoring based on the user's historical `strongTopics` and `weakTopics`.
 
 ### 4. Background Processing & Scalability
-Operations like generating large quizzes or sending "Daily Digest" emails are offloaded to **BullMQ worker queues** backed by Redis. This decouples long-running LLM inference tasks from the main HTTP thread, preventing request timeouts and ensuring system resilience.
+Operations like generating large quizzes or generating "Daily Digest" in-app notifications are offloaded to **BullMQ worker queues** backed by Redis. This decouples long-running LLM inference tasks from the main HTTP thread, preventing request timeouts and ensuring system resilience.
 
 ---
 
@@ -129,10 +129,10 @@ Full-Stack AI Engineer focused on distributed systems, agentic AI pipelines, and
 **GitHub:** [https://github.com/harshtadas8](https://github.com/harshtadas8)
 
 ## By The Numbers 📊
-* **Eval Pass Rate**: 98% (Measured over 100 iterations of strict Zod schema validation)
+* **Eval Pass Rate**: 98% pass rate on a 5-topic eval spanning 4 languages (enforced by strict Zod schema validation and retry loops)
 * **Average Course Generation Time**: ~12s (Optimized via parallel asynchronous multi-agent processing)
 * **Tutor Latency (RAG + Inference)**: ~2.5s (p95 latency)
-* **Load Test**: Handled 10 req/sec sustained load during Artillery test runs with 100% cache hit rate for public routes via Upstash Redis.
+* **Load Test**: Handled 10 req/sec sustained load during Artillery test runs, with Upstash Redis caching implemented for all public endpoints to optimize throughput.
 
 ---
 

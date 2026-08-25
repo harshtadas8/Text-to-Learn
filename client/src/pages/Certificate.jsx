@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { getCourseByIdAPI, downloadCertificatePdfAPI } from "../services/api";
+import { getCertificatePublicAPI, downloadCertificatePdfAPI } from "../services/api";
 
 export default function Certificate() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user, isAuthenticated, isLoading } = useAuth0();
   
-  const [course, setCourse] = useState(null);
+  const [cert, setCert] = useState(null);
   const [fetching, setFetching] = useState(true);
 
   useEffect(() => {
-    const fetchCourse = async () => {
+    const fetchCert = async () => {
       try {
-        const res = await getCourseByIdAPI(id);
+        const res = await getCertificatePublicAPI(id); // id is certId
         if (res.success) {
-          setCourse(res.data);
+          setCert(res.data);
         } else {
-          console.error("Failed to fetch course for certificate");
+          console.error("Failed to fetch cert");
         }
       } catch (err) {
         console.error(err);
@@ -26,12 +26,15 @@ export default function Certificate() {
         setFetching(false);
       }
     };
-    fetchCourse();
+    fetchCert();
   }, [id]);
 
   const handleDownloadPDF = async () => {
+    // Note: PDF generation might need to be updated to take certId if we want that, but for now we pass courseId if API expects it, wait, downloadCertificatePdfAPI took courseId.
+    // Let us pass cert.courseId.
+
     try {
-      await downloadCertificatePdfAPI(id);
+      await downloadCertificatePdfAPI(cert.courseId);
     } catch (err) {
       console.error("Failed to generate PDF", err);
       alert("Failed to download PDF. Please try again. " + (err.message || err));
@@ -46,23 +49,13 @@ export default function Certificate() {
     );
   }
 
-  if (!isAuthenticated) {
+  
+  if (!cert) {
     return (
       <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
-        <p className="text-xl mb-4">Please login to view your certificate.</p>
+        <p className="text-xl mb-4">Certificate not found or invalid.</p>
         <button onClick={() => navigate("/")} className="px-6 py-2 bg-emerald-500 text-black font-bold rounded-lg hover:bg-emerald-400 transition">
           Go Home
-        </button>
-      </div>
-    );
-  }
-
-  if (!course) {
-    return (
-      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
-        <p className="text-xl mb-4">Course not found.</p>
-        <button onClick={() => navigate("/courses")} className="px-6 py-2 bg-emerald-500 text-black font-bold rounded-lg hover:bg-emerald-400 transition">
-          Back to Dashboard
         </button>
       </div>
     );
@@ -74,7 +67,7 @@ export default function Certificate() {
       {/* Controls - Hidden during print */}
       <div className="max-w-4xl w-full flex justify-between items-center mb-8">
         <button 
-          onClick={() => navigate(`/course/${id}`)}
+          onClick={() => navigate(`/course/${cert.courseId}`)}
           className="px-5 py-2 bg-gray-800 text-gray-300 font-medium rounded-lg hover:bg-gray-700 hover:text-white transition flex items-center"
         >
           Back to Course
@@ -113,16 +106,22 @@ export default function Certificate() {
           <div className="flex-1 flex flex-col justify-center items-center w-full relative z-10">
             <p className="text-gray-400 text-xs sm:text-sm mb-3">This is to certify that</p>
             <h2 className="text-2xl sm:text-4xl font-bold text-white mb-6 border-b border-gray-800 pb-2 min-w-[250px] sm:min-w-[400px] break-all px-4">
-              {user.name || "Learner"}
+              {cert.userName}
             </h2>
 
             <p className="text-gray-400 text-xs sm:text-sm mb-3">has successfully completed the AI-generated course</p>
             <h3 className="text-xl sm:text-2xl font-bold text-emerald-400 mb-6 max-w-xl">
-              {course.topic}
+              {cert.courseTopic}
             </h3>
 
-            <p className="text-gray-500 text-xs max-w-lg mx-auto">
-              Demonstrating proficiency at the <span className="text-gray-300 font-semibold">{course.level}</span> level in <span className="text-gray-300 font-semibold">{course.language}</span>.
+            
+            <div className="mt-8 text-center bg-gray-900/50 p-4 border border-gray-800 rounded-lg inline-block relative z-10">
+              <p className="text-gray-400 text-xs mb-1">Verifiable Credential</p>
+              <p className="text-emerald-400 font-mono text-sm tracking-wider">{cert.certId}</p>
+            </div>
+
+            <p className="text-gray-500 text-xs max-w-lg mx-auto mt-6">
+              Demonstrating proficiency at the <span className="text-gray-300 font-semibold">{cert.courseLevel || "Beginner"}</span> level in <span className="text-gray-300 font-semibold">{cert.courseLanguage || "English"}</span>.
             </p>
           </div>
 

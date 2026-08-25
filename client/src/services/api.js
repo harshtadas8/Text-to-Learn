@@ -567,3 +567,35 @@ export async function evaluateTeachBackAPI(payload) {
   if (!res.ok) await handleApiError(res, "Failed to evaluate teach-back");
   return res.json();
 }
+
+export async function enrollCourseAPI(courseId) {
+  const token = await getSafeToken();
+  const res = await fetch(`${BASE_URL}/users/enroll/${courseId}`, {
+    method: "POST",
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+  if (!res.ok) await handleApiError(res, "Failed to enroll");
+  return res.json();
+}
+
+export async function issueCertificateAPI(courseId, userName) {
+  const token = await getSafeToken();
+  const res = await fetch(`${BASE_URL}/certificates/issue/${courseId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: JSON.stringify({ userName }),
+  });
+  if (!res.ok) await handleApiError(res, "Failed to issue certificate");
+  return res.json();
+}
+
+export async function getCertificatePublicAPI(certId) {
+  const res = await fetch(`${BASE_URL}/certificates/${certId}`);
+  if (!res.ok) await handleApiError(res, "Failed to fetch certificate");
+  return res.json();
+}

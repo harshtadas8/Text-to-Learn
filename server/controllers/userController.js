@@ -209,7 +209,7 @@ export async function getCourseProgress(req, res) {
 
     const progress = await Progress.findOne({ userId: auth0Id, courseId });
 
-    return res.json({ success: true, data: progress ? progress.completedLessons : [] });
+    return res.json({ success: true, data: progress ? progress.completedLessons : [], isEnrolled: !!progress });
   } catch (error) {
     logger.error("Get progress error:", error);
     return res.status(500).json({ success: false, message: "Failed to fetch progress" });
@@ -241,5 +241,28 @@ export async function addXp(req, res) {
   } catch (error) {
     logger.error("Add XP error:", error);
     return res.status(500).json({ success: false, message: "Failed to add XP" });
+  }
+}
+
+/* =====================================================
+   POST /api/users/enroll/:courseId
+===================================================== */
+export async function enrollCourse(req, res) {
+  try {
+    const auth0Id = req.auth.sub;
+    const { courseId } = req.params;
+
+    let progress = await Progress.findOne({ userId: auth0Id, courseId });
+    if (!progress) {
+      await Progress.create({
+        userId: auth0Id,
+        courseId,
+        completedLessons: []
+      });
+    }
+    return res.json({ success: true });
+  } catch (error) {
+    logger.error("Enroll course error:", error);
+    return res.status(500).json({ success: false, message: "Failed to enroll" });
   }
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getCourseByIdAPI, getCourseProgressAPI, markLessonProgressAPI, downloadCoursePdfAPI } from "../services/api";
+import { getCourseByIdAPI, getCourseProgressAPI, markLessonProgressAPI, downloadCoursePdfAPI, enrollCourseAPI, issueCertificateAPI } from "../services/api";
 import ModuleAccordion from "../components/ModuleAccordion";
 import CourseSkeleton from "../components/CourseSkeleton";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -9,10 +9,11 @@ export default function CourseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
 
   const [course, setCourse] = useState(null);
   const [completedLessons, setCompletedLessons] = useState([]);
+  const [isEnrolled, setIsEnrolled] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -35,6 +36,7 @@ export default function CourseDetails() {
         try {
           const progRes = await getCourseProgressAPI(id);
           setCompletedLessons(progRes.data || []);
+          setIsEnrolled(progRes.isEnrolled || false);
         } catch (progErr) {
           console.warn("Failed to fetch progress (auth might have expired):", progErr);
           // Do NOT set error here, let the course load anyway
@@ -46,6 +48,17 @@ export default function CourseDetails() {
 
     fetchCourseData();
   }, [id, isAuthenticated]);
+
+  
+  const handleEnroll = async () => {
+    if (!isAuthenticated) return;
+    try {
+      await enrollCourseAPI(id);
+      setIsEnrolled(true);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   /* -------------------- PROGRESS HANDLER -------------------- */
 
@@ -185,12 +198,24 @@ export default function CourseDetails() {
           </button>
           
           {isAuthenticated && modules.length > 0 && completedLessons.length === modules.reduce((acc, m) => acc + m.lessons.length, 0) && (
+            {isAuthenticated && modules.length > 0 && completedLessons.length === modules.reduce((acc, m) => acc + m.lessons.length, 0) && (
             <button
-              onClick={() => navigate(`/certificate/${course._id}`)}
+              onClick={async () => {
+                try {
+                  const res = await issueCertificateAPI(course._id, user?.name || "Learner");
+                  if (res.success && res.certId) {
+                    navigate(`/certificate/${res.certId}`);
+                  }
+                } catch (err) {
+                  console.error(err);
+                  alert("Failed to issue certificate");
+                }
+              }}
               className="px-5 py-2 rounded-lg bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-bold shadow-[0_0_15px_rgba(251,191,36,0.4)] hover:shadow-[0_0_25px_rgba(251,191,36,0.6)] transition"
             >
-              View Certificate 🏆
+              View Certificate dY?+
             </button>
+          )}
           )}
         </div>
 
