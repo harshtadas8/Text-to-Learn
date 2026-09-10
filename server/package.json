@@ -6,7 +6,8 @@
     "start": "node -r dotenv/config server.js",
     "dev": "nodemon -r dotenv/config server.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles",
-    "eval": "node -r dotenv/config scripts/run_evals.js"
+    "eval": "node -r dotenv/config scripts/run_evals.js",
+    "postinstall": "puppeteer browsers install chrome"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

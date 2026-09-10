@@ -1,5 +1,11 @@
 # Text-to-Learn: Multi-Agent AI Learning Platform
 
+<div align="center">
+  <img src="./docs/hero-dashboard.png" alt="Text-to-Learn Dashboard" width="100%" />
+  <p><em>An AI-powered, real-time collaborative learning platform</em></p>
+</div>
+
+
 > **A production-grade, highly concurrent, multi-agent AI pipeline featuring distributed state, vector search (RAG), queue-based orchestration, spaced repetition, and real-time multiplayer sockets.**
 
 **Live App:** [https://text-to-learn-psi.vercel.app](https://text-to-learn-psi.vercel.app)  
@@ -16,6 +22,9 @@
 - **Real-Time Multiplayer (WebSockets)**: Features a collaborative whiteboard and synchronized "Quiz Battles" using `socket.io` backed by Redis pub-sub for horizontal scaling.
 - **AI Observability**: Full token usage and cost estimation tracking per user and operation type persisted to an `AIUsage` collection.
 - **Robust CI/CD Pipeline**: Automated Jest/Supertest suite using mocked Mongoose, Redis, and BullMQ dependencies, enforced by GitHub Actions.
+- **Speech-to-Text "Teach-Back" Mode**: Evaluates user comprehension by allowing them to verbally explain concepts to the AI using the Web Speech API.
+- **Verifiable Certificates**: Automatically issues public, UUID-backed verifiable certificates upon 100% course completion.
+- **Omni-Modal Ingestion**: Capable of generating full structured courses from raw text prompts, uploaded PDF documents, or YouTube video URLs.
 
 ---
 
@@ -101,17 +110,32 @@ graph TD
 
 ## 🧠 Core Features & Workflows
 
-### 1. Multi-Agent Course Generation
+### Multi-Agent Course Generation
+![Course Generation Flow](./docs/course-generation.png)
 When a user requests a course, the `Orchestrator` invokes the `LessonAgent` to build the curriculum. The raw output is immediately passed to the `EvaluatorAgent`, which grades the structure. If the Evaluator detects poor formatting, missing metadata, or hallucinations, it either rewrites the payload or requests a retry, ensuring **100% structured JSON integrity** for the frontend.
 
-### 2. Spaced Repetition (SRS) Engine
+### Spaced Repetition (SRS) Engine
+![Spaced Repetition Flashcards](./docs/srs-flashcards.png)
 When a user finishes a quiz, missed concepts are fed into the `QuizAgent` to generate micro-flashcards. The backend implements the **SM-2 Algorithm** to calculate optimal intervals for the next review (`interval`, `easeFactor`, `repetition`), drastically improving long-term retention.
 
-### 3. RAG-Powered AI Tutor
+### RAG-Powered AI Tutor
+![AI Tutor Chat](./docs/ai-tutor.png)
 Each course generates vector embeddings for its chunks stored in MongoDB Atlas. When the user asks a question, the `TutorAgent` performs a cosine similarity vector search to inject relevant context into the LLM prompt. This grounds the AI in the specific course material and provides personalized tutoring based on the user's historical `strongTopics` and `weakTopics`.
 
-### 4. Background Processing & Scalability
+### Background Processing & Scalability
 Operations like generating large quizzes or generating "Daily Digest" in-app notifications are offloaded to **BullMQ worker queues** backed by Redis. This decouples long-running LLM inference tasks from the main HTTP thread, preventing request timeouts and ensuring system resilience.
+
+### Collaborative Study Room (Multiplayer)
+![Multiplayer Study Room](./docs/study-room.png)
+Users can join synchronized study rooms via Socket.IO. The room features a collaborative whiteboard (state synced via Redis) and real-time "Quiz Battles" to gamify the learning experience with peers.
+
+### Speech-to-Text Teach-Back & Podcast Mode
+![Teachback Mode](./docs/teachback-mode.png)
+To enforce the Feynman Technique, users can enter **Teach-Back Mode**, using their microphone to explain a concept to the AI. The AI evaluates their verbal explanation against the course vector store. Alternatively, **Podcast Mode** uses browser-native speech synthesis to read lessons aloud for on-the-go learning.
+
+### Verifiable Certificates
+![Verifiable Certificate](./docs/verifiable-certificate.png)
+Upon reaching 100% completion in a course, the backend automatically issues a UUID-backed Verifiable Certificate. This certificate is hosted on a public route (`/certificate/:certId`), allowing students to link it on their resume or LinkedIn for employers to verify.
 
 ---
 
